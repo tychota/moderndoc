@@ -66,6 +66,8 @@ watch-%:
 clean:
 	@echo "Cleaning auxiliary files..."
 	@rm -rf $(BUILDDIR)
+	@rm -rf $(TEMPLATEDIR)/_minted-*
+	@rm -f $(TEMPLATEDIR)/*.synctex.gz
 	@echo "Done."
 
 .PHONY: distclean

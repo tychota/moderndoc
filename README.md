@@ -120,17 +120,31 @@ The `moderndoc.sty` package accepts these options:
   article,           % or: paper, thesis, book
   citestyle=numeric, % or: authoryear
   language=en-US,    % or: en-GB, fr, etc.
+  font=plex,         % or: stix, palatino
+  draft=false,       % or: true (adds watermark & line numbers)
   minted=true,       % Enable code highlighting
   biblatex=true,     % Enable bibliography
   hyperlinks=true,   % Enable hyperref
 ]{moderndoc}
 ```
 
+### Font Selection
+
+The `font` option controls the typeface family:
+
+- `plex` (default): IBM Plex superfamily (Serif body, Sans headings, Mono code). Modern, technical, rational.
+- `stix`: STIX Two Text (Times-like). Traditional, highly readable, excellent math support.
+- `palatino`: TeX Gyre Pagella (body) and Heros (headings). Classic, humanist, warm.
+
+### Draft Mode
+
+Enable `draft=true` to adds a "DRAFT" watermark and line numbers to facilitate reviewing and editing.
+
 ## 🔤 Typography
 
 ### Font Configuration
 
-The template uses the IBM Plex superfamily:
+The template uses the IBM Plex superfamily by default:
 
 | Purpose   | Font             | Style Notes                    |
 |-----------|------------------|--------------------------------|
@@ -314,6 +328,16 @@ Using tabularray for modern table syntax:
 ```
 
 ## 🔧 Customization
+
+### Customizing Colors
+
+You can easily override the default colors by redefining them after loading the package:
+
+```latex
+\usepackage{moderndoc}
+\definecolor{mdocprimary}{RGB}{45, 120, 180}  % Change primary blue
+\definecolor{mdocaccent}{RGB}{220, 50, 50}    % Change accent red
+```
 
 ### Colors
 

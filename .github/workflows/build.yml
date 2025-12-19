@@ -1,0 +1,68 @@
+name: Build Templates
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+        
+    - name: Install Pygments
+      run: pip install Pygments
+      
+    - name: Install TeX Live
+      uses: zauguin/install-texlive@v3
+      with:
+        packages: |
+          scheme-basic
+          latexmk
+          luatex
+          fontspec
+          microtype
+          polyglossia
+          luatexja
+          biblatex
+          biber
+          minted
+          tcolorbox
+          tabularray
+          ninecolors
+          cleveref
+          environ
+          trimspaces
+          varwidth
+          koma-script
+          etoolbox
+          xcolor
+          tools
+          graphics
+          caption
+          fancyhdr
+          hyperref
+          oberdiek
+          pdftexcmds
+          infwarerr
+          kvoptions
+          geometry
+          enumitem
+          abstract
+          titlesec
+          plex
+          stix2-otf
+          tex-gyre
+          draftwatermark
+          lineno
+          
+    - name: Build all templates
+      run: make all

@@ -32,11 +32,13 @@
 \DeclareBoolOption[false]{paper}
 \DeclareBoolOption[false]{thesis}
 \DeclareBoolOption[false]{book}
+\DeclareBoolOption[false]{draft}       % Draft mode (watermark, line numbers)
 \DeclareBoolOption[true]{minted}       % Code highlighting
 \DeclareBoolOption[true]{biblatex}     % Bibliography
 \DeclareBoolOption[true]{hyperlinks}   % Hyperref setup
 \DeclareStringOption[numeric]{citestyle}
 \DeclareStringOption[en-US]{language}
+\DeclareStringOption[plex]{font}       % Font family: plex, stix, palatino
 
 \ProcessKeyvalOptions*
 
@@ -60,59 +62,110 @@
 \setmainlanguage{english}
 \setotherlanguage{french}
 
+% Utilities
+\RequirePackage{etoolbox}
+
 % Japanese support
 \RequirePackage{luatexja}
 \RequirePackage[match]{luatexja-fontspec}
 
 % =============================================================================
-% FONT CONFIGURATION — IBM PLEX SUPERFAMILY
+% FONT CONFIGURATION
 % =============================================================================
-% IBM Plex: Designed for "mankind + machine" — engineered warmth
-% Characteristics: Square-ish curves, rational geometry, complete ecosystem
 
-% --- BODY: IBM Plex Serif ---
-\setmainfont{IBM Plex Serif}[
-  Ligatures      = {TeX, Common},
-  Numbers        = {OldStyle, Proportional},
-  BoldFont       = {IBM Plex Serif Bold},
-  ItalicFont     = {IBM Plex Serif Italic},
-  BoldItalicFont = {IBM Plex Serif Bold Italic},
-  SmallCapsFeatures = {LetterSpace=5},
-]
+% --- OPTION: IBM PLEX (Default) ---
+\ifdefstring{\mdoc@font}{plex}{
+  % IBM Plex: Designed for "mankind + machine" — engineered warmth
+  % Characteristics: Square-ish curves, rational geometry, complete ecosystem
 
-% --- HEADINGS: IBM Plex Sans ---
-\setsansfont{IBM Plex Sans}[
-  Scale          = MatchLowercase,
-  Ligatures      = {TeX, Common},
-  Numbers        = {Lining, Proportional},
-  BoldFont       = {IBM Plex Sans Bold},
-  ItalicFont     = {IBM Plex Sans Italic},
-  BoldItalicFont = {IBM Plex Sans Bold Italic},
-  SmallCapsFeatures = {LetterSpace=5},
-]
+  % --- BODY: IBM Plex Serif ---
+  \setmainfont{IBM Plex Serif}[
+    Ligatures      = {TeX, Common},
+    Numbers        = {OldStyle, Proportional},
+    BoldFont       = {IBM Plex Serif Bold},
+    ItalicFont     = {IBM Plex Serif Italic},
+    BoldItalicFont = {IBM Plex Serif Bold Italic},
+    SmallCapsFeatures = {LetterSpace=5},
+  ]
 
-% Heading font family
-\newfontfamily\headingfont{IBM Plex Sans}[
-  Scale          = MatchLowercase,
-  Ligatures      = {TeX, Common},
-  BoldFont       = {IBM Plex Sans Bold},
-  SmallCapsFeatures = {LetterSpace=5},
-]
+  % --- HEADINGS: IBM Plex Sans ---
+  \setsansfont{IBM Plex Sans}[
+    Scale          = MatchLowercase,
+    Ligatures      = {TeX, Common},
+    Numbers        = {Lining, Proportional},
+    BoldFont       = {IBM Plex Sans Bold},
+    ItalicFont     = {IBM Plex Sans Italic},
+    BoldItalicFont = {IBM Plex Sans Bold Italic},
+    SmallCapsFeatures = {LetterSpace=5},
+  ]
 
-% --- QUOTES: IBM Plex Serif Italic ---
-\newfontfamily\quotefont{IBM Plex Serif}[
-  Ligatures      = {TeX, Common},
-  Numbers        = {OldStyle, Proportional},
-  ItalicFont     = {IBM Plex Serif Italic},
-]
+  % Heading font family
+  \newfontfamily\headingfont{IBM Plex Sans}[
+    Scale          = MatchLowercase,
+    Ligatures      = {TeX, Common},
+    BoldFont       = {IBM Plex Sans Bold},
+    SmallCapsFeatures = {LetterSpace=5},
+  ]
 
-% --- CODE: IBM Plex Mono ---
-\setmonofont{IBM Plex Mono}[
-  Scale          = 0.85,
-  BoldFont       = {IBM Plex Mono Bold},
-  ItalicFont     = {IBM Plex Mono Italic},
-  BoldItalicFont = {IBM Plex Mono Bold Italic},
-]
+  % --- QUOTES: IBM Plex Serif Italic ---
+  \newfontfamily\quotefont{IBM Plex Serif}[
+    Ligatures      = {TeX, Common},
+    Numbers        = {OldStyle, Proportional},
+    ItalicFont     = {IBM Plex Serif Italic},
+  ]
+
+  % --- CODE: IBM Plex Mono ---
+  \setmonofont{IBM Plex Mono}[
+    Scale          = 0.85,
+    BoldFont       = {IBM Plex Mono Bold},
+    ItalicFont     = {IBM Plex Mono Italic},
+    BoldItalicFont = {IBM Plex Mono Bold Italic},
+  ]
+}{}
+
+% --- OPTION: STIX TWO ---
+\ifdefstring{\mdoc@font}{stix}{
+  \setmainfont{STIX Two Text}[
+    Ligatures = {TeX, Common},
+    Numbers   = {OldStyle, Proportional},
+  ]
+  \setsansfont{IBM Plex Sans}[ % Keep Plex Sans for headings as it pairs well
+    Scale     = MatchLowercase,
+    BoldFont  = {IBM Plex Sans Bold},
+  ]
+  \newfontfamily\headingfont{IBM Plex Sans}[
+    Scale     = MatchLowercase,
+    BoldFont  = {IBM Plex Sans Bold},
+  ]
+  \newfontfamily\quotefont{STIX Two Text}[
+    Ligatures  = {TeX, Common},
+    Numbers    = {OldStyle, Proportional},
+    ItalicFont = {STIX Two Text Italic},
+  ]
+  \setmonofont{IBM Plex Mono}[Scale=0.85]
+}{}
+
+% --- OPTION: PALATINO (TeX Gyre) ---
+\ifdefstring{\mdoc@font}{palatino}{
+  \setmainfont{TeX Gyre Pagella}[
+    Ligatures = {TeX, Common},
+    Numbers   = {OldStyle, Proportional},
+  ]
+  \setsansfont{TeX Gyre Heros}[
+    Scale     = MatchLowercase,
+    Ligatures = {TeX, Common},
+  ]
+  \newfontfamily\headingfont{TeX Gyre Heros}[
+    Scale     = MatchLowercase,
+    BoldFont  = {TeX Gyre Heros Bold},
+  ]
+  \newfontfamily\quotefont{TeX Gyre Pagella}[
+    Ligatures  = {TeX, Common},
+    Numbers    = {OldStyle, Proportional},
+    ItalicFont = {TeX Gyre Pagella Italic},
+  ]
+  \setmonofont{TeX Gyre Cursor}[Scale=MatchLowercase]
+}{}
 
 % --- JAPANESE: IBM Plex Sans JP / Noto fallback ---
 \IfFontExistsTF{IBM Plex Sans JP}{
@@ -136,6 +189,19 @@
 % MICROTYPE TRACKING FOR SMALL CAPS
 % =============================================================================
 \SetTracking{encoding = *, shape = sc}{50}
+
+% =============================================================================
+% DRAFT MODE
+% =============================================================================
+\ifmdoc@draft
+  \RequirePackage{draftwatermark}
+  \SetWatermarkText{DRAFT}
+  \SetWatermarkScale{1}
+  \SetWatermarkColor[gray]{0.9}
+  
+  \RequirePackage{lineno}
+  \linenumbers
+\fi
 
 % =============================================================================
 % PAGE GEOMETRY (conditional on document type)
