@@ -1,0 +1,250 @@
+% =============================================================================
+% PAPER TEMPLATE — Two-Column Conference Paper
+% =============================================================================
+% Compile with: lualatex --shell-escape paper.tex
+%               biber paper
+%               lualatex --shell-escape paper.tex
+% =============================================================================
+
+% --- PDF 2.0 and metadata (must be before \documentclass) ---
+\DocumentMetadata{
+  pdfversion = 2.0,
+  lang       = en-US,
+}
+
+\documentclass[11pt, a4paper, twocolumn]{scrartcl}
+
+% =============================================================================
+% PREAMBLE
+% =============================================================================
+\usepackage[paper, citestyle=numeric]{moderndoc}
+
+% --- Bibliography file ---
+\addbibresource{references.bib}
+
+% --- Additional paper-specific settings ---
+\RedeclareSectionCommand[
+  beforeskip = 1.5ex plus 0.5ex minus 0.2ex,
+  afterskip  = 1ex plus 0.2ex,
+]{section}
+
+\RedeclareSectionCommand[
+  beforeskip = 1.2ex plus 0.4ex minus 0.2ex,
+  afterskip  = 0.8ex plus 0.2ex,
+]{subsection}
+
+% Tighter lists for papers
+\setlist{
+  topsep     = 0.3em,
+  itemsep    = 0.15em,
+  parsep     = 0pt,
+  leftmargin = 1.2em,
+}
+
+% --- Document metadata ---
+\hypersetup{
+  pdftitle    = {Your Paper Title},
+  pdfauthor   = {Author Names},
+  pdfsubject  = {Conference Name 2025},
+  pdfkeywords = {keyword1, keyword2, keyword3},
+}
+
+% =============================================================================
+% TITLE CONFIGURATION
+% =============================================================================
+\title{A Long and Descriptive Paper Title\\That May Span Multiple Lines}
+\author{%
+  First Author$^{1}$ \quad
+  Second Author$^{2}$ \quad
+  Third Author$^{1,2}$\\[0.5em]
+  \small$^{1}$University of Example, Department of Computer Science\\
+  \small$^{2}$Research Institute, Laboratory Name\\[0.3em]
+  \small\texttt{\{first, third\}@example.edu}, \texttt{second@research.org}
+}
+\date{}  % No date for conference papers
+
+% =============================================================================
+% DOCUMENT CONTENT
+% =============================================================================
+\begin{document}
+
+\maketitle
+
+% --- Abstract ---
+\begin{abstract}
+\noindent
+This paper presents a novel approach to [problem domain]. We propose a method
+that [key contribution 1] and [key contribution 2]. Our experiments on
+[benchmark/dataset] demonstrate that our approach achieves [main result],
+outperforming state-of-the-art methods by [margin]. We also provide
+[additional contribution, e.g., theoretical analysis, open-source implementation].
+Our findings suggest that [broader implication].
+\end{abstract}
+
+% =============================================================================
+\section{Introduction}
+% =============================================================================
+
+The opening paragraph should establish the context and importance of the
+research area. What is the broader problem domain? Why does it matter?
+
+The second paragraph typically identifies the specific gap or challenge that
+this paper addresses. What limitation exists in current approaches?
+
+\begin{paperquote}
+Prior work has focused primarily on X, leaving Y relatively unexplored despite
+its practical importance in real-world applications.
+\end{paperquote}
+
+In this paper, we present:
+\begin{itemize}
+  \item A novel method for [task] that [key innovation]
+  \item Theoretical analysis showing [property/guarantee]
+  \item Comprehensive experiments demonstrating [improvement]
+\end{itemize}
+
+% =============================================================================
+\section{Related Work}
+% =============================================================================
+
+\subsection{First Category of Related Work}
+
+Discuss the first category of related work. Compare and contrast with your
+approach. What are the limitations that your work addresses?
+
+\subsection{Second Category of Related Work}
+
+Another category of related work with similar structure.
+
+% =============================================================================
+\section{Methodology}
+% =============================================================================
+
+\subsection{Problem Formulation}
+
+Let $\mathcal{X}$ denote the input space and $\mathcal{Y}$ the output space.
+Given a dataset $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^{n}$, our goal is to learn
+a function $f: \mathcal{X} \to \mathcal{Y}$ that minimizes:
+
+\begin{equation}
+  \mathcal{L}(f) = \sum_{i=1}^{n} \ell(f(x_i), y_i) + \lambda \Omega(f)
+  \label{eq:objective}
+\end{equation}
+
+where $\ell$ is the loss function and $\Omega$ is a regularization term.
+
+\subsection{Proposed Approach}
+
+Our method consists of three main components:
+
+\paragraph{Component 1.}
+Description of the first component of your method.
+
+\paragraph{Component 2.}
+Description of the second component.
+
+\subsection{Algorithm}
+
+The complete algorithm is presented below:
+
+\begin{minted}[fontsize=\footnotesize, linenos]{python}
+def our_algorithm(X, y, params):
+    """Main algorithm implementation."""
+    model = initialize_model(params)
+    
+    for epoch in range(params.epochs):
+        # Training loop
+        loss = compute_loss(model, X, y)
+        gradients = compute_gradients(loss)
+        model = update_model(model, gradients)
+    
+    return model
+\end{minted}
+
+% =============================================================================
+\section{Experiments}
+% =============================================================================
+
+\subsection{Experimental Setup}
+
+\paragraph{Datasets.}
+We evaluate on three benchmark datasets: Dataset A (10K samples), Dataset B
+(50K samples), and Dataset C (100K samples).
+
+\paragraph{Baselines.}
+We compare against: Method 1~\autocite{knuth1984texbook}, Method
+2~\autocite{lamport1994latex}, and the state-of-the-art Method 3.
+
+\paragraph{Metrics.}
+We report accuracy, F1-score, and inference time.
+
+\subsection{Main Results}
+
+\begin{table}[t]
+  \centering
+  \caption{Performance comparison on benchmark datasets}
+  \label{tab:results}
+  \begin{tblr}{
+    colspec = {lcccc},
+    row{1}  = {font=\bfseries\footnotesize\sffamily, bg=gray!15},
+    hlines  = {0.5pt, gray!50},
+    rowsep  = 2pt,
+    colsep  = 4pt,
+    cell{1}{1} = {r=2}{},
+    cell{1}{2} = {c=2}{c},
+    cell{1}{4} = {c=2}{c},
+  }
+    Method & Dataset A & & Dataset B & \\
+           & Acc. & F1  & Acc. & F1  \\
+    Method 1 & 85.2 & 84.1 & 82.3 & 81.5 \\
+    Method 2 & 87.4 & 86.2 & 84.6 & 83.8 \\
+    Method 3 & 89.1 & 88.3 & 86.2 & 85.4 \\
+    \textbf{Ours} & \textbf{91.3} & \textbf{90.5} & \textbf{88.7} & \textbf{87.9} \\
+  \end{tblr}
+\end{table}
+
+As shown in \cref{tab:results}, our method achieves the best performance across
+all datasets and metrics.
+
+\subsection{Ablation Study}
+
+To understand the contribution of each component, we conduct ablation
+experiments by removing one component at a time.
+
+% =============================================================================
+\section{Discussion}
+% =============================================================================
+
+\paragraph{Limitations.}
+While our method achieves strong results, it has some limitations. First, [limitation 1].
+Second, [limitation 2].
+
+\paragraph{Future Work.}
+Several directions remain for future investigation: [direction 1] and
+[direction 2].
+
+% =============================================================================
+\section{Conclusion}
+% =============================================================================
+
+We presented [method name], a novel approach for [task]. Our key contributions
+include [contribution 1] and [contribution 2]. Experiments demonstrate
+state-of-the-art performance on [benchmarks], with improvements of [X\%] over
+previous methods. [Final sentence about impact or future directions.]
+
+% =============================================================================
+% ACKNOWLEDGEMENTS
+% =============================================================================
+\section*{Acknowledgements}
+
+This work was supported by [funding source]. We thank [people] for helpful
+discussions.
+
+% =============================================================================
+% BIBLIOGRAPHY
+% =============================================================================
+{\small
+\printbibliography
+}
+
+\end{document}

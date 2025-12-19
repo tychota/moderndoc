@@ -1,0 +1,549 @@
+% =============================================================================
+% MODERNDOC.STY — Modern Document Styling for LuaLaTeX
+% =============================================================================
+% A comprehensive style package for academic documents with:
+%   • IBM Plex font family (with Japanese support)
+%   • Microtype for professional typography
+%   • Multilingual support (English, French, Japanese)
+%   • PDF 2.0 output with proper metadata
+%   • Modern bibliography with biblatex
+%   • Code highlighting with minted
+%   • Quote boxes with tcolorbox
+%   • Modern tables with tabularray
+%
+% Usage: \usepackage{moderndoc}
+% Options: article, paper, thesis, book
+% Compile with: lualatex --shell-escape document.tex
+% =============================================================================
+
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\ProvidesPackage{moderndoc}[2025/01/01 v1.0 Modern Document Styling]
+
+% =============================================================================
+% PACKAGE OPTIONS
+% =============================================================================
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{
+  family=mdoc,
+  prefix=mdoc@
+}
+
+\DeclareBoolOption[false]{article}
+\DeclareBoolOption[false]{paper}
+\DeclareBoolOption[false]{thesis}
+\DeclareBoolOption[false]{book}
+\DeclareBoolOption[true]{minted}       % Code highlighting
+\DeclareBoolOption[true]{biblatex}     % Bibliography
+\DeclareBoolOption[true]{hyperlinks}   % Hyperref setup
+\DeclareStringOption[numeric]{citestyle}
+\DeclareStringOption[en-US]{language}
+
+\ProcessKeyvalOptions*
+
+% =============================================================================
+% CORE PACKAGES
+% =============================================================================
+% Font selection for LuaLaTeX
+\RequirePackage{fontspec}
+
+% Microtypography (protrusion, expansion, tracking)
+\RequirePackage[
+  protrusion = true,
+  expansion  = true,
+  tracking   = true,
+  babel      = true,
+  final
+]{microtype}
+
+% Language support
+\RequirePackage{polyglossia}
+\setmainlanguage{english}
+\setotherlanguage{french}
+
+% Japanese support
+\RequirePackage{luatexja}
+\RequirePackage[match]{luatexja-fontspec}
+
+% =============================================================================
+% FONT CONFIGURATION — IBM PLEX SUPERFAMILY
+% =============================================================================
+% IBM Plex: Designed for "mankind + machine" — engineered warmth
+% Characteristics: Square-ish curves, rational geometry, complete ecosystem
+
+% --- BODY: IBM Plex Serif ---
+\setmainfont{IBM Plex Serif}[
+  Ligatures      = {TeX, Common},
+  Numbers        = {OldStyle, Proportional},
+  BoldFont       = {IBM Plex Serif Bold},
+  ItalicFont     = {IBM Plex Serif Italic},
+  BoldItalicFont = {IBM Plex Serif Bold Italic},
+  SmallCapsFeatures = {LetterSpace=5},
+]
+
+% --- HEADINGS: IBM Plex Sans ---
+\setsansfont{IBM Plex Sans}[
+  Scale          = MatchLowercase,
+  Ligatures      = {TeX, Common},
+  Numbers        = {Lining, Proportional},
+  BoldFont       = {IBM Plex Sans Bold},
+  ItalicFont     = {IBM Plex Sans Italic},
+  BoldItalicFont = {IBM Plex Sans Bold Italic},
+  SmallCapsFeatures = {LetterSpace=5},
+]
+
+% Heading font family
+\newfontfamily\headingfont{IBM Plex Sans}[
+  Scale          = MatchLowercase,
+  Ligatures      = {TeX, Common},
+  BoldFont       = {IBM Plex Sans Bold},
+  SmallCapsFeatures = {LetterSpace=5},
+]
+
+% --- QUOTES: IBM Plex Serif Italic ---
+\newfontfamily\quotefont{IBM Plex Serif}[
+  Ligatures      = {TeX, Common},
+  Numbers        = {OldStyle, Proportional},
+  ItalicFont     = {IBM Plex Serif Italic},
+]
+
+% --- CODE: IBM Plex Mono ---
+\setmonofont{IBM Plex Mono}[
+  Scale          = 0.85,
+  BoldFont       = {IBM Plex Mono Bold},
+  ItalicFont     = {IBM Plex Mono Italic},
+  BoldItalicFont = {IBM Plex Mono Bold Italic},
+]
+
+% --- JAPANESE: IBM Plex Sans JP / Noto fallback ---
+\IfFontExistsTF{IBM Plex Sans JP}{
+  \setmainjfont{IBM Plex Sans JP}[
+    Scale    = 0.95,
+    BoldFont = {IBM Plex Sans JP Bold},
+  ]
+  \setsansjfont{IBM Plex Sans JP}[
+    Scale    = 0.95,
+    BoldFont = {IBM Plex Sans JP Bold},
+  ]
+}{
+  % Fallback to Noto Sans JP if IBM Plex Sans JP not available
+  \IfFontExistsTF{Noto Sans JP}{
+    \setmainjfont{Noto Sans JP}[Scale = 0.95]
+    \setsansjfont{Noto Sans JP}[Scale = 0.95]
+  }{}
+}
+
+% =============================================================================
+% MICROTYPE TRACKING FOR SMALL CAPS
+% =============================================================================
+\SetTracking{encoding = *, shape = sc}{50}
+
+% =============================================================================
+% PAGE GEOMETRY (conditional on document type)
+% =============================================================================
+\RequirePackage{geometry}
+
+\ifmdoc@article
+  \geometry{
+    a4paper,
+    left      = 25mm,
+    right     = 25mm,
+    top       = 30mm,
+    bottom    = 30mm,
+    marginparwidth = 15mm,
+  }
+  \linespread{1.08}
+\fi
+
+\ifmdoc@paper
+  \geometry{
+    a4paper,
+    left      = 18mm,
+    right     = 18mm,
+    top       = 25mm,
+    bottom    = 25mm,
+    columnsep = 8mm,
+  }
+  \linespread{1.05}
+\fi
+
+\ifmdoc@thesis
+  \geometry{
+    a4paper,
+    left      = 35mm,  % Extra binding margin
+    right     = 25mm,
+    top       = 30mm,
+    bottom    = 35mm,
+    marginparwidth = 20mm,
+  }
+  \linespread{1.15}
+\fi
+
+\ifmdoc@book
+  \geometry{
+    a4paper,
+    inner     = 30mm,
+    outer     = 25mm,
+    top       = 30mm,
+    bottom    = 35mm,
+    marginparwidth = 20mm,
+  }
+  \linespread{1.12}
+\fi
+
+% Default geometry if no option specified
+\@ifundefined{Gm@lmargin}{
+  \geometry{
+    a4paper,
+    left      = 25mm,
+    right     = 25mm,
+    top       = 30mm,
+    bottom    = 30mm,
+  }
+  \linespread{1.08}
+}{}
+
+% =============================================================================
+% PARAGRAPH FORMATTING
+% =============================================================================
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+
+% =============================================================================
+% COLORS
+% =============================================================================
+\RequirePackage{xcolor}
+
+% Brand colors
+\definecolor{mdocprimary}{RGB}{0, 95, 178}     % Deep blue
+\definecolor{mdocsecondary}{RGB}{99, 102, 106} % Neutral gray
+\definecolor{mdocaccent}{RGB}{204, 0, 0}       % Alert red
+\definecolor{mdoclink}{RGB}{0, 51, 102}        % Link blue
+
+% Code colors
+\definecolor{codebg}{RGB}{248, 248, 248}
+\definecolor{codeframe}{RGB}{200, 200, 200}
+\definecolor{codekeyword}{RGB}{0, 119, 170}
+\definecolor{codestring}{RGB}{163, 21, 21}
+\definecolor{codecomment}{RGB}{106, 153, 85}
+
+% Quote colors
+\definecolor{quotebg}{RGB}{245, 245, 245}
+\definecolor{quotebar}{RGB}{180, 180, 180}
+
+% =============================================================================
+% HYPERREF CONFIGURATION
+% =============================================================================
+\ifmdoc@hyperlinks
+  \RequirePackage{hyperref}
+  \hypersetup{
+    colorlinks  = true,
+    linkcolor   = mdoclink,
+    citecolor   = mdoclink,
+    urlcolor    = mdocprimary,
+    filecolor   = mdocprimary,
+    pdfcreator  = {LuaLaTeX with moderndoc},
+    pdfproducer = {LuaLaTeX},
+    bookmarksnumbered = true,
+    bookmarksopen     = true,
+    bookmarksdepth    = 3,
+  }
+  \RequirePackage{bookmark}
+\fi
+
+% =============================================================================
+% HEADING STYLES (KOMA-Script compatible)
+% =============================================================================
+\RequirePackage{titlesec}
+
+% Section styling
+\titleformat{\section}
+  {\headingfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+\titlespacing*{\section}
+  {0pt}{2.5ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% Subsection styling  
+\titleformat{\subsection}
+  {\headingfont\large\bfseries}
+  {\thesubsection}
+  {1em}
+  {}
+\titlespacing*{\subsection}
+  {0pt}{2ex plus 1ex minus .2ex}{1ex plus .2ex}
+
+% Subsubsection styling
+\titleformat{\subsubsection}
+  {\headingfont\normalsize\bfseries}
+  {\thesubsubsection}
+  {1em}
+  {}
+\titlespacing*{\subsubsection}
+  {0pt}{1.5ex plus .5ex minus .2ex}{0.8ex plus .2ex}
+
+% =============================================================================
+% HEADER AND FOOTER
+% =============================================================================
+\RequirePackage{fancyhdr}
+
+\fancypagestyle{moderndoc}{%
+  \fancyhf{}
+  \fancyhead[L]{\small\textit{\leftmark}}
+  \fancyhead[R]{\small\thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\small\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\pagestyle{moderndoc}
+
+% =============================================================================
+% BIBLIOGRAPHY (biblatex)
+% =============================================================================
+\ifmdoc@biblatex
+  \RequirePackage[
+    backend     = biber,
+    style       = \mdoc@citestyle,
+    sorting     = nyt,
+    maxnames    = 3,
+    minnames    = 1,
+    maxbibnames = 99,
+    giveninits  = true,
+    uniquename  = init,
+    doi         = true,
+    isbn        = false,
+    url         = true,
+    eprint      = true,
+    hyperref    = true,
+  ]{biblatex}
+  
+  % ACM-style formatting adjustments
+  \DeclareFieldFormat{title}{\mkbibemph{#1}}
+  \DeclareFieldFormat[article]{title}{#1}
+  \DeclareFieldFormat[inproceedings]{title}{#1}
+  
+  % ArXiv formatting
+  \DeclareFieldFormat{eprint:arxiv}{%
+    arXiv\addcolon\space
+    \ifhyperref
+      {\href{https://arxiv.org/abs/#1}{\nolinkurl{#1}}}
+      {\nolinkurl{#1}}%
+  }
+\fi
+
+% =============================================================================
+% CODE HIGHLIGHTING (minted)
+% =============================================================================
+\ifmdoc@minted
+  \RequirePackage{minted}
+  \usemintedstyle{friendly}
+  
+  % Default minted settings
+  \setminted{
+    bgcolor      = codebg,
+    frame        = single,
+    framesep     = 2mm,
+    fontsize     = \small,
+    breaklines   = true,
+    breakanywhere = false,
+    linenos      = false,
+    numbersep    = 5pt,
+    tabsize      = 2,
+  }
+  
+  % Inline code
+  \newcommand{\code}[1]{\mintinline{text}{#1}}
+\fi
+
+% =============================================================================
+% QUOTE/EXTRACT BOXES (tcolorbox)
+% =============================================================================
+\RequirePackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins}
+
+% Paper quote style (gray background box)
+\newtcolorbox{paperquote}[1][]{%
+  enhanced,
+  breakable,
+  colback      = quotebg,
+  colframe     = quotebg,
+  boxrule      = 0pt,
+  left         = 3mm,
+  right        = 3mm,
+  top          = 2mm,
+  bottom       = 2mm,
+  arc          = 0mm,
+  borderline west = {3pt}{0pt}{quotebar},
+  fontupper    = \small\quotefont\itshape,
+  before skip  = 1em,
+  after skip   = 1em,
+  #1
+}
+
+% Block quote with attribution
+\newtcolorbox{attributedquote}[2][]{%
+  enhanced,
+  breakable,
+  colback      = quotebg,
+  colframe     = quotebg,
+  boxrule      = 0pt,
+  left         = 3mm,
+  right        = 3mm,
+  top          = 2mm,
+  bottom       = 2mm,
+  arc          = 0mm,
+  borderline west = {3pt}{0pt}{quotebar},
+  fontupper    = \small\quotefont\itshape,
+  before skip  = 1em,
+  after skip   = 1em,
+  after upper  = {\par\vspace{0.5em}\hfill\textnormal{\textsc{#2}}},
+  #1
+}
+
+% Note box
+\newtcolorbox{notebox}[1][Note]{%
+  enhanced,
+  breakable,
+  colback      = blue!5,
+  colframe     = mdocprimary,
+  boxrule      = 1pt,
+  left         = 3mm,
+  right        = 3mm,
+  top          = 2mm,
+  bottom       = 2mm,
+  arc          = 2mm,
+  title        = {\textbf{#1}},
+  fonttitle    = \headingfont\small,
+  coltitle     = white,
+  colbacktitle = mdocprimary,
+  before skip  = 1em,
+  after skip   = 1em,
+}
+
+% Warning box
+\newtcolorbox{warningbox}[1][Warning]{%
+  enhanced,
+  breakable,
+  colback      = red!5,
+  colframe     = mdocaccent,
+  boxrule      = 1pt,
+  left         = 3mm,
+  right        = 3mm,
+  top          = 2mm,
+  bottom       = 2mm,
+  arc          = 2mm,
+  title        = {\textbf{#1}},
+  fonttitle    = \headingfont\small,
+  coltitle     = white,
+  colbacktitle = mdocaccent,
+  before skip  = 1em,
+  after skip   = 1em,
+}
+
+% =============================================================================
+% MODERN TABLES (tabularray)
+% =============================================================================
+\RequirePackage{tabularray}
+\UseTblrLibrary{booktabs, varwidth}
+
+% Default table style
+\NewTblrTheme{moderndoc}{
+  \SetTblrStyle{firsthead}{font=\bfseries\sffamily\small}
+  \SetTblrStyle{head}{font=\bfseries\sffamily\small}
+}
+
+% Simple table environment
+\NewTblrEnviron{mdtable}
+\SetTblrOuter[mdtable]{long}
+\SetTblrInner[mdtable]{
+  rowsep   = 2pt,
+  colsep   = 6pt,
+  hlines   = {0.5pt, gray!50},
+  vlines   = {},
+  row{1}   = {font=\bfseries\sffamily, bg=gray!10},
+}
+
+% =============================================================================
+% FIGURES AND CAPTIONS
+% =============================================================================
+\RequirePackage{graphicx}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+
+\captionsetup{
+  font        = small,
+  labelfont   = {bf, sf},
+  format      = plain,
+  justification = justified,
+  singlelinecheck = false,
+}
+
+% =============================================================================
+% MATH SUPPORT (optional, seldom used)
+% =============================================================================
+\RequirePackage{amsmath}
+\RequirePackage{unicode-math}
+
+% Set math font (STIX Two matches well with text fonts)
+\IfFontExistsTF{STIX Two Math}{
+  \setmathfont{STIX Two Math}
+}{
+  \IfFontExistsTF{Latin Modern Math}{
+    \setmathfont{Latin Modern Math}
+  }{}
+}
+
+% =============================================================================
+% CROSS-REFERENCING
+% =============================================================================
+\RequirePackage[capitalize, nameinlink]{cleveref}
+
+% =============================================================================
+% CUSTOM COMMANDS
+% =============================================================================
+% Japanese term with reading
+\newcommand{\jpterm}[2]{\textit{#1} ({#2})}
+
+% Japanese text
+\newcommand{\jp}[1]{{#1}}
+
+% Concept/key term
+\newcommand{\concept}[1]{\textbf{#1}}
+
+% Manual citation (for footnotes)
+\newcommand{\manualcite}[1]{\textsuperscript{[#1]}}
+
+% TODO marker
+\newcommand{\todo}[1]{\textcolor{mdocaccent}{\textbf{[TODO: #1]}}}
+
+% =============================================================================
+% ABSTRACT STYLING
+% =============================================================================
+\RequirePackage{abstract}
+\renewcommand{\abstractnamefont}{\headingfont\bfseries\normalsize}
+\renewcommand{\abstracttextfont}{\small}
+\setlength{\absleftindent}{0pt}
+\setlength{\absrightindent}{0pt}
+
+% =============================================================================
+% LIST STYLING
+% =============================================================================
+\RequirePackage{enumitem}
+\setlist{
+  topsep      = 0.5em,
+  itemsep     = 0.25em,
+  parsep      = 0pt,
+  leftmargin  = 1.5em,
+}
+
+% =============================================================================
+% END OF PACKAGE
+% =============================================================================
+\endinput

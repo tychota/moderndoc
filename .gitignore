@@ -1,0 +1,189 @@
+# =============================================================================
+# .gitignore for LaTeX Projects
+# =============================================================================
+
+# Core LaTeX auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Bibliography
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Build tool auxiliaries
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+*.rubbercache
+rubber.cache
+
+# Indices
+*.idx
+*.ilg
+*.ind
+*.ist
+
+# Glossary
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.lzo
+*.lzs
+
+# Nomenclature
+*.nlg
+*.nlo
+*.nls
+
+# Makeidx
+*.maf
+*.mlf
+*.mlt
+*.mtc*
+
+# Algorithms
+*.alg
+*.loa
+
+# Floats
+*.loa
+*.loe
+*.lol
+
+# KOMA-Script aux files
+*.slg
+*.slo
+*.sls
+
+# hyperref
+*.brf
+
+# varioref
+*.vrb
+
+# listings
+*.lol
+
+# todonotes
+*.tdo
+
+# minted
+_minted-*
+*.pyg
+
+# pythontex
+*.pytxcode
+pythontex-files-*/
+
+# TikZ externalization
+*.dpth
+*.md5
+*.auxlock
+*.figlist
+*.makefile
+
+# gnuplot
+*.gnuplot
+*.table
+
+# Beamer
+*.nav
+*.pre
+*.snm
+
+# Lyx
+*.lyx~
+
+# latexdiff
+*-diff*
+
+# KBibTeX
+*~[0-9]*
+
+# xypic
+*.xyc
+
+# endfloat
+*.ttt
+*.fff
+
+# Latexian
+TSWLatexianTemp*
+
+# Texpad
+.texpadtmp
+
+# LyX
+*.lyx~
+
+# Kile
+*.backup
+
+# WinEdt
+*.sav
+*.bak
+
+# REVTeX
+*.rtf
+
+# hyperref's bookmark
+*.brf
+
+# PDF output (keep templates clean)
+*.pdf
+
+# Output directory
+output/
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# latexrun
+latex.out/
+
+# Texify
+*.dvi
+
+# MiKTeX
+*.synctex
+*.synctex.gz
+
+# letltxmacro
+*.lpt
+
+# xindy
+*.xdy
+
+# Cleveref
+*.sed
+
+# Makeglossaries
+*.glstex
+
+# minted
+_minted

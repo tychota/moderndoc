@@ -1,0 +1,78 @@
+% =============================================================================
+% MINIMAL EXAMPLE — Quick Start Demo
+% =============================================================================
+% A minimal working example to test the template setup
+% Compile: lualatex --shell-escape minimal.tex
+% =============================================================================
+
+\DocumentMetadata{pdfversion = 2.0, lang = en-US}
+
+\documentclass[11pt, a4paper]{scrartcl}
+
+\usepackage[article]{moderndoc}
+
+\addbibresource{references.bib}
+
+\title{Minimal Working Example}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Typography Test}
+
+Regular text with \textbf{bold} and \textit{italic}. Small caps for 
+\textsc{Acronyms}. Japanese: \jp{日本語}. French: \textfrench{Bonjour}.
+
+Numbers: 0123456789 (old-style in body). Ligatures: ff, fi, fl, ffi, ffl.
+
+\section{Quote Box}
+
+\begin{paperquote}
+This is an extracted quote with a gray background and left border, perfect
+for citing passages from papers or documents.
+\end{paperquote}
+
+\section{Code Example}
+
+\begin{minted}{python}
+def greet(name: str) -> str:
+    """Return a greeting message."""
+    return f"Hello, {name}!"
+
+print(greet("World"))
+\end{minted}
+
+\section{Table Example}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Sample Table}
+  \begin{tblr}{
+    colspec = {lcr},
+    row{1}  = {font=\bfseries\sffamily, bg=gray!15},
+    hlines  = {0.5pt, gray!50},
+  }
+    Left & Center & Right \\
+    Data 1 & Data 2 & Data 3 \\
+    More & Data & Here \\
+  \end{tblr}
+\end{table}
+
+\section{Math}
+
+Inline math: $E = mc^2$. Display math:
+
+\begin{equation}
+  \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+\end{equation}
+
+\section{Citations}
+
+Example citation\autocite{knuth1984texbook} and multiple\autocites{lamport1994latex}{mittelbach2004companion}.
+
+\printbibliography
+
+\end{document}
