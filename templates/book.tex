@@ -58,14 +58,18 @@
 ]{chapter}
 
 % --- Header/footer for books ---
-\clearpairofpagestyles
-\ihead{\headmark}
-\ohead{}
-\cfoot[\pagemark]{\pagemark}
-\automark[section]{chapter}
+\fancypagestyle{book}{%
+  \fancyhf{}
+  \fancyhead[LE]{\small\textit{\leftmark}}
+  \fancyhead[RO]{\small\textit{\rightmark}}
+  \fancyfoot[C]{\small\thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+\pagestyle{book}
 
 % --- Drop cap configuration ---
-\renewcommand{\LettsreFont}{\headingfont\bfseries}
+\renewcommand{\LettrineFontHook}{\headingfont\bfseries}
 \setcounter{DefaultLines}{3}
 \renewcommand{\DefaultLoversize}{0.1}
 \renewcommand{\DefaultLraise}{0}
@@ -212,7 +216,7 @@ I would like to thank everyone who contributed to this book...
 % MAIN MATTER
 % =============================================================================
 \mainmatter
-\pagestyle{scrheadings}
+\pagestyle{book}
 \onehalfspacing
 
 % =============================================================================

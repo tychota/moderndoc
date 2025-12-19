@@ -6,24 +6,28 @@
 #   make paper      - Build the paper template
 #   make thesis     - Build the thesis template
 #   make book       - Build the book template
+#   make minimal    - Build the minimal template
 #   make all        - Build all templates
 #   make clean      - Remove auxiliary files
 #   make distclean  - Remove all generated files
 # =============================================================================
 
-# LaTeX compiler
-LATEX = lualatex
-LATEXFLAGS = --shell-escape --interaction=nonstopmode
+# Directories
+ROOT      := $(shell pwd)
+STYLEDIR  := $(ROOT)/styles
+TEMPLATEDIR := $(ROOT)/templates
+BUILDDIR  := $(ROOT)/build
+OUTPUTDIR := $(ROOT)/output
 
-# BibTeX processor
-BIBER = biber
+# Set TEXINPUTS to find styles without relative paths
+export TEXINPUTS := $(STYLEDIR):$(TEMPLATEDIR):$(TEXINPUTS)
+
+# latexmk with project latexmkrc
+# -f forces completion even with errors (needed for multi-pass builds)
+LATEXMK = latexmk -r $(ROOT)/latexmkrc -f
 
 # Source files
-TEMPLATES = article paper thesis book
-
-# Directories
-TEMPLATEDIR = templates
-OUTPUTDIR = output
+TEMPLATES = article paper thesis book minimal
 
 # =============================================================================
 # Default target
@@ -32,51 +36,28 @@ OUTPUTDIR = output
 all: $(TEMPLATES)
 
 # =============================================================================
-# Individual template targets
+# Generic build rule
 # =============================================================================
-.PHONY: article
-article:
-	@echo "Building article..."
-	@mkdir -p $(OUTPUTDIR)
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) article.tex
-	@cd $(TEMPLATEDIR) && $(BIBER) article
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) article.tex
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) article.tex
-	@mv $(TEMPLATEDIR)/article.pdf $(OUTPUTDIR)/
-	@echo "Done: $(OUTPUTDIR)/article.pdf"
+define build_template
+.PHONY: $(1)
+$(1):
+	@echo "Building $(1)..."
+	@mkdir -p $(BUILDDIR) $(OUTPUTDIR)
+	@cd $(TEMPLATEDIR) && $(LATEXMK) -outdir=$(BUILDDIR) $(1).tex
+	@cp $(BUILDDIR)/$(1).pdf $(OUTPUTDIR)/
+	@echo "Done: $(OUTPUTDIR)/$(1).pdf"
+endef
 
-.PHONY: paper
-paper:
-	@echo "Building paper..."
-	@mkdir -p $(OUTPUTDIR)
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) paper.tex
-	@cd $(TEMPLATEDIR) && $(BIBER) paper
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) paper.tex
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) paper.tex
-	@mv $(TEMPLATEDIR)/paper.pdf $(OUTPUTDIR)/
-	@echo "Done: $(OUTPUTDIR)/paper.pdf"
+$(foreach tmpl,$(TEMPLATES),$(eval $(call build_template,$(tmpl))))
 
-.PHONY: thesis
-thesis:
-	@echo "Building thesis..."
-	@mkdir -p $(OUTPUTDIR)
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) thesis.tex
-	@cd $(TEMPLATEDIR) && $(BIBER) thesis
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) thesis.tex
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) thesis.tex
-	@mv $(TEMPLATEDIR)/thesis.pdf $(OUTPUTDIR)/
-	@echo "Done: $(OUTPUTDIR)/thesis.pdf"
-
-.PHONY: book
-book:
-	@echo "Building book..."
-	@mkdir -p $(OUTPUTDIR)
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) book.tex
-	@cd $(TEMPLATEDIR) && $(BIBER) book
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) book.tex
-	@cd $(TEMPLATEDIR) && $(LATEX) $(LATEXFLAGS) book.tex
-	@mv $(TEMPLATEDIR)/book.pdf $(OUTPUTDIR)/
-	@echo "Done: $(OUTPUTDIR)/book.pdf"
+# =============================================================================
+# Watch mode (continuous compilation)
+# =============================================================================
+.PHONY: watch-%
+watch-%:
+	@echo "Watching $*..."
+	@mkdir -p $(BUILDDIR) $(OUTPUTDIR)
+	@cd $(TEMPLATEDIR) && $(LATEXMK) -outdir=$(BUILDDIR) -pvc $*.tex
 
 # =============================================================================
 # Clean targets
@@ -84,8 +65,7 @@ book:
 .PHONY: clean
 clean:
 	@echo "Cleaning auxiliary files..."
-	@cd $(TEMPLATEDIR) && rm -f *.aux *.bbl *.bcf *.blg *.log *.out *.run.xml *.toc *.lof *.lot *.fls *.fdb_latexmk *.synctex.gz *.nav *.snm *.vrb
-	@cd $(TEMPLATEDIR) && rm -rf _minted-*
+	@rm -rf $(BUILDDIR)
 	@echo "Done."
 
 .PHONY: distclean
@@ -102,11 +82,13 @@ help:
 	@echo "Modern LaTeX Templates - Makefile"
 	@echo ""
 	@echo "Usage:"
-	@echo "  make article    - Build the article template"
-	@echo "  make paper      - Build the paper template"
-	@echo "  make thesis     - Build the thesis template"
-	@echo "  make book       - Build the book template"
-	@echo "  make all        - Build all templates"
-	@echo "  make clean      - Remove auxiliary files"
-	@echo "  make distclean  - Remove all generated files"
-	@echo "  make help       - Show this help message"
+	@echo "  make article     - Build the article template"
+	@echo "  make paper       - Build the paper template"
+	@echo "  make thesis      - Build the thesis template"
+	@echo "  make book        - Build the book template"
+	@echo "  make minimal     - Build the minimal template"
+	@echo "  make all         - Build all templates"
+	@echo "  make watch-NAME  - Watch and rebuild NAME on changes"
+	@echo "  make clean       - Remove auxiliary files (build/)"
+	@echo "  make distclean   - Remove all generated files"
+	@echo "  make help        - Show this help message"

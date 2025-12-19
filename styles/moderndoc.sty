@@ -282,6 +282,24 @@
 \titlespacing*{\subsubsection}
   {0pt}{1.5ex plus .5ex minus .2ex}{0.8ex plus .2ex}
 
+% Paragraph styling (run-in heading)
+\titleformat{\paragraph}[runin]
+  {\headingfont\normalsize\bfseries}
+  {\theparagraph}
+  {1em}
+  {}
+\titlespacing*{\paragraph}
+  {0pt}{1ex plus .5ex minus .2ex}{1em}
+
+% Subparagraph styling (run-in heading)
+\titleformat{\subparagraph}[runin]
+  {\headingfont\normalsize\itshape}
+  {\thesubparagraph}
+  {1em}
+  {}
+\titlespacing*{\subparagraph}
+  {\parindent}{0.5ex plus .2ex minus .1ex}{1em}
+
 % =============================================================================
 % HEADER AND FOOTER
 % =============================================================================
@@ -524,13 +542,22 @@
 \newcommand{\todo}[1]{\textcolor{mdocaccent}{\textbf{[TODO: #1]}}}
 
 % =============================================================================
-% ABSTRACT STYLING
+% ABSTRACT STYLING (only for article/paper, not book/thesis)
 % =============================================================================
-\RequirePackage{abstract}
-\renewcommand{\abstractnamefont}{\headingfont\bfseries\normalsize}
-\renewcommand{\abstracttextfont}{\small}
-\setlength{\absleftindent}{0pt}
-\setlength{\absrightindent}{0pt}
+\ifmdoc@article
+  \RequirePackage{abstract}
+  \renewcommand{\abstractnamefont}{\headingfont\bfseries\normalsize}
+  \renewcommand{\abstracttextfont}{\small}
+  \setlength{\absleftindent}{0pt}
+  \setlength{\absrightindent}{0pt}
+\fi
+\ifmdoc@paper
+  \RequirePackage{abstract}
+  \renewcommand{\abstractnamefont}{\headingfont\bfseries\normalsize}
+  \renewcommand{\abstracttextfont}{\small}
+  \setlength{\absleftindent}{0pt}
+  \setlength{\absrightindent}{0pt}
+\fi
 
 % =============================================================================
 % LIST STYLING

@@ -1,53 +1,70 @@
 # =============================================================================
 # latexmkrc — Configuration for latexmk
 # =============================================================================
-# Usage: latexmk -lualatex document.tex
+# Usage:
+#   latexmk -r latexmkrc document.tex
+#   Or via Makefile: make article
 # =============================================================================
 
 # Use LuaLaTeX as the default compiler
 $pdf_mode = 4;  # 4 = lualatex
-$lualatex = 'lualatex --shell-escape %O %S';
+$lualatex = 'lualatex --shell-escape --interaction=nonstopmode %O %S';
 
 # Use biber for bibliography
-$biber = 'biber %O %S';
 $bibtex_use = 2;
-
-# Custom dependencies for minted
-add_cus_dep('pytxcode', 'tex', 0, 'pythontex');
-sub pythontex { return system("pythontex", $_[0]); }
-
-# Clean minted cache directories
-$clean_ext .= ' %R.pytxcode %R.nav %R.snm %R.vrb';
-push @generated_exts, 'run.xml';
-push @generated_exts, 'synctex.gz';
-
-# Clean minted directories
-$cleanup_mode = 2;
-$cleanup_includes_generated = 1;
-
-# Add minted output directory to clean list
-push @generated_exts, '_minted-%R';
 
 # Increase max passes for complex documents
 $max_repeat = 5;
 
-# Preview continuously (uncomment for live preview)
+# =============================================================================
+# Output directory handling
+# =============================================================================
+# Ensure auxiliary files go to outdir but sources are found
+$emulate_aux = 1;
+$aux_dir = $out_dir;
+
+# =============================================================================
+# Minted / Pygments support
+# =============================================================================
+# Custom dependencies for pythontex
+add_cus_dep('pytxcode', 'tex', 0, 'pythontex');
+sub pythontex { return system("pythontex", $_[0]); }
+
+# Track minted directories for cleanup
+$clean_ext .= ' %R.pytxcode %R.nav %R.snm %R.vrb';
+push @generated_exts, 'run.xml';
+push @generated_exts, 'synctex.gz';
+
+# =============================================================================
+# Glossary support
+# =============================================================================
+add_cus_dep('glo', 'gls', 0, 'makeglo2gls');
+sub makeglo2gls {
+    my ($base) = @_;
+    my $dir = $aux_dir ? "$aux_dir/" : "";
+    system("makeindex -s '${dir}${base}.ist' -t '${dir}${base}.glg' -o '${dir}${base}.gls' '${dir}${base}.glo'");
+}
+
+# =============================================================================
+# Index support
+# =============================================================================
+$makeindex = 'makeindex %O -o %D %S';
+
+# =============================================================================
+# Cleanup settings
+# =============================================================================
+$cleanup_mode = 2;
+$cleanup_includes_generated = 1;
+
+# Clean minted cache directories
+push @generated_exts, '_minted-%R';
+
+# =============================================================================
+# Preview settings (uncomment to enable)
+# =============================================================================
 # $preview_continuous_mode = 1;
 
 # PDF viewer (adjust for your system)
-# $pdf_previewer = 'evince';           # Linux
-# $pdf_previewer = 'open -a Preview';  # macOS
-# $pdf_previewer = 'start';            # Windows
-
-# Show output in terminal
-$pdflatex = 'pdflatex --shell-escape %O %S';
-$xelatex = 'xelatex --shell-escape %O %S';
-
-# Glossary support (if using glossaries package)
-add_cus_dep('glo', 'gls', 0, 'makeglo2gls');
-sub makeglo2gls {
-    system("makeindex -s '$_[0].ist' -t '$_[0].glg' -o '$_[0].gls' '$_[0].glo'");
-}
-
-# Index support
-$makeindex = 'makeindex %O -o %D %S';
+# $pdf_previewer = 'open -a Preview %S';  # macOS
+# $pdf_previewer = 'evince %S';           # Linux
+# $pdf_previewer = 'start %S';            # Windows

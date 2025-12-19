@@ -47,10 +47,14 @@
 ]{chapter}
 
 % --- Header/footer adjustments for thesis ---
-\clearpairofpagestyles
-\ohead{\headmark}
-\ofoot[\pagemark]{\pagemark}
-\automark[section]{chapter}
+\fancypagestyle{thesis}{%
+  \fancyhf{}
+  \fancyhead[LE,RO]{\small\thepage}
+  \fancyhead[RE]{\small\textit{\leftmark}}
+  \fancyhead[LO]{\small\textit{\rightmark}}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
 
 % --- Front matter style ---
 \newcommand{\frontmatterstyle}{%
@@ -60,7 +64,7 @@
 
 % --- Main matter style ---
 \newcommand{\mainmatterstyle}{%
-  \pagestyle{scrheadings}
+  \pagestyle{thesis}
   \pagenumbering{arabic}
 }
 
@@ -370,7 +374,7 @@ Statement of the theorem.
 \end{notebox}
 
 \textit{Proof.} Sketch of the proof or reference to appendix for full details.
-\hfill$\square$
+\hfill$\mdlgwhtsquare$
 
 % =====================================
 \chapter{Experimental Evaluation}

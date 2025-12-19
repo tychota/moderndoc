@@ -152,7 +152,8 @@ TSWLatexianTemp*
 # PDF output (keep templates clean)
 *.pdf
 
-# Output directory
+# Build and output directories
+build/
 output/
 
 # Editor files
