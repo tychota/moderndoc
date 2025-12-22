@@ -5,7 +5,7 @@
 %   • IBM Plex font family (with Japanese support)
 %   • Microtype for professional typography
 %   • Multilingual support (English, French, Japanese)
-%   • PDF 2.0 output with proper metadata
+%   • PDF 2.0 with PDF/A-4 archival compliance (ISO 19005-4:2020)
 %   • Modern bibliography with biblatex
 %   • Code highlighting with minted
 %   • Quote boxes with tcolorbox
@@ -15,6 +15,11 @@
 % Usage: \usepackage{moderndoc}
 % Options: article, paper, thesis, book, report, letter
 % Compile with: lualatex --shell-escape document.tex
+%
+% PDF/A-4 Support:
+%   All templates use \DocumentMetadata{pdfstandard=a-4} for PDF/A-4 compliance.
+%   This ensures long-term archival compatibility while maintaining PDF 2.0 features.
+%   PDF/A-4 automatically handles: XMP metadata, sRGB output intent, font embedding.
 % =============================================================================
 
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
@@ -60,8 +65,8 @@
 
 % Output mode options
 \DeclareBoolOption[false]{print}       % Print-optimized (no colored links)
-\DeclareBoolOption[false]{pdfa}        % PDF/A archival format
-\DeclareBoolOption[false]{accessible}  % Tagged PDF for accessibility
+\DeclareBoolOption[false]{pdfa}        % PDF/A mode (use with pdfstandard in DocumentMetadata)
+\DeclareBoolOption[false]{accessible}  % Tagged PDF for accessibility (via DocumentMetadata)
 
 % Feature toggles
 \DeclareBoolOption[false]{makeindex}   % Enable index generation

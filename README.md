@@ -1,14 +1,15 @@
-![Modern LaTeX Templates](./docs/assets/logo-wide.png)
+![Modern LaTeX Templates](./docs/assets/banner.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt) [![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/)
 
-A comprehensive LuaLaTeX template repository for quick, professional document publishing. Designed for articles, papers, theses, books, reports, and letters with modern typography, PDF 2.0 output, and excellent multilingual support.
+A comprehensive LuaLaTeX template repository for quick, professional document publishing. Designed for articles, papers, theses, books, reports, and letters with modern typography, PDF 2.0 with PDF/A-4 archival compliance, and excellent multilingual support.
 
 **Batteries included**: Ships with IBM Plex fonts — no system font installation required.
 
 ## Features
 
-- **Modern PDF Output**: PDF 2.0 with proper metadata and hyperlinks
+- **Modern PDF Output**: PDF 2.0 with PDF/A-4 archival compliance (ISO 19005-4:2020)
+- **Long-term Preservation**: PDF/A-4 ensures documents remain readable for decades
 - **Professional Typography**: IBM Plex font family with microtype for optical kerning
 - **Bundled Fonts**: IBM Plex (Serif, Sans, Mono, Japanese) included — works offline
 - **Publication Quality**: Widow/orphan control, float optimization, proper caption styling
@@ -421,6 +422,54 @@ The moderndoc package includes several features for publication-ready output:
 - **Caption Styling**: Tables above, figures below
 - **Emergency Stretch**: Avoids overfull boxes
 - **Per-Chapter Numbering**: For books and theses (Figure 3.2, Table 5.1)
+
+## PDF/A-4 Archival Compliance
+
+All templates produce **PDF/A-4** compliant output (ISO 19005-4:2020), the archival standard for PDF 2.0:
+
+### What is PDF/A-4?
+
+PDF/A-4 is the newest PDF archival standard, designed for long-term preservation of electronic documents. It ensures:
+
+- **Self-contained documents**: All fonts are embedded
+- **Device-independent color**: sRGB output intent included automatically
+- **Complete metadata**: XMP metadata for discoverability
+- **Future-proof**: Based on PDF 2.0, the latest PDF specification
+
+### Why PDF/A-4?
+
+| Standard | PDF Base | Use Case |
+|----------|----------|----------|
+| PDF/A-1  | PDF 1.4  | Legacy systems, basic archival |
+| PDF/A-2  | PDF 1.7  | Enhanced features, JPEG2000 support |
+| PDF/A-3  | PDF 1.7  | Embedded files (e.g., source data) |
+| **PDF/A-4** | **PDF 2.0** | **Modern archival with full PDF 2.0 features** |
+
+PDF/A-4 is ideal for academic publications, institutional repositories, and any document requiring long-term preservation.
+
+### Verification
+
+You can verify PDF/A compliance using:
+
+```bash
+# Using VeraPDF (recommended)
+verapdf --flavour 4 output/article.pdf
+
+# Using JHOVE
+jhove -m PDF-hul output/article.pdf
+```
+
+### Disabling PDF/A (if needed)
+
+To generate standard PDF 2.0 without PDF/A restrictions, modify the `\DocumentMetadata` in your template:
+
+```latex
+\DocumentMetadata{
+  pdfversion = 2.0,
+  % pdfstandard = a-4,  % Comment out to disable PDF/A-4
+  lang       = en-US,
+}
+```
 
 ## License
 

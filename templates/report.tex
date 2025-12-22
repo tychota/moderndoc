@@ -6,10 +6,12 @@
 %               lualatex --shell-escape report.tex (x2)
 % =============================================================================
 
-% --- PDF 2.0 and metadata (must be before \documentclass) ---
+% --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
+% PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion = 2.0,
-  lang       = en-US,
+  pdfversion  = 2.0,
+  pdfstandard = a-4,
+  lang        = en-US,
 }
 
 % Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
