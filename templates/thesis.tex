@@ -12,11 +12,16 @@
   lang       = en-US,
 }
 
+% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
+\RequirePackage{silence}
+\WarningFilter{latex}{Command \@footnotemark}
+
 \documentclass[
   11pt,
   a4paper,
   twoside,
   openright,
+  cleardoublepage = empty,  % Use KOMA-Script option instead of emptypage package
   chapterprefix = true,
   numbers       = noenddot,
   headings      = normal,
@@ -32,7 +37,6 @@
 
 % --- Thesis-specific packages ---
 \usepackage{setspace}
-\usepackage{emptypage}  % Blank pages before chapters
 
 % --- Chapter styling ---
 \addtokomafont{chapter}{\headingfont}
@@ -46,15 +50,15 @@
   afterskip  = 2cm,
 ]{chapter}
 
-% --- Header/footer adjustments for thesis ---
-\fancypagestyle{thesis}{%
-  \fancyhf{}
-  \fancyhead[LE,RO]{\small\thepage}
-  \fancyhead[RE]{\small\textit{\leftmark}}
-  \fancyhead[LO]{\small\textit{\rightmark}}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+% --- Header/footer adjustments for thesis (scrlayer-scrpage) ---
+\defpagestyle{thesis}{%
+  % head: (even, center, odd)
+  {\thepage\hfill\textit{\leftmark}}{}{\textit{\rightmark}\hfill\thepage}%
+}{%
+  % foot: (even, center, odd)
+  {}{}{}%
 }
+\KOMAoptions{headsepline=0.4pt}
 
 % --- Front matter style ---
 \newcommand{\frontmatterstyle}{%

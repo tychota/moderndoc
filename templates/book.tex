@@ -12,11 +12,16 @@
   lang       = en-US,
 }
 
+% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
+\RequirePackage{silence}
+\WarningFilter{latex}{Command \@footnotemark}
+
 \documentclass[
   11pt,
   a4paper,
   twoside,
   openright,
+  cleardoublepage = empty,  % Use KOMA-Script option instead of emptypage package
   chapterprefix = true,
   numbers       = noenddot,
   headings      = big,
@@ -34,7 +39,6 @@
 
 % --- Book-specific packages ---
 \usepackage{setspace}
-\usepackage{emptypage}
 \usepackage{lettrine}    % Drop caps for chapter openings
 
 % --- Part styling ---
@@ -57,15 +61,15 @@
   innerskip  = 1cm,
 ]{chapter}
 
-% --- Header/footer for books ---
-\fancypagestyle{book}{%
-  \fancyhf{}
-  \fancyhead[LE]{\small\textit{\leftmark}}
-  \fancyhead[RO]{\small\textit{\rightmark}}
-  \fancyfoot[C]{\small\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+% --- Header/footer for books (scrlayer-scrpage) ---
+\defpagestyle{book}{%
+  % head: (even, center, odd)
+  {\textit{\leftmark}}{}{\textit{\rightmark}}%
+}{%
+  % foot: (even, center, odd)
+  {}{\thepage}{}%
 }
+\KOMAoptions{headsepline=0.4pt}
 \pagestyle{book}
 
 % --- Drop cap configuration ---

@@ -12,6 +12,11 @@
   lang       = en-US,
 }
 
+% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
+% This warning is harmless - latex-lab modifies footnotes for PDF accessibility
+\RequirePackage{silence}
+\WarningFilter{latex}{Command \@footnotemark}
+
 \documentclass[11pt, a4paper, oneside]{scrartcl}
 
 % =============================================================================

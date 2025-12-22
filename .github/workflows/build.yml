@@ -48,7 +48,6 @@ jobs:
           tools
           graphics
           caption
-          fancyhdr
           hyperref
           oberdiek
           pdftexcmds
@@ -57,7 +56,7 @@ jobs:
           geometry
           enumitem
           abstract
-          titlesec
+          silence
           plex
           stix2-otf
           tex-gyre
@@ -73,7 +72,6 @@ jobs:
           amsmath
           unicode-math
           setspace
-          emptypage
           lettrine
           scrlttr2
 

@@ -21,6 +21,17 @@
 \ProvidesPackage{moderndoc}[2025/12/22 v2.0 Modern Document Styling]
 
 % =============================================================================
+% WARNING FILTERS (must be loaded early)
+% =============================================================================
+% Using silence package to filter warnings that are informational and harmless:
+% 1. @footnotemark warning: comes from latex-lab tagging modifying footnotes
+%    for PDF accessibility. Expected when using \DocumentMetadata.
+% 2. luatexja microtype warning: informational about patch compatibility
+\RequirePackage{silence}
+\WarningFilter{latex}{Command \string\@footnotemark\space has changed}
+\WarningFilter{luatexja}{LuaTeX-ja's patch against the microtype package}
+
+% =============================================================================
 % PACKAGE OPTIONS
 % =============================================================================
 \RequirePackage{kvoptions}
@@ -122,16 +133,19 @@
   % Characteristics: Square-ish curves, rational geometry, complete ecosystem
 
   % --- BODY: IBM Plex Serif ---
+  % Note: IBM Plex Serif lacks native small caps, so we use FakeSmallCaps
   \setmainfont{IBM Plex Serif}[
     Ligatures      = {TeX, Common},
     Numbers        = {OldStyle, Proportional},
     BoldFont       = {IBM Plex Serif Bold},
     ItalicFont     = {IBM Plex Serif Italic},
     BoldItalicFont = {IBM Plex Serif Bold Italic},
-    SmallCapsFeatures = {LetterSpace=5},
+    SmallCapsFont  = {IBM Plex Serif},  % Use same font for SC
+    SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
   ]
 
   % --- HEADINGS: IBM Plex Sans ---
+  % Note: IBM Plex Sans also lacks native small caps
   \setsansfont{IBM Plex Sans}[
     Scale          = MatchLowercase,
     Ligatures      = {TeX, Common},
@@ -139,7 +153,8 @@
     BoldFont       = {IBM Plex Sans Bold},
     ItalicFont     = {IBM Plex Sans Italic},
     BoldItalicFont = {IBM Plex Sans Bold Italic},
-    SmallCapsFeatures = {LetterSpace=5},
+    SmallCapsFont  = {IBM Plex Sans},
+    SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
   ]
 
   % Heading font family
@@ -147,7 +162,8 @@
     Scale          = MatchLowercase,
     Ligatures      = {TeX, Common},
     BoldFont       = {IBM Plex Sans Bold},
-    SmallCapsFeatures = {LetterSpace=5},
+    SmallCapsFont  = {IBM Plex Sans},
+    SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
   ]
 
   % --- QUOTES: IBM Plex Serif Italic ---
@@ -285,7 +301,7 @@
     right     = 25mm,
     top       = 30mm,
     bottom    = 30mm,
-    headheight   = 12pt,
+    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
     headsep      = 18pt,
     footskip     = 22pt,
     marginparsep = 5mm,
@@ -302,7 +318,7 @@
     top       = 22mm,
     bottom    = 25mm,
     columnsep = 6mm,
-    headheight   = 10pt,
+    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
     headsep      = 12pt,
     footskip     = 18pt,
   }
@@ -322,7 +338,7 @@
     outer     = 25mm,
     top       = 30mm,
     bottom    = 35mm,
-    headheight   = 14pt,
+    headheight   = 18pt,  % Increased for thesis line spacing + scrlayer-scrpage
     headsep      = 20pt,
     footskip     = 25pt,
     marginparsep = 5mm,
@@ -338,7 +354,7 @@
     outer     = 20mm,  % Less on outer edge
     top       = 25mm,
     bottom    = 30mm,
-    headheight   = 14pt,
+    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
     headsep      = 20pt,
     footskip     = 25pt,
     marginparsep    = 7mm,
@@ -354,7 +370,7 @@
     right     = 25mm,
     top       = 30mm,
     bottom    = 30mm,
-    headheight   = 12pt,
+    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
     headsep      = 18pt,
     footskip     = 22pt,
     marginparsep = 5mm,
@@ -421,18 +437,23 @@
   \RequirePackage{hyperref}
 
   % Base hyperref configuration
+  % Note: bookmarksdepth is now handled by bookmark package
+  % Note: breaklinks=true is now the default in modern hyperref
   \hypersetup{%
     pdfcreator={LuaLaTeX with moderndoc},%
     pdfproducer={LuaLaTeX},%
     bookmarksnumbered=true,%
     bookmarksopen=true,%
-    bookmarksdepth=3,%
     pdfstartview={FitH},%
     pdfpagemode={UseOutlines},%
-    breaklinks=true,%
     linktocpage=false,%
     pdfnewwindow=true,%
     pdfdisplaydoctitle=true%
+  }
+
+  % Configure bookmark depth via bookmark package
+  \AtBeginDocument{%
+    \bookmarksetup{depth=3}%
   }
 
   % Print mode: no colored links
@@ -463,59 +484,65 @@
 \fi
 
 % =============================================================================
-% HEADING STYLES (KOMA-Script compatible)
+% HEADING STYLES (using KOMA-Script native commands)
 % =============================================================================
-\RequirePackage{titlesec}
+% Configure section fonts using KOMA-Script's \setkomafont
+% This avoids conflicts with titlesec
+% Note: These commands are only available in scrartcl, scrbook, scrreprt
+% The scrlttr2 letter class does not have sectioning commands
 
-% Section styling
-\titleformat{\section}
-  {\headingfont\Large\bfseries}
-  {\thesection}
-  {1em}
-  {}
-\titlespacing*{\section}
-  {0pt}{2.5ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\ifmdoc@letter\else
+  % All dispositions (sectioning commands) use the heading font
+  \setkomafont{disposition}{\headingfont\bfseries}
 
-% Subsection styling
-\titleformat{\subsection}
-  {\headingfont\large\bfseries}
-  {\thesubsection}
-  {1em}
-  {}
-\titlespacing*{\subsection}
-  {0pt}{2ex plus 1ex minus .2ex}{1ex plus .2ex}
+  % Section: Large bold
+  \setkomafont{section}{\headingfont\Large\bfseries}
+  \RedeclareSectionCommand[
+    beforeskip = 2.5ex plus 1ex minus .2ex,
+    afterskip  = 1.5ex plus .2ex,
+    indent     = 0pt,
+  ]{section}
 
-% Subsubsection styling
-\titleformat{\subsubsection}
-  {\headingfont\normalsize\bfseries}
-  {\thesubsubsection}
-  {1em}
-  {}
-\titlespacing*{\subsubsection}
-  {0pt}{1.5ex plus .5ex minus .2ex}{0.8ex plus .2ex}
+  % Subsection: large bold
+  \setkomafont{subsection}{\headingfont\large\bfseries}
+  \RedeclareSectionCommand[
+    beforeskip = 2ex plus 1ex minus .2ex,
+    afterskip  = 1ex plus .2ex,
+    indent     = 0pt,
+  ]{subsection}
 
-% Paragraph styling (run-in heading)
-\titleformat{\paragraph}[runin]
-  {\headingfont\normalsize\bfseries}
-  {\theparagraph}
-  {1em}
-  {}
-\titlespacing*{\paragraph}
-  {0pt}{1ex plus .5ex minus .2ex}{1em}
+  % Subsubsection: normalsize bold
+  \setkomafont{subsubsection}{\headingfont\normalsize\bfseries}
+  \RedeclareSectionCommand[
+    beforeskip = 1.5ex plus .5ex minus .2ex,
+    afterskip  = 0.8ex plus .2ex,
+    indent     = 0pt,
+  ]{subsubsection}
 
-% Subparagraph styling (run-in heading)
-\titleformat{\subparagraph}[runin]
-  {\headingfont\normalsize\itshape}
-  {\thesubparagraph}
-  {1em}
-  {}
-\titlespacing*{\subparagraph}
-  {\parindent}{0.5ex plus .2ex minus .1ex}{1em}
+  % Paragraph: run-in, normalsize bold
+  \setkomafont{paragraph}{\headingfont\normalsize\bfseries}
+  \RedeclareSectionCommand[
+    beforeskip = 1ex plus .5ex minus .2ex,
+    afterskip  = 1em,
+    indent     = 0pt,
+    runin      = true,
+  ]{paragraph}
+
+  % Subparagraph: run-in, normalsize italic
+  \setkomafont{subparagraph}{\headingfont\normalsize\itshape}
+  \RedeclareSectionCommand[
+    beforeskip = 0.5ex plus .2ex minus .1ex,
+    afterskip  = 1em,
+    indent     = \parindent,
+    runin      = true,
+  ]{subparagraph}
+\fi
 
 % =============================================================================
 % HEADER AND FOOTER (per document type)
 % =============================================================================
-\RequirePackage{fancyhdr}
+% Using scrlayer-scrpage for KOMA-Script compatibility
+\RequirePackage[automark, headsepline]{scrlayer-scrpage}
 
 % Short title and author commands for headers (plain text versions)
 \newcommand{\shorttitle}[1]{\gdef\mdoc@shorttitle{#1}}
@@ -523,100 +550,101 @@
 \gdef\mdoc@shorttitle{}
 \gdef\mdoc@shortauthor{}
 
+% Configure default head/foot widths and separator
+\KOMAoptions{
+  headsepline=0.4pt,
+  footsepline=false,
+}
+\setkomafont{pagehead}{\small\normalfont}
+\setkomafont{pagefoot}{\small\normalfont}
+
 % --- Book headers/footers ---
-\fancypagestyle{mdocbook}{%
-  \fancyhf{}
-  \fancyhead[LE]{\small\textsc{\leftmark}}
-  \fancyhead[RO]{\small\textit{\rightmark}}
-  \fancyfoot[LE,RO]{\small\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{mdocbook}{%
+  % head: (width, left, center, right)
+  {\textsc{\leftmark}}{}{\textit{\rightmark}}%
+}{%
+  % foot
+  {\thepage}{}{\thepage}%
 }
 
 % --- Article headers/footers ---
 % Note: Use \shorttitle{} and \shortauthor{} to set header content
-\fancypagestyle{mdocarticle}{%
-  \fancyhf{}
-  \fancyhead[L]{\small\textit{\mdoc@shortauthor}}
-  \fancyhead[R]{\small\textit{\mdoc@shorttitle}}
-  \fancyfoot[C]{\small\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{mdocarticle}{%
+  {\textit{\mdoc@shortauthor}}{}{\textit{\mdoc@shorttitle}}%
+}{%
+  {}{\thepage}{}%
 }
 
 % --- Paper headers/footers (minimal) ---
-\fancypagestyle{mdocpaper}{%
-  \fancyhf{}
-  \fancyfoot[C]{\small\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{mdocpaper}{%
+  {}{}{}%
+}{%
+  {}{\thepage}{}%
 }
+\KOMAoptions{headsepline=false}%
 
 % --- Thesis headers/footers ---
-\fancypagestyle{mdocthesis}{%
-  \fancyhf{}
-  \fancyhead[LE,RO]{\small\thepage}
-  \fancyhead[RE]{\small\textsc{\leftmark}}
-  \fancyhead[LO]{\small\textit{\rightmark}}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{mdocthesis}{%
+  {\textit{\rightmark}}{}{\textsc{\leftmark}}%
+}{%
+  {\thepage}{}{\thepage}%
 }
 
 % --- Front matter style (for thesis/book) ---
-\fancypagestyle{frontmatter}{%
-  \fancyhf{}
-  \fancyfoot[C]{\small\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{frontmatter}{%
+  {}{}{}%
+}{%
+  {}{\thepage}{}%
 }
 
 % --- Report headers/footers ---
-\fancypagestyle{mdocreport}{%
-  \fancyhf{}
-  \fancyhead[L]{\small\textit{\leftmark}}
-  \fancyhead[R]{\small\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{mdocreport}{%
+  {\textit{\leftmark}}{}{\thepage}%
+}{%
+  {}{}{}%
 }
 
 % --- Part pages (no header/footer) ---
-\fancypagestyle{part}{%
-  \fancyhf{}
-  \renewcommand{\headrulewidth}{0pt}
-  \renewcommand{\footrulewidth}{0pt}
-}
-
-% --- Plain style (chapter openings, first pages) ---
-\fancypagestyle{plain}{%
-  \fancyhf{}
-  \fancyfoot[C]{\small\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{part}{%
+  {}{}{}%
+}{%
+  {}{}{}%
 }
 
 % --- Legacy moderndoc style (backward compatibility) ---
-\fancypagestyle{moderndoc}{%
-  \fancyhf{}
-  \fancyhead[L]{\small\textit{\leftmark}}
-  \fancyhead[R]{\small\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}
+\defpagestyle{moderndoc}{%
+  {\textit{\leftmark}}{}{\thepage}%
+}{%
+  {}{}{}%
+}
+
+% Redefine plain style for chapter openings
+\renewpagestyle{plain}{%
+  {}{}{}%
+}{%
+  {}{\thepage}{}%
 }
 
 % Apply appropriate page style based on document type
 \ifmdoc@book
+  \KOMAoptions{headsepline=0.4pt}
   \pagestyle{mdocbook}
 \else\ifmdoc@thesis
+  \KOMAoptions{headsepline=0.4pt}
   \pagestyle{mdocthesis}
 \else\ifmdoc@paper
+  \KOMAoptions{headsepline=false}
   \pagestyle{mdocpaper}
 \else\ifmdoc@article
+  \KOMAoptions{headsepline=0.4pt}
   \pagestyle{mdocarticle}
 \else\ifmdoc@report
+  \KOMAoptions{headsepline=0.4pt}
   \pagestyle{mdocreport}
 \else\ifmdoc@letter
   \pagestyle{empty}
 \else
+  \KOMAoptions{headsepline=0.4pt}
   \pagestyle{moderndoc}
 \fi\fi\fi\fi\fi\fi
 
@@ -955,7 +983,8 @@
 % MATH SUPPORT
 % =============================================================================
 \RequirePackage{amsmath}
-\RequirePackage{unicode-math}
+% Suppress mathtools compatibility warnings (we accept unicode-math's behavior)
+\RequirePackage[warnings-off={mathtools-overbracket,mathtools-colon}]{unicode-math}
 
 % Set math font (STIX Two matches well with text fonts)
 \IfFontExistsTF{STIX Two Math}{
