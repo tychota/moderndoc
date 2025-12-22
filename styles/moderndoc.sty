@@ -27,9 +27,13 @@
 % 1. @footnotemark warning: comes from latex-lab tagging modifying footnotes
 %    for PDF accessibility. Expected when using \DocumentMetadata.
 % 2. luatexja microtype warning: informational about patch compatibility
+% 3. Kanji font shape warnings: Japanese fonts lack italic/slanted/sc variants
+%    (this is standard for CJK typography)
 \RequirePackage{silence}
 \WarningFilter{latex}{Command \string\@footnotemark\space has changed}
 \WarningFilter{luatexja}{LuaTeX-ja's patch against the microtype package}
+\WarningFilter{latexfont}{Font shape}
+\WarningFilter{latexfont}{Some font shapes}
 
 % =============================================================================
 % PACKAGE OPTIONS
@@ -134,12 +138,15 @@
 
   % --- BODY: IBM Plex Serif ---
   % Note: IBM Plex Serif lacks native small caps, so we use FakeSmallCaps
+  % Note: Also lacks slanted variant, so we map slanted to italic
   \setmainfont{IBM Plex Serif}[
     Ligatures      = {TeX, Common},
     Numbers        = {OldStyle, Proportional},
     BoldFont       = {IBM Plex Serif Bold},
     ItalicFont     = {IBM Plex Serif Italic},
     BoldItalicFont = {IBM Plex Serif Bold Italic},
+    SlantedFont    = {IBM Plex Serif Italic},      % Map slanted to italic
+    BoldSlantedFont = {IBM Plex Serif Bold Italic}, % Map bold slanted to bold italic
     SmallCapsFont  = {IBM Plex Serif},  % Use same font for SC
     SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
   ]
@@ -448,7 +455,9 @@
     pdfpagemode={UseOutlines},%
     linktocpage=false,%
     pdfnewwindow=true,%
-    pdfdisplaydoctitle=true%
+    pdfdisplaydoctitle=true,%
+    plainpages=false,%      % Avoid duplicate page destination warnings
+    pdfpagelabels=true%     % Use page labels for unique destinations
   }
 
   % Configure bookmark depth via bookmark package
