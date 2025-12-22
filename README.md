@@ -1,11 +1,18 @@
 # Modern LaTeX Templates
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt)
+[![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/)
+
 A comprehensive LuaLaTeX template repository for quick, professional document publishing. Designed for articles, papers, theses, books, reports, and letters with modern typography, PDF 2.0 output, and excellent multilingual support.
+
+**Batteries included**: Ships with IBM Plex fonts — no system font installation required.
 
 ## Features
 
 - **Modern PDF Output**: PDF 2.0 with proper metadata and hyperlinks
 - **Professional Typography**: IBM Plex font family with microtype for optical kerning
+- **Bundled Fonts**: IBM Plex (Serif, Sans, Mono, Japanese) included — works offline
 - **Publication Quality**: Widow/orphan control, float optimization, proper caption styling
 - **Multilingual Support**: English, French, German, and Japanese out of the box
 - **Context-Sensitive Quotes**: Automatic quotation marks via csquotes
@@ -21,9 +28,16 @@ A comprehensive LuaLaTeX template repository for quick, professional document pu
 
 ```
 modern-latex-templates/
+├── LICENSE                # MIT license (repository code)
 ├── README.md
 ├── Makefile
 ├── latexmkrc
+├── fonts/                 # Bundled IBM Plex fonts (OFL licensed)
+│   ├── OFL-LICENSE.txt    # SIL Open Font License
+│   ├── Serif/             # IBM Plex Serif (body text)
+│   ├── Sans/              # IBM Plex Sans (headings)
+│   ├── Mono/              # IBM Plex Mono (code)
+│   └── SansJP/            # IBM Plex Sans JP (Japanese)
 ├── styles/
 │   └── moderndoc.sty      # Main style package (v2.0)
 ├── templates/
@@ -31,8 +45,8 @@ modern-latex-templates/
 │   ├── paper.tex          # Two-column conference paper
 │   ├── thesis.tex         # Dissertation/thesis
 │   ├── book.tex           # Technical book
-│   ├── report.tex         # Technical report (NEW)
-│   ├── letter.tex         # Formal letter (NEW)
+│   ├── report.tex         # Technical report
+│   ├── letter.tex         # Formal letter
 │   ├── minimal.tex        # Minimal test template
 │   └── references.bib     # Example bibliography
 ├── build/                 # Build output directory
@@ -46,7 +60,8 @@ modern-latex-templates/
 1. **TeX Live 2024** (or later) with LuaLaTeX
 2. **Biber** for bibliography processing
 3. **Pygments** for code highlighting (Python package)
-4. **IBM Plex fonts** (usually included in TeX Live)
+
+> **Note**: IBM Plex fonts are bundled in the `fonts/` directory — no separate installation needed.
 
 ```bash
 # Install Pygments (required for minted)
@@ -354,15 +369,6 @@ Enable with the `makeindex` option:
 
 ### Common Issues
 
-**"Font not found" errors:**
-```bash
-# Check if IBM Plex is installed
-fc-list | grep -i plex
-
-# Install via TeX Live
-tlmgr install plex
-```
-
 **Minted "shell-escape" error:**
 ```bash
 # Add --shell-escape flag
@@ -374,6 +380,15 @@ lualatex --shell-escape document.tex
 # Clear cache and rebuild
 rm -rf `biber --cache`
 biber document
+```
+
+**Font not found (when using system fonts instead of bundled):**
+```bash
+# Check if IBM Plex is installed system-wide
+fc-list | grep -i plex
+
+# Or install via TeX Live
+tlmgr install plex
 ```
 
 ### KOMA-Script Warnings
@@ -392,7 +407,10 @@ The moderndoc package includes several features for publication-ready output:
 
 ## License
 
-This template is released under the MIT License. Use freely for academic and commercial projects.
+- **Code & Templates**: [MIT License](LICENSE)
+- **IBM Plex Fonts**: [SIL Open Font License 1.1](fonts/OFL-LICENSE.txt)
+
+Use freely for academic and commercial projects.
 
 ## Contributing
 
