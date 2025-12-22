@@ -1,8 +1,6 @@
-# Modern LaTeX Templates
+![Modern LaTeX Templates](./docs/assets/logo-wide.png)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt)
-[![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt) [![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/)
 
 A comprehensive LuaLaTeX template repository for quick, professional document publishing. Designed for articles, papers, theses, books, reports, and letters with modern typography, PDF 2.0 output, and excellent multilingual support.
 
@@ -75,6 +73,7 @@ biber --version
 ### Building a Document
 
 **Using Make:**
+
 ```bash
 make article   # Build article template
 make paper     # Build conference paper
@@ -87,12 +86,14 @@ make clean     # Remove auxiliary files
 ```
 
 **Using latexmk:**
+
 ```bash
 cd templates
 latexmk -lualatex article.tex
 ```
 
 **Manual compilation:**
+
 ```bash
 cd templates
 lualatex --shell-escape article.tex
@@ -106,39 +107,51 @@ lualatex --shell-escape article.tex
 ## Template Overview
 
 ### Article Template (`article.tex`)
+
 Single-column format for journal articles and general documents.
+
 - 25mm margins, 11pt font, 1.08 line spread
 - Author/title running headers
 - Keywords environment for abstract
 
 ### Paper Template (`paper.tex`)
+
 Two-column format for conference papers.
+
 - 18mm margins, 10pt font, 1.04 line spread
 - Minimal headers (page number only)
 - Keywords and CCS classification environments
 
 ### Thesis Template (`thesis.tex`)
+
 Full dissertation format with front matter.
+
 - 40mm binding margin, 25mm outer
 - Full-page abstract with French translation support
 - Chapter/section headers with page numbers
 - 1.25 line spread (1.5-spaced)
 
 ### Book Template (`book.tex`)
+
 Complete book layout with parts and chapters.
+
 - 35mm inner / 20mm outer for binding
 - Decorative chapter headings with drop caps
 - Chapter epigraphs via `chapterquote` environment
 - Per-chapter figure/table numbering
 
 ### Report Template (`report.tex`) - NEW
+
 Technical/business report format.
+
 - Document control section (version history, approvals)
 - Executive summary
 - Professional chapter styling
 
 ### Letter Template (`letter.tex`) - NEW
+
 Formal business letter using KOMA-Script scrlttr2.
+
 - Sender/recipient formatting
 - Multiple letters per document
 - Enclosures and CC support
@@ -175,14 +188,14 @@ The `moderndoc.sty` package (v2.0) accepts these options:
 
 ### Document Type Settings
 
-| Type | Inner/Left | Outer/Right | Line Spread | Headers |
-|------|------------|-------------|-------------|---------|
-| Article | 25mm | 25mm | 1.08 | Author / Title |
-| Paper | 18mm | 18mm | 1.04 | Page only |
-| Thesis | 40mm | 25mm | 1.25 | Chapter / Section |
-| Book | 35mm | 20mm | 1.10 | Chapter / Section |
-| Report | 25mm | 25mm | 1.10 | Section / Page |
-| Letter | 25mm | 25mm | 1.05 | None |
+| Type    | Inner/Left | Outer/Right | Line Spread | Headers           |
+| ------- | ---------- | ----------- | ----------- | ----------------- |
+| Article | 25mm       | 25mm        | 1.08        | Author / Title    |
+| Paper   | 18mm       | 18mm        | 1.04        | Page only         |
+| Thesis  | 40mm       | 25mm        | 1.25        | Chapter / Section |
+| Book    | 35mm       | 20mm        | 1.10        | Chapter / Section |
+| Report  | 25mm       | 25mm        | 1.10        | Section / Page    |
+| Letter  | 25mm       | 25mm        | 1.05        | None              |
 
 ### Font Selection
 
@@ -312,6 +325,7 @@ $\set{a, b, c}$                 % {a, b, c} set notation
 ### Enhanced Configuration (v2.0)
 
 The bibliography now includes:
+
 - Back-references to citing pages
 - Improved DOI/URL/arXiv formatting
 - Sorted citations
@@ -370,12 +384,14 @@ Enable with the `makeindex` option:
 ### Common Issues
 
 **Minted "shell-escape" error:**
+
 ```bash
 # Add --shell-escape flag
 lualatex --shell-escape document.tex
 ```
 
 **Biber errors:**
+
 ```bash
 # Clear cache and rebuild
 rm -rf `biber --cache`
@@ -383,6 +399,7 @@ biber document
 ```
 
 **Font not found (when using system fonts instead of bundled):**
+
 ```bash
 # Check if IBM Plex is installed system-wide
 fc-list | grep -i plex
@@ -415,6 +432,7 @@ Use freely for academic and commercial projects.
 ## Contributing
 
 Contributions welcome! Please:
+
 1. Fork the repository
 2. Create a feature branch
 3. Submit a pull request
