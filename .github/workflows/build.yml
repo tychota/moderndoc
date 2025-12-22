@@ -9,18 +9,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
-        
+
     - name: Install Pygments
       run: pip install Pygments
-      
+
     - name: Install TeX Live
       uses: zauguin/install-texlive@v3
       with:
@@ -63,6 +63,19 @@ jobs:
           tex-gyre
           draftwatermark
           lineno
-          
+          csquotes
+          placeins
+          mathtools
+          needspace
+          marginnote
+          appendix
+          imakeidx
+          amsmath
+          unicode-math
+          setspace
+          emptypage
+          lettrine
+          scrlttr2
+
     - name: Build all templates
       run: make all

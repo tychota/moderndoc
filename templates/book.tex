@@ -69,21 +69,20 @@
 \pagestyle{book}
 
 % --- Drop cap configuration ---
-\renewcommand{\LettrineFontHook}{\headingfont\bfseries}
-\setcounter{DefaultLines}{3}
-\renewcommand{\DefaultLoversize}{0.1}
-\renewcommand{\DefaultLraise}{0}
+% IBM Plex Sans Bold pairs well with Plex Serif body text
+\renewcommand{\LettrineFontHook}{\headingfont\bfseries\color{mdocsecondary}}
+\setcounter{DefaultLines}{2}
+\renewcommand{\DefaultLoversize}{0.15}
+\renewcommand{\DefaultLraise}{0.1}
+\setlength{\DefaultFindent}{3pt}
+\setlength{\DefaultNindent}{0pt}
 
-% --- Epigraph for chapter openings ---
+% Note: The chapterquote environment is now provided by moderndoc.sty
+% Legacy alias for backward compatibility
 \newcommand{\chapterepigraph}[2]{%
-  \begin{flushright}
-    \begin{minipage}{0.7\textwidth}
-      \small\itshape #1
-      \par\vspace{0.5em}
-      \normalfont\small --- #2
-    \end{minipage}
-  \end{flushright}
-  \vspace{1em}
+  \begin{chapterquote}{#2}{}
+    #1
+  \end{chapterquote}
 }
 
 % --- Document metadata ---
@@ -228,7 +227,9 @@ I would like to thank everyone who contributed to this book...
 \label{ch:intro}
 % =====================================
 
-\chapterepigraph{The beginning of wisdom is the definition of terms.}{Socrates}
+\begin{chapterquote}{Socrates}{}
+The beginning of wisdom is the definition of terms.
+\end{chapterquote}
 
 \lettrine{T}{his chapter} introduces the fundamental concepts that form the
 foundation of our subject. Understanding these basics is essential before
@@ -284,7 +285,9 @@ The next chapter will dive deeper into [next topic].
 \label{ch:fundamentals}
 % =====================================
 
-\chapterepigraph{Make things as simple as possible, but not simpler.}{Albert Einstein}
+\begin{chapterquote}{Albert Einstein}{1933}
+Make things as simple as possible, but not simpler.
+\end{chapterquote}
 
 \lettrine{B}{uilding} on the introduction, this chapter presents the essential
 concepts in greater detail.
@@ -293,10 +296,10 @@ concepts in greater detail.
 
 The first fundamental concept is...
 
-\begin{paperquote}
+\begin{citedquote}{Leading Expert}{2020}
 Understanding this concept transformed how practitioners approach the problem.
 Early misconceptions led to years of confusion before the breakthrough insight.
-\end{paperquote}
+\end{citedquote}
 
 \subsection{Definition}
 
@@ -352,7 +355,9 @@ When we combine these concepts...
 \label{ch:technique1}
 % =====================================
 
-\chapterepigraph{The only way to learn a new technique is to practice it.}{Unknown}
+\begin{chapterquote}{Unknown}{}
+The only way to learn a new technique is to practice it.
+\end{chapterquote}
 
 \lettrine{N}{ow} that we've established the foundations, let's explore the
 first core technique in depth.
@@ -470,7 +475,7 @@ Building on the foundations...
 \backmatter
 
 % --- Appendices ---
-\appendix
+\startappendices
 
 \chapter{Reference Tables}
 \label{app:reference}

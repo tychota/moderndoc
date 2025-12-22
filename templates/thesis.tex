@@ -142,9 +142,7 @@
 \clearpage
 
 % --- Abstract ---
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
-
+\begin{thesisabstract}
 This thesis investigates [main topic]. The central research question is:
 [research question].
 
@@ -161,6 +159,18 @@ The implications of this research extend to [broader impact]. Future directions
 include [future work].
 
 \textbf{Keywords:} keyword1, keyword2, keyword3, keyword4, keyword5
+\end{thesisabstract}
+
+% --- French Abstract (Résumé) ---
+\begin{abstractfr}
+Cette thèse étudie [sujet principal]. La question de recherche centrale est:
+[question de recherche].
+
+La première contribution de ce travail est [contribution 1]. Nous démontrons
+que [résultat 1].
+
+\textbf{Mots-clés:} mot-clé1, mot-clé2, mot-clé3, mot-clé4, mot-clé5
+\end{abstractfr}
 
 % --- Acknowledgements ---
 \chapter*{Acknowledgements}
@@ -208,10 +218,10 @@ The opening section establishes the broader context and importance of your
 research area. Why does this problem matter? What are the practical or
 theoretical implications?
 
-\begin{paperquote}
+\begin{citedquote}{Influential Researcher}{2015}
 A relevant quote that captures the essence of the challenge or the vision that
 motivates this research.
-\end{paperquote}
+\end{citedquote}
 
 \section{Problem Statement}
 
@@ -476,7 +486,7 @@ Directions for future research building on this thesis.
 \printbibliography[heading=bibintoc]
 
 % --- Appendices ---
-\appendix
+\startappendices
 
 \chapter{Additional Experiments}
 \label{app:experiments}

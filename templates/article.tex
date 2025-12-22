@@ -30,6 +30,10 @@
   pdfkeywords = {keyword1, keyword2, keyword3},
 }
 
+% --- Header content (plain text for running headers) ---
+\shorttitle{Your Article Title}
+\shortauthor{First Author \& Second Author}
+
 % =============================================================================
 % DOCUMENT CONTENT
 % =============================================================================
@@ -51,6 +55,10 @@
 This is the abstract of your article. It should provide a concise summary of the
 research question, methodology, key findings, and implications. Keep it to
 150--300 words for most journals.
+
+\begin{keywords}
+typography, LaTeX, document preparation, academic writing, LuaLaTeX
+\end{keywords}
 \end{abstract}
 
 % =============================================================================
@@ -104,10 +112,20 @@ an effective document design.
 
 For attributed quotes, use \texttt{attributedquote}:
 
-\begin{attributedquote}{Robert Bringhurst, 1992}
+\begin{attributedquote}{Robert Bringhurst}
 Typography exists to honor content. Good typography reveals rather than
 conceals the message.
 \end{attributedquote}
+
+For quotes with author and year (proper citation style), use \texttt{citedquote}:
+
+\begin{citedquote}{Robert Bringhurst}{1992}
+Typography is the craft of endowing human language with a durable visual form,
+and thus with an independent existence.
+\end{citedquote}
+
+For quick inline quotes, use the \verb|\q{}| command: \q{This is an inline quote}
+with proper quotation marks that adapt to the document language.
 
 % =============================================================================
 \section{Code Examples}
@@ -209,6 +227,24 @@ concluding remarks.
 
 Citations work seamlessly with biblatex. For example, you might cite a seminal
 work\autocite{knuth1984texbook} or multiple sources\autocites{lamport1994latex}{mittelbach2004companion}.
+
+% =============================================================================
+\section{Semantic Markup}
+% =============================================================================
+
+The \texttt{moderndoc} package provides semantic markup commands:
+
+\begin{itemize}
+  \item \foreign{Foreign terms} for non-English words: \verb|\foreign{bon appétit}|
+  \item \term{Technical terms} for terminology: \verb|\term{kerning}|
+  \item \acronym{UNESCO} for acronyms: \verb|\acronym{UNESCO}|
+  \item \bookref{The Elements of Typographic Style} for book titles
+  \item \software{LuaTeX} for software names: \verb|\software{LuaTeX}|
+  \item \email{example@email.com} for email addresses
+\end{itemize}
+
+Mathematical operators like $\argmax$ and $\argmin$ are predefined, along with
+$\abs{x}$, $\norm{v}$, and $\set{a, b, c}$.
 
 % =============================================================================
 \section{Conclusion}

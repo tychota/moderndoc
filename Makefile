@@ -6,6 +6,8 @@
 #   make paper      - Build the paper template
 #   make thesis     - Build the thesis template
 #   make book       - Build the book template
+#   make report     - Build the report template
+#   make letter     - Build the letter template
 #   make minimal    - Build the minimal template
 #   make all        - Build all templates
 #   make clean      - Remove auxiliary files
@@ -27,7 +29,7 @@ export TEXINPUTS := $(STYLEDIR):$(TEMPLATEDIR):$(TEXINPUTS)
 LATEXMK = latexmk -r $(ROOT)/latexmkrc -f
 
 # Source files
-TEMPLATES = article paper thesis book minimal
+TEMPLATES = article paper thesis book report letter minimal
 
 # =============================================================================
 # Default target
@@ -88,6 +90,8 @@ help:
 	@echo "  make paper       - Build the paper template"
 	@echo "  make thesis      - Build the thesis template"
 	@echo "  make book        - Build the book template"
+	@echo "  make report      - Build the report template"
+	@echo "  make letter      - Build the letter template"
 	@echo "  make minimal     - Build the minimal template"
 	@echo "  make all         - Build all templates"
 	@echo "  make watch-NAME  - Watch and rebuild NAME on changes"
