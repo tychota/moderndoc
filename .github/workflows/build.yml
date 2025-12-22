@@ -73,7 +73,6 @@ jobs:
           unicode-math
           setspace
           lettrine
-          scrlttr2
 
     - name: Build all templates
       run: make all
