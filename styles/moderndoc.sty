@@ -23,7 +23,7 @@
 % =============================================================================
 
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\ProvidesPackage{moderndoc}[2025/12/22 v2.0 Modern Document Styling]
+\ProvidesPackage{moderndoc}[2025/12/24 v3.0 Modern Document Styling — Professional Typography]
 
 % =============================================================================
 % WARNING FILTERS (must be loaded early)
@@ -85,13 +85,23 @@
 \RequirePackage{fontspec}
 
 % Microtypography (protrusion, expansion, tracking)
+% Note: kerning and spacing features are NOT available in LuaLaTeX (pdfTeX only)
 \RequirePackage[
-  protrusion = true,
-  expansion  = true,
-  tracking   = true,
-  babel      = true,
-  final
+  protrusion = true,            % Character protrusion (hanging punctuation)
+  expansion  = true,            % Font expansion (hz-program)
+  tracking   = true,            % Letterspacing control (for small caps)
+  final                         % Enable in final documents
 ]{microtype}
+
+% Enable protrusion for math punctuation (improved margins in technical docs)
+\UseMicrotypeSet[protrusion]{basicmath}
+
+% Bringhurst-compliant settings via microtypesetup
+% Protrusion factor: 95% of full values for subtle effect
+% Expansion: default 2% stretch/shrink is appropriate
+\microtypesetup{
+  factor = 950,                 % 95% protrusion (subtle)
+}
 
 % Language support
 \RequirePackage{polyglossia}
@@ -136,6 +146,23 @@
 % FONT CONFIGURATION
 % =============================================================================
 
+% --- CENTRALIZED FONT DEFAULTS ---
+% Following ConTeXt's "bodyfont as single source of truth" philosophy
+\newcommand*\mdocFontDefaults{%
+  Ligatures = {TeX, Common},%
+  Kerning   = On%
+}
+
+\newcommand*\mdocSerifDefaults{%
+  \mdocFontDefaults,%
+  Numbers = {OldStyle, Proportional}%
+}
+
+\newcommand*\mdocSansDefaults{%
+  \mdocFontDefaults,%
+  Numbers = {Lining, Proportional}%
+}
+
 % --- OPTION: IBM PLEX (Default) ---
 \ifdefstring{\mdoc@font}{plex}{
   % IBM Plex: Designed for "mankind + machine" — engineered warmth
@@ -144,38 +171,37 @@
   % --- BODY: IBM Plex Serif ---
   % Note: IBM Plex Serif lacks native small caps, so we use FakeSmallCaps
   % Note: Also lacks slanted variant, so we map slanted to italic
+  % Note: LetterSpace removed — microtype \SetTracking handles SC tracking
   \setmainfont{IBM Plex Serif}[
-    Ligatures      = {TeX, Common},
-    Numbers        = {OldStyle, Proportional},
+    \mdocSerifDefaults,
     BoldFont       = {IBM Plex Serif Bold},
     ItalicFont     = {IBM Plex Serif Italic},
     BoldItalicFont = {IBM Plex Serif Bold Italic},
     SlantedFont    = {IBM Plex Serif Italic},      % Map slanted to italic
     BoldSlantedFont = {IBM Plex Serif Bold Italic}, % Map bold slanted to bold italic
-    SmallCapsFont  = {IBM Plex Serif},  % Use same font for SC
-    SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
+    SmallCapsFont  = {IBM Plex Serif},
+    SmallCapsFeatures = {FakeSmallCaps},
   ]
 
   % --- HEADINGS: IBM Plex Sans ---
   % Note: IBM Plex Sans also lacks native small caps
   \setsansfont{IBM Plex Sans}[
+    \mdocSansDefaults,
     Scale          = MatchLowercase,
-    Ligatures      = {TeX, Common},
-    Numbers        = {Lining, Proportional},
     BoldFont       = {IBM Plex Sans Bold},
     ItalicFont     = {IBM Plex Sans Italic},
     BoldItalicFont = {IBM Plex Sans Bold Italic},
     SmallCapsFont  = {IBM Plex Sans},
-    SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
+    SmallCapsFeatures = {FakeSmallCaps},
   ]
 
   % Heading font family
   \newfontfamily\headingfont{IBM Plex Sans}[
+    \mdocSansDefaults,
     Scale          = MatchLowercase,
-    Ligatures      = {TeX, Common},
     BoldFont       = {IBM Plex Sans Bold},
     SmallCapsFont  = {IBM Plex Sans},
-    SmallCapsFeatures = {FakeSmallCaps, LetterSpace=5},
+    SmallCapsFeatures = {FakeSmallCaps},
   ]
 
   % --- QUOTES: IBM Plex Serif Italic ---
@@ -188,6 +214,8 @@
   % --- CODE: IBM Plex Mono ---
   \setmonofont{IBM Plex Mono}[
     Scale          = 0.85,
+    Ligatures      = {},            % No ligatures in code
+    Numbers        = {Lining, Tabular},
     BoldFont       = {IBM Plex Mono Bold},
     ItalicFont     = {IBM Plex Mono Italic},
     BoldItalicFont = {IBM Plex Mono Bold Italic},
@@ -259,34 +287,61 @@
 % =============================================================================
 % MICROTYPE TRACKING FOR SMALL CAPS
 % =============================================================================
-\SetTracking{encoding = *, shape = sc}{50}
+% Golden Rule: NEVER letterspace lowercase text
+% Only letterspace: Small Caps and ALL CAPS
+\SetTracking{encoding=*, shape=sc}{50}    % 5% tracking for small caps
+
+% Disable protrusion in Table of Contents (page numbers must align)
+\preto\tableofcontents{\microtypesetup{protrusion=false}}
+\appto\tableofcontents{\microtypesetup{protrusion=true}}
+\preto\listoffigures{\microtypesetup{protrusion=false}}
+\appto\listoffigures{\microtypesetup{protrusion=true}}
+\preto\listoftables{\microtypesetup{protrusion=false}}
+\appto\listoftables{\microtypesetup{protrusion=true}}
 
 % =============================================================================
-% WIDOW/ORPHAN CONTROL AND TYPOGRAPHIC QUALITY
+% PARAGRAPH PENALTIES — PUBLICATION QUALITY
 % =============================================================================
+
 % Strict widow/orphan control
-\widowpenalty=10000
-\clubpenalty=10000
-\displaywidowpenalty=10000
-\predisplaypenalty=10000
+\widowpenalty=10000             % Never leave single line at top of page
+\clubpenalty=10000              % Never leave single line at bottom
+\displaywidowpenalty=10000      % Before display math
 
-% Discourage page break within paragraph
-\interlinepenalty=1000
+% Page break penalties
+\brokenpenalty=100              % Discourage page break after hyphenated line
+\predisplaypenalty=10000        % Strongly discourage break before display math
+\postdisplaypenalty=0           % Allow break after display math
 
-% Allow extra stretch to avoid overfull boxes
-\emergencystretch=1em
+% Inter-paragraph control (default is 0; 1000 was too strict)
+\interlinepenalty=0
+
+% Hyphenation penalties
+\hyphenpenalty=50               % Default; slight penalty for hyphenation
+\exhyphenpenalty=50             % After explicit hyphen
+\doublehyphendemerits=10000     % Strongly discourage consecutive hyphens
+\finalhyphendemerits=5000       % Discourage hyphen on second-to-last line
+
+% Flexibility for justified text
+\emergencystretch=1.5em         % Extra stretch to avoid overfull boxes
+\tolerance=200                  % Line-breaking tolerance (default)
 
 % =============================================================================
 % FLOAT PLACEMENT OPTIMIZATION
 % =============================================================================
-\renewcommand{\topfraction}{0.85}
-\renewcommand{\bottomfraction}{0.70}
-\renewcommand{\textfraction}{0.15}
-\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\topfraction}{0.9}        % Up to 90% of page for top floats
+\renewcommand{\bottomfraction}{0.8}     % Up to 80% of page for bottom floats
+\renewcommand{\textfraction}{0.1}       % At least 10% text on page
+\renewcommand{\floatpagefraction}{0.8}  % At least 80% fill for float pages
 
-\setcounter{topnumber}{3}
-\setcounter{bottomnumber}{2}
-\setcounter{totalnumber}{5}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+
+% Float spacing (baseline-relative for consistency)
+\setlength{\textfloatsep}{1.5\baselineskip plus 4pt minus 4pt}
+\setlength{\floatsep}{1\baselineskip plus 3pt minus 2pt}
+\setlength{\intextsep}{1\baselineskip plus 3pt minus 2pt}
 
 % =============================================================================
 % DRAFT MODE
@@ -304,16 +359,19 @@
 % =============================================================================
 % PAGE GEOMETRY (conditional on document type)
 % =============================================================================
+% Bringhurst optimal line length: 45-75 characters, 66 ideal
+% For IBM Plex Serif at 11pt: ~350pt textwidth ≈ 66 characters
+% For two-column papers, each column should be ~45-50 characters
 \RequirePackage{geometry}
 
 \ifmdoc@article
   \geometry{
     a4paper,
-    left      = 25mm,
-    right     = 25mm,
-    top       = 30mm,
-    bottom    = 30mm,
-    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
+    textwidth    = 350pt,        % ~66 characters for IBM Plex 11pt
+    textheight   = 44\baselineskip,
+    hmarginratio = 2:3,          % Inner:outer ratio
+    vmarginratio = 2:3,          % Top:bottom ratio
+    headheight   = 15pt,
     headsep      = 18pt,
     footskip     = 22pt,
     marginparsep = 5mm,
@@ -323,66 +381,69 @@
 \fi
 
 \ifmdoc@paper
+  % Two-column: use 10pt base via class option instead of redefining \normalsize
+  % Column width calculation: (174mm - 6mm columnsep) / 2 = 84mm ≈ 45 chars at 10pt
   \geometry{
     a4paper,
-    left      = 18mm,
-    right     = 18mm,
-    top       = 22mm,
-    bottom    = 25mm,
-    columnsep = 6mm,
-    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
+    textwidth    = 174mm,
+    columnsep    = 6mm,
+    left         = 18mm,
+    right        = 18mm,
+    top          = 22mm,
+    bottom       = 25mm,
+    headheight   = 15pt,
     headsep      = 12pt,
     footskip     = 18pt,
   }
   \linespread{1.04}
-  % Smaller fonts for two-column papers
-  \AtBeginDocument{%
-    \renewcommand{\normalsize}{\fontsize{10}{12}\selectfont}%
-    \renewcommand{\small}{\fontsize{9}{11}\selectfont}%
-    \renewcommand{\footnotesize}{\fontsize{8}{10}\selectfont}%
-  }
+  % Note: For proper 10pt text, use \documentclass[10pt]{scrartcl}
+  % Avoid redefining \normalsize as it can cause issues with other packages
 \fi
 
 \ifmdoc@thesis
+  % Thesis: wider binding margin, ~66 character line length
   \geometry{
     a4paper,
-    inner     = 40mm,  % Extra binding margin (institutional requirement)
-    outer     = 25mm,
-    top       = 30mm,
-    bottom    = 35mm,
-    headheight   = 18pt,  % Increased for thesis line spacing + scrlayer-scrpage
+    textwidth    = 350pt,        % ~66 characters
+    inner        = 35mm,         % Binding margin
+    outer        = 25mm,
+    top          = 30mm,
+    bottom       = 35mm,
+    headheight   = 18pt,
     headsep      = 20pt,
     footskip     = 25pt,
     marginparsep = 5mm,
     marginparwidth = 15mm,
   }
-  \linespread{1.25}  % 1.5-spaced for thesis (use 1.5 for double-spaced draft)
+  \linespread{1.25}              % 1.5-spacing for thesis readability
 \fi
 
 \ifmdoc@book
+  % Book: inner/outer for binding, ~66 characters
   \geometry{
     a4paper,
-    inner     = 35mm,  % More for binding
-    outer     = 20mm,  % Less on outer edge
-    top       = 25mm,
-    bottom    = 30mm,
-    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
+    textwidth    = 350pt,
+    inner        = 30mm,
+    outer        = 22mm,
+    top          = 25mm,
+    bottom       = 30mm,
+    headheight   = 15pt,
     headsep      = 20pt,
     footskip     = 25pt,
-    marginparsep    = 7mm,
-    marginparwidth  = 15mm,
+    marginparsep = 7mm,
+    marginparwidth = 15mm,
   }
   \linespread{1.10}
 \fi
 
 \ifmdoc@report
+  % Report: balanced margins, ~66 characters
   \geometry{
     a4paper,
-    left      = 25mm,
-    right     = 25mm,
-    top       = 30mm,
-    bottom    = 30mm,
-    headheight   = 15pt,  % Increased for scrlayer-scrpage compatibility
+    textwidth    = 350pt,
+    hmarginratio = 1:1,          % Centered text block
+    vmarginratio = 2:3,
+    headheight   = 15pt,
     headsep      = 18pt,
     footskip     = 22pt,
     marginparsep = 5mm,
@@ -419,6 +480,26 @@
 % =============================================================================
 \setlength{\parindent}{1em}
 \setlength{\parskip}{0pt}
+
+% =============================================================================
+% PROFILE-DEPENDENT TYPOGRAPHIC ADJUSTMENTS
+% =============================================================================
+% Thesis/Book: stricter hyphenation control, more emergency stretch
+\ifmdoc@thesis
+  \brokenpenalty=500            % Stronger discouragement for bound documents
+  \emergencystretch=2em         % More flexibility for binding margins
+\fi
+
+\ifmdoc@book
+  \brokenpenalty=500
+  \emergencystretch=2em
+\fi
+
+% Paper: two-column needs more tolerance
+\ifmdoc@paper
+  \tolerance=300                % More tolerant for narrow columns
+  \emergencystretch=1em         % Less stretch (narrower columns)
+\fi
 
 % =============================================================================
 % COLORS
@@ -898,26 +979,60 @@
 }
 
 % =============================================================================
-% MODERN TABLES (tabularray)
+% MODERN TABLES (tabularray) — BOOKTABS-STYLE
 % =============================================================================
+% "Avoid vertical rules and use a small number of well-weighted horizontal rules"
+% — booktabs documentation
 \RequirePackage{tabularray}
 \UseTblrLibrary{booktabs, varwidth}
 
-% Default table style
+% Publication-quality theme
 \NewTblrTheme{moderndoc}{
-  \SetTblrStyle{firsthead}{font=\bfseries\sffamily\small}
-  \SetTblrStyle{head}{font=\bfseries\sffamily\small}
+  \SetTblrStyle{firsthead}{font=\small\sffamily\bfseries}
+  \SetTblrStyle{head}{font=\small\sffamily\bfseries}
+  \SetTblrStyle{caption-tag}{font=\small\sffamily\bfseries}
+  \SetTblrStyle{caption-text}{font=\small}
 }
 
-% Simple table environment
+% Default table: booktabs-style (minimal rules)
 \NewTblrEnviron{mdtable}
-\SetTblrOuter[mdtable]{long}
+\SetTblrOuter[mdtable]{long, theme=moderndoc}
 \SetTblrInner[mdtable]{
-  rowsep   = 2pt,
+  rowsep   = 4pt,
+  colsep   = 8pt,
+  hlines   = {},                % No rules by default
+  vlines   = {},                % Never vertical rules
+  hline{1} = {1pt},             % Top rule (thick)
+  hline{2} = {0.5pt},           % Below header (thin)
+  hline{Z} = {1pt},             % Bottom rule (thick)
+  row{1}   = {font=\small\sffamily\bfseries, bg=gray!5},
+  cells    = {valign=m},
+}
+
+% Grid-style table (for comparison tables if needed)
+\NewTblrEnviron{gridtable}
+\SetTblrOuter[gridtable]{long, theme=moderndoc}
+\SetTblrInner[gridtable]{
+  rowsep   = 3pt,
   colsep   = 6pt,
-  hlines   = {0.5pt, gray!50},
+  hlines   = {0.5pt, gray!40},
   vlines   = {},
-  row{1}   = {font=\bfseries\sffamily, bg=gray!10},
+  row{1}   = {font=\small\sffamily\bfseries, bg=gray!5},
+}
+
+% Numerical table with tabular figures
+\NewTblrEnviron{numtable}
+\SetTblrOuter[numtable]{long, theme=moderndoc}
+\SetTblrInner[numtable]{
+  rowsep   = 4pt,
+  colsep   = 8pt,
+  hlines   = {},
+  vlines   = {},
+  hline{1} = {1pt},
+  hline{2} = {0.5pt},
+  hline{Z} = {1pt},
+  row{1}   = {font=\small\sffamily\bfseries},
+  column{2-Z} = {font={\addfontfeatures{Numbers={Lining,Tabular}}}},
 }
 
 % =============================================================================
@@ -935,20 +1050,22 @@
   indention      = 0pt,
   justification  = justified,
   singlelinecheck = true,
-  skip           = 8pt,
+  skip           = 6pt,
   position       = auto,
+  labelsep       = quad,        % Em-space between label and caption text
 }
 
 % Table caption at top
-\captionsetup[table]{position=above, skip=5pt}
+\captionsetup[table]{position=above, skip=4pt}
 
 % Figure caption at bottom
-\captionsetup[figure]{position=below}
+\captionsetup[figure]{position=below, skip=6pt}
 
 % Subcaption styling
 \captionsetup[sub]{
   font      = footnotesize,
   labelfont = bf,
+  skip      = 4pt,
 }
 
 % =============================================================================
@@ -1119,6 +1236,21 @@
 }
 
 % =============================================================================
+% NUMBER STYLE UTILITIES
+% =============================================================================
+% Switch to lining figures (for tables, technical content)
+\providecommand{\liningnums}[1]{{\addfontfeatures{Numbers={Lining,Proportional}}#1}}
+
+% Switch to tabular figures (for aligned columns)
+\providecommand{\tabularnums}[1]{{\addfontfeatures{Numbers={Lining,Tabular}}#1}}
+
+% Switch to text figures (for running text, default)
+\providecommand{\textnums}[1]{{\addfontfeatures{Numbers={OldStyle,Proportional}}#1}}
+
+% Proper fractions using OpenType feature
+\providecommand{\properfrac}[2]{{\addfontfeatures{Fractions=On}#1/#2}}
+
+% =============================================================================
 % SEMANTIC MARKUP COMMANDS
 % =============================================================================
 % Japanese term with reading
@@ -1148,8 +1280,11 @@
   \newcommand{\termbf}[1]{\textit{#1}}
 \fi
 
-% Acronyms (small caps)
+% Acronyms (small caps with tracking via microtype)
 \newcommand{\acronym}[1]{\textsc{\MakeLowercase{#1}}}
+
+% Letterspaced capitals (explicit tracking for uppercase)
+\newcommand{\caps}[1]{\textls[80]{\MakeUppercase{#1}}}
 
 % Book titles (use \bookref to avoid conflict with book template's \booktitle)
 \newcommand{\bookref}[1]{\textit{#1}}
