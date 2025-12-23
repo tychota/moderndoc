@@ -1,6 +1,6 @@
 ![Modern LaTeX Templates](./docs/assets/banner.png)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt) [![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/)[![Docs](https://img.shields.io/badge/docs-mkdocs-green)](docs/index.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt) [![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/) [![Docs](https://img.shields.io/badge/Docs-Available-green)](https://tychota.github.io/moderndoc/)
 
 **Beautiful, modern LaTeX documents for the 21st century.**
 
@@ -15,45 +15,28 @@ ModernDoc transforms the powerful but complex LaTeX system into an accessible, "
 
 ## Quick Start
 
-
-
-1.  **Install the library**:
-
+1. **Install the library**:
     ```bash
-
     curl -sSL https://raw.githubusercontent.com/tychota/moderndoc/main/scripts/install.sh | bash
-
     ```
 
-
-
-2.  **Clone for templates (Optional)**:
-
+2. **Clone for templates** (optional):
     ```bash
-
     git clone https://github.com/tychota/moderndoc.git
-
     cd moderndoc
-
     ```
 
-
-
-3.  **Build a template**:
-
+3. **Build a template**:
     ```bash
-
     make article
-
     ```
 
 ## Documentation
 
-Full documentation is available in the `docs/` folder or at our [documentation site](docs/index.md).
+Full documentation is available at our **[documentation site](https://tychota.github.io/moderndoc/)**.
 
-- [Getting Started](docs/getting-started.md)
-- [Advanced Usage](docs/advanced.md)
-- [Template Reference](docs/reference/templates.md)
+- [Getting Started](https://tychota.github.io/moderndoc/getting-started/)
+- [Advanced Usage](https://tychota.github.io/moderndoc/advanced/)
 
 ## License
 

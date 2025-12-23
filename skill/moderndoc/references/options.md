@@ -1,6 +1,7 @@
 # Package Options Reference
 
 ## Table of Contents
+
 - [Document Type Options](#document-type-options)
 - [Citation Style Options](#citation-style-options)
 - [Language Options](#language-options)
@@ -16,7 +17,7 @@
 Mutually exclusive. Choose one based on document purpose.
 
 | Option | KOMA Class | Layout | Line Spread |
-|--------|-----------|--------|-------------|
+| --- | --- | --- | --- |
 | `article` | scrartcl | 350pt textwidth (~66 chars), single-column | 1.08 |
 | `paper` | scrartcl | 174mm textwidth, two-column (~45 chars/col) | 1.04 |
 | `thesis` | scrbook | 350pt textwidth, 35mm/25mm binding | 1.25 |
@@ -27,6 +28,7 @@ Mutually exclusive. Choose one based on document purpose.
 > **Typography Note**: Text widths follow Bringhurst's recommendation of 45-75 characters per line (66 optimal). At 11pt IBM Plex Serif, 350pt ≈ 66 characters.
 
 **Usage:**
+
 ```latex
 \usepackage[article]{moderndoc}    % Single-column article
 \usepackage[paper]{moderndoc}      % Two-column conference paper
@@ -42,19 +44,21 @@ Mutually exclusive. Choose one based on document purpose.
 
 Control bibliography and citation formatting.
 
-| Option | Format | Example |
-|--------|--------|---------|
-| `citestyle=numeric` | Numbered | [1], [2], [3] |
-| `citestyle=authoryear` | Author-date | (Smith, 2024) |
+| Option                  | Format       | Example       |
+| ----------------------- | ------------ | ------------- |
+| `citestyle=numeric`     | Numbered     | [1], [2], [3] |
+| `citestyle=authoryear`  | Author-date  | (Smith, 2024) |
 | `citestyle=authortitle` | Author-title | (Smith 2024a) |
 
 **Usage:**
+
 ```latex
 \usepackage[article, citestyle=numeric]{moderndoc}
 \usepackage[thesis, citestyle=authoryear]{moderndoc}
 ```
 
 **Citation commands:**
+
 ```latex
 \cite{key}           % Standard citation
 \parencite{key}      % Parenthetical: (Smith 2024)
@@ -70,20 +74,22 @@ Control bibliography and citation formatting.
 
 Set document language for hyphenation, quotes, and localization.
 
-| Option | Language | Quote Style |
-|--------|----------|-------------|
-| `language=en-US` | American English | "double" 'single' |
-| `language=en-GB` | British English | 'single' "double" |
-| `language=fr` | French | « guillemets » |
-| `language=de` | German | „Anführungszeichen" |
+| Option           | Language         | Quote Style         |
+| ---------------- | ---------------- | ------------------- |
+| `language=en-US` | American English | "double" 'single'   |
+| `language=en-GB` | British English  | 'single' "double"   |
+| `language=fr`    | French           | « guillemets »      |
+| `language=de`    | German           | „Anführungszeichen" |
 
 **Usage:**
+
 ```latex
 \usepackage[article, language=en-US]{moderndoc}
 \usepackage[thesis, language=fr]{moderndoc}
 ```
 
 **Quote commands (language-aware):**
+
 ```latex
 \q{quoted text}        % Context-sensitive quotes
 \qq{nested quote}      % Nested quotes
@@ -100,37 +106,38 @@ Select font family combination.
 
 IBM Plex font family (bundled with moderndoc).
 
-| Role | Font | Features |
-|------|------|----------|
-| Body | IBM Plex Serif | Old-style numbers, proportional |
-| Headings | IBM Plex Sans | Lining numbers |
-| Code | IBM Plex Mono | Scaled 0.85 |
-| Math | STIX Two Math | Full Unicode math |
-| Japanese | IBM Plex Sans JP | CJK support |
+| Role     | Font             | Features                        |
+| -------- | ---------------- | ------------------------------- |
+| Body     | IBM Plex Serif   | Old-style numbers, proportional |
+| Headings | IBM Plex Sans    | Lining numbers                  |
+| Code     | IBM Plex Mono    | Scaled 0.85                     |
+| Math     | STIX Two Math    | Full Unicode math               |
+| Japanese | IBM Plex Sans JP | CJK support                     |
 
 ### Option: `font=stix`
 
 Traditional Times-like appearance.
 
-| Role | Font |
-|------|------|
-| Body | STIX Two Text |
+| Role     | Font          |
+| -------- | ------------- |
+| Body     | STIX Two Text |
 | Headings | IBM Plex Sans |
-| Code | IBM Plex Mono |
-| Math | STIX Two Math |
+| Code     | IBM Plex Mono |
+| Math     | STIX Two Math |
 
 ### Option: `font=palatino`
 
 TeX Gyre fonts (Palatino/Helvetica clones).
 
-| Role | Font |
-|------|------|
-| Body | TeX Gyre Pagella |
-| Headings | TeX Gyre Heros |
-| Code | TeX Gyre Cursor |
-| Math | Latin Modern Math |
+| Role     | Font              |
+| -------- | ----------------- |
+| Body     | TeX Gyre Pagella  |
+| Headings | TeX Gyre Heros    |
+| Code     | TeX Gyre Cursor   |
+| Math     | Latin Modern Math |
 
 **Usage:**
+
 ```latex
 \usepackage[article, font=plex]{moderndoc}
 \usepackage[thesis, font=stix]{moderndoc}
@@ -148,6 +155,7 @@ Enable or disable specific features.
 Draft mode adds visual aids for review.
 
 **Enabled:**
+
 - "DRAFT" watermark on all pages
 - Line numbers in margins
 - Overfull box markers
@@ -161,6 +169,7 @@ Draft mode adds visual aids for review.
 Code syntax highlighting via Pygments.
 
 **Requirements when enabled:**
+
 - Python installed
 - Pygments package (`pip install Pygments`)
 - `--shell-escape` compiler flag
@@ -201,6 +210,7 @@ Print-ready mode removes colored links.
 Enable index generation.
 
 **When enabled, provides:**
+
 ```latex
 \idx{term}       % Add to index
 \term{concept}   % Format + add to index
@@ -218,6 +228,7 @@ Enable index generation.
 Moderndoc defines semantic colors that can be redefined.
 
 **Default colors:**
+
 ```latex
 \definecolor{mdocprimary}{HTML}{2B579A}    % Primary (links, headings)
 \definecolor{mdocaccent}{HTML}{C45911}     % Accent (emphasis)
@@ -228,6 +239,7 @@ Moderndoc defines semantic colors that can be redefined.
 ```
 
 **Override in preamble:**
+
 ```latex
 \usepackage[article]{moderndoc}
 
@@ -284,31 +296,37 @@ All options combined:
 ## Option Combinations by Use Case
 
 ### Journal Submission
+
 ```latex
 \usepackage[article, citestyle=numeric, print=true]{moderndoc}
 ```
 
 ### Conference Paper
+
 ```latex
 \usepackage[paper, citestyle=numeric, minted=true]{moderndoc}
 ```
 
 ### PhD Thesis
+
 ```latex
 \usepackage[thesis, citestyle=authoryear, draft=true]{moderndoc}
 ```
 
 ### Technical Book
+
 ```latex
 \usepackage[book, citestyle=authortitle, makeindex=true]{moderndoc}
 ```
 
 ### Business Report
+
 ```latex
 \usepackage[report, citestyle=numeric]{moderndoc}
 ```
 
 ### Formal Letter
+
 ```latex
 \usepackage[letter, minted=false, biblatex=false]{moderndoc}
 ```

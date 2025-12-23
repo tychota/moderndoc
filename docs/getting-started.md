@@ -70,12 +70,20 @@ cd templates
 latexmk -lualatex -shell-escape article.tex
 ```
 
-!!! note "Shell Escape" ModernDoc uses `minted` for code highlighting, which requires the `-shell-escape` flag during compilation.
+!!! note "Shell Escape"
+    ModernDoc uses `minted` for code highlighting, which requires the `-shell-escape` flag during compilation.
 
 ## Using with AI Agents
 
-ModernDoc is designed to be "agent-friendly". If you are using an AI agent (like Claude or ChatGPT) with tool capabilities:
+ModernDoc is designed to be "agent-friendly". If you are using an AI coding agent:
 
-1.  Provide the `moderndoc.skill` to your agent (if supported).
-2.  Ask the agent to "Generate a report about X using the moderndoc report template."
-3.  The agent can use the library's structure to create valid, compilable LaTeX code.
+**Claude Code / Cursor / Windsurf:**
+
+1. Copy `skill/moderndoc/` to your project's `.claude/skills/` directory (or equivalent).
+2. The agent will automatically use ModernDoc conventions when working with `.tex` files.
+3. Ask the agent to "Generate a report about X using the moderndoc report template."
+
+**Other Agents:**
+
+1. Provide the contents of `skill/moderndoc/SKILL.md` as context.
+2. The agent can use the documentation to create valid, compilable LaTeX code.

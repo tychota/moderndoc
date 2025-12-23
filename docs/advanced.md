@@ -35,7 +35,7 @@ ModernDoc v3.0 enables professional `microtype` features optimized for LuaLaTeX:
 - **Expansion**: Bringhurst-compliant glyph scaling (maximum 2% stretch/shrink) for better justification.
 - **Tracking**: 5% letter-spacing for small caps only. Following the golden rule: *never letterspace lowercase text*.
 
-!!! note "LuaLaTeX Limitation"
+!!! info "LuaLaTeX Limitation"
     The `kerning` and `spacing` (interword) features of microtype are **not available** in LuaLaTeX—they only work with pdfTeX. ModernDoc uses fontspec's `Kerning=On` instead.
 
 ## Typographic Rules
