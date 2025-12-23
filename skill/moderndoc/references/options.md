@@ -17,12 +17,14 @@ Mutually exclusive. Choose one based on document purpose.
 
 | Option | KOMA Class | Layout | Line Spread |
 |--------|-----------|--------|-------------|
-| `article` | scrartcl | 25mm margins, single-column | 1.08 |
-| `paper` | scrartcl | 18mm sides, two-column | 1.04 |
-| `thesis` | scrbook | 40mm/25mm binding margins | 1.25 |
-| `book` | scrbook | 35mm/20mm binding margins | 1.10 |
-| `report` | scrreprt | 25mm margins | 1.10 |
+| `article` | scrartcl | 350pt textwidth (~66 chars), single-column | 1.08 |
+| `paper` | scrartcl | 174mm textwidth, two-column (~45 chars/col) | 1.04 |
+| `thesis` | scrbook | 350pt textwidth, 35mm/25mm binding | 1.25 |
+| `book` | scrbook | 350pt textwidth, 30mm/22mm binding | 1.10 |
+| `report` | scrreprt | 350pt textwidth, centered | 1.10 |
 | `letter` | scrlttr2 | DIN standard format | 1.05 |
+
+> **Typography Note**: Text widths follow Bringhurst's recommendation of 45-75 characters per line (66 optimal). At 11pt IBM Plex Serif, 350pt ≈ 66 characters.
 
 **Usage:**
 ```latex

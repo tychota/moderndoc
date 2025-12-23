@@ -261,20 +261,26 @@ Math: ∑, ∫, ∞, ≠, ≤, ≥
 ### Microtype Enhancement
 
 ```latex
-\usepackage{microtype}
-
-% Full features (LuaTeX)
-\microtypesetup{
+\usepackage[
     protrusion=true,     % Character protrusion into margins
     expansion=true,      % Font expansion for better justification
     tracking=true,       % Letter spacing adjustments
-    kerning=true,        % Kerning adjustments
-    spacing=true         % Word spacing adjustments
+    final                % Enable in final documents
+]{microtype}
+
+% Enable protrusion for math punctuation
+\UseMicrotypeSet[protrusion]{basicmath}
+
+% Bringhurst-compliant settings
+\microtypesetup{
+    factor=950           % 95% protrusion (subtle effect)
 }
 
-% Small caps tracking
+% Small caps tracking (5%)
 \SetTracking{encoding=*, shape=sc}{50}
 ```
+
+> **LuaLaTeX Limitation**: The `kerning` and `spacing` (interword) features are **not available** in LuaLaTeX—they only work with pdfTeX. Use fontspec's `Kerning=On` instead.
 
 ### Page Geometry
 
@@ -380,9 +386,14 @@ Math: ∑, ∫, ∞, ≠, ≤, ≥
 \widowpenalty=10000      % No widows (last line alone)
 \displaywidowpenalty=10000
 
-% Allow page breaks in display math
-\predisplaypenalty=0
-\postdisplaypenalty=0
+% Page break penalties
+\brokenpenalty=100       % Discourage break after hyphenated line
+\predisplaypenalty=10000 % Discourage break before display math
+\postdisplaypenalty=0    % Allow break after display math
+
+% Hyphenation control
+\doublehyphendemerits=10000  % Discourage consecutive hyphenated lines
+\finalhyphendemerits=5000    % Discourage hyphen on second-to-last line
 ```
 
 ### Hyphenation

@@ -116,8 +116,17 @@ Full options in [references/options.md](references/options.md).
 \foreign{bon appétit}      % Foreign terms (italic)
 \term{kerning}             % Technical terms
 \acronym{UNESCO}           % Acronyms (small caps)
+\caps{WARNING}             % Letterspaced capitals
 \software{LuaTeX}          % Software names (sans)
 \concept{Key Term}         % Bold concepts
+```
+
+### Number Utilities
+```latex
+\liningnums{2024}          % Lining figures (tables)
+\tabularnums{1,234}        % Tabular figures (aligned columns)
+\textnums{1984}            % Text/oldstyle figures
+\properfrac{3}{4}          % OpenType fractions (¾)
 ```
 
 ### Code Blocks (requires minted)
