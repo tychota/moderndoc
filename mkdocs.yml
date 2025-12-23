@@ -1,4 +1,5 @@
 site_name: ModernDoc
+site_url: https://tychota.github.io/moderndoc/
 site_description: A comprehensive LuaLaTeX template repository for quick, professional document publishing.
 site_author: Tychota
 repo_url: https://github.com/tychota/moderndoc
