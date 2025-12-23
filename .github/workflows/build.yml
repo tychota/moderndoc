@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.12'
 
     - name: Install Pygments
       run: pip install Pygments
@@ -38,41 +38,53 @@ jobs:
           tcolorbox
           tabularray
           ninecolors
+          booktabs
           cleveref
+          koma-script
+          hyperref
+          bookmark
+          unicode-math
+          lualatex-math
+          pdfmanagement-testphase
+          tagpdf
+          colorprofiles
+          abstract
+          amsmath
+          appendix
+          caption
+          csquotes
+          draftwatermark
+          enumitem
           environ
+          geometry
+          imakeidx
+          lettrine
+          lineno
+          listings
+          marginnote
+          mathtools
+          needspace
+          pgf
+          placeins
+          setspace
+          silence
           trimspaces
           varwidth
-          koma-script
-          etoolbox
           xcolor
-          tools
-          graphics
-          caption
-          hyperref
-          oberdiek
-          pdftexcmds
-          infwarerr
-          kvoptions
-          geometry
-          enumitem
-          abstract
-          silence
+          fvextra
+          fancyvrb
+          upquote
+          tikzfill
+          pdfcol
+          everyhook
+          svn-prov
           plex
           stix2-otf
           tex-gyre
-          draftwatermark
-          lineno
-          csquotes
-          placeins
-          mathtools
-          needspace
-          marginnote
-          appendix
-          imakeidx
-          amsmath
-          unicode-math
-          setspace
-          lettrine
+          haranoaji
+          lm
+          hyphen-french
+          hyphen-german
 
     - name: Build all templates
       run: make all
