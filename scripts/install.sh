@@ -2,16 +2,29 @@
 
 # ModernDoc Installer
 # Multi-platform (Linux, macOS) installer for ModernDoc dependencies and style files.
+# Supports both local execution and piping via curl.
 
 set -e
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DEPS_FILE="$PROJECT_ROOT/dependencies.txt"
-STYLE_FILE="$PROJECT_ROOT/styles/moderndoc.sty"
+# Configuration
+REPO_RAW_URL="https://raw.githubusercontent.com/tychota/moderndoc/main"
+DEPS_URL="$REPO_RAW_URL/dependencies.txt"
+STYLE_URL="$REPO_RAW_URL/styles/moderndoc.sty"
 
 echo "=== ModernDoc Installer ==="
 
-# 1. Check Requirements
+# 1. Determine installation source
+if [ -f "styles/moderndoc.sty" ] && [ -f "dependencies.txt" ]; then
+    echo "Detected local repository."
+    LOCAL_MODE=true
+    STYLE_FILE="styles/moderndoc.sty"
+    DEPS_FILE="dependencies.txt"
+else
+    echo "Detected remote installation mode."
+    LOCAL_MODE=false
+fi
+
+# 2. Check Requirements
 echo "Checking requirements..."
 
 if ! command -v tlmgr &> /dev/null; then
@@ -24,7 +37,7 @@ if ! command -v lualatex &> /dev/null; then
     exit 1
 fi
 
-# 2. Install Python Dependencies
+# 3. Install Python Dependencies
 echo "Installing Python dependencies (Pygments)..."
 if command -v pip3 &> /dev/null; then
     pip3 install Pygments
@@ -34,48 +47,54 @@ else
     echo "Warning: pip not found. Pygments (for minted) might not be installed."
 fi
 
-# 3. Install LaTeX Packages
-if [ -f "$DEPS_FILE" ]; then
-    echo "Installing LaTeX packages from dependencies.txt..."
-    # Read packages into an array, skipping comments
+# 4. Install LaTeX Packages
+echo "Installing LaTeX packages..."
+if [ "$LOCAL_MODE" = true ]; then
     mapfile -t PKGS < <(grep -v '^#' "$DEPS_FILE")
-    
-    # Try to install (may need sudo depending on TL installation)
+else
+    # Fetch dependencies from remote
+    mapfile -t PKGS < <(curl -sSL "$DEPS_URL" | grep -v '^#')
+fi
+
+if [ ${#PKGS[@]} -eq 0 ]; then
+    echo "  No packages to install."
+else
+    # Try to install
     if [ "$(id -u)" -ne 0 ] && [ -w "$(tlmgr --version | grep 'root:' | awk '{print $2}')" ]; then
         tlmgr install "${PKGS[@]}"
     else
         echo "Note: Using sudo for tlmgr installation..."
         sudo tlmgr install "${PKGS[@]}"
     fi
-else
-    echo "Warning: dependencies.txt not found. Run generate_dependencies.sh first?"
 fi
 
-# 4. Install moderndoc.sty
+# 5. Install moderndoc.sty
 echo "Installing moderndoc.sty to local TEXMF directory..."
 
 TEXMFHOME=$(kpsewhich -var-value=TEXMFHOME)
 TARGET_DIR="$TEXMFHOME/tex/latex/moderndoc"
 
 mkdir -p "$TARGET_DIR"
-cp "$STYLE_FILE" "$TARGET_DIR/"
 
-echo "Installed to $TARGET_DIR"
+if [ "$LOCAL_MODE" = true ]; then
+    cp "$STYLE_FILE" "$TARGET_DIR/"
+else
+    curl -sSL "$STYLE_URL" -o "$TARGET_DIR/moderndoc.sty"
+fi
 
-# 5. Update TeX Database
+echo "  Installed to $TARGET_DIR"
+
+# 6. Update TeX Database
 echo "Updating TeX filename database..."
 if command -v mktexlsr &> /dev/null; then
+    # We might need sudo for mktexlsr if it's a system-wide update, 
+    # but usually TEXMFHOME doesn't need it. 
+    # However, running it on TEXMFHOME is safer.
     mktexlsr "$TEXMFHOME"
 fi
 
-# 6. Setup Mode (Fetch Skills)
-if [[ "$1" == "--setup" ]]; then
-    echo "Setup mode: Installing ModernDoc Skill..."
-    # Placeholder for fetching skill - for now we just acknowledge the local one
-    # In a real library, this might download the .skill file to a standard location.
-    echo "Skill file is available at: $PROJECT_ROOT/moderndoc.skill"
-    echo "You can provide this file to your AI agent (Claude/GPT) to enable ModernDoc support."
-fi
-
 echo "=== Installation Complete ==="
-echo "Try building a template: make article"
+echo "You can now use \usepackage{moderndoc} in your LaTeX documents."
+if [ "$LOCAL_MODE" = false ]; then
+    echo "To use our templates, clone the repository: git clone https://github.com/tychota/moderndoc.git"
+fi

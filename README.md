@@ -15,22 +15,36 @@ ModernDoc transforms the powerful but complex LaTeX system into an accessible, "
 
 ## Quick Start
 
-1.  **Clone the repo**:
+
+
+1.  **Install the library**:
 
     ```bash
+
+    curl -sSL https://raw.githubusercontent.com/tychota/moderndoc/main/scripts/install.sh | bash
+
+    ```
+
+
+
+2.  **Clone for templates (Optional)**:
+
+    ```bash
+
     git clone https://github.com/tychota/moderndoc.git
+
     cd moderndoc
+
     ```
 
-2.  **Install dependencies**:
 
-    ```bash
-    python3 scripts/install.py
-    ```
 
 3.  **Build a template**:
+
     ```bash
+
     make article
+
     ```
 
 ## Documentation

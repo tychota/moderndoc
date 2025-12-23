@@ -11,7 +11,21 @@ ModernDoc relies on a modern TeX environment. You will need:
 
 ## Installation
 
-We provide an automated installation script to set up all dependencies and install the `moderndoc` style file.
+The easiest way to install ModernDoc and all its LaTeX dependencies is via our one-liner install script:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/tychota/moderndoc/main/scripts/install.sh | bash
+```
+
+This script will:
+1.  Check for a working TeX Live installation.
+2.  Install required Python packages (`Pygments`).
+3.  Automatically download and install missing LaTeX packages via `tlmgr`.
+4.  Install the `moderndoc.sty` file into your local `TEXMF` directory.
+
+### Using Templates (Optional)
+
+If you want to use our pre-configured templates (highly recommended for new projects), clone the repository:
 
 1.  **Clone the repository:**
     ```bash
@@ -19,16 +33,7 @@ We provide an automated installation script to set up all dependencies and insta
     cd moderndoc
     ```
 
-2.  **Run the installer:**
-    The script will check for missing LaTeX packages and Python dependencies.
-    ```bash
-    python3 scripts/install.py
-    ```
-    
-    *   **Mac/Linux**: This may require `sudo` if installing to system directories, though we recommend user-local installation (default).
-    *   **Windows**: Run in PowerShell or Command Prompt.
-
-3.  **Verify Installation:**
+2.  **Verify Installation:**
     Check that `lualatex` can find the style file:
     ```bash
     kpsewhich moderndoc.sty
@@ -39,17 +44,19 @@ We provide an automated installation script to set up all dependencies and insta
 ModernDoc comes with several pre-configured templates in the `templates/` directory.
 
 ### 1. Choose a Template
-*   `article.tex`: For generic articles and documentation.
-*   `report.tex`: For technical reports with executive summaries.
-*   `thesis.tex`: For academic dissertations (customizable margins).
-*   `book.tex`: For writing books.
-*   `letter.tex`: For formal correspondence.
+
+- `article.tex`: For generic articles and documentation.
+- `report.tex`: For technical reports with executive summaries.
+- `thesis.tex`: For academic dissertations (customizable margins).
+- `book.tex`: For writing books.
+- `letter.tex`: For formal correspondence.
 
 ### 2. Build the Document
 
 You can compile documents using the provided `Makefile` or standard LaTeX tools.
 
 **Using Make (Recommended):**
+
 ```bash
 make article
 # or
@@ -57,13 +64,13 @@ make all
 ```
 
 **Using Latexmk:**
+
 ```bash
 cd templates
 latexmk -lualatex -shell-escape article.tex
 ```
 
-!!! note "Shell Escape"
-    ModernDoc uses `minted` for code highlighting, which requires the `-shell-escape` flag during compilation.
+!!! note "Shell Escape" ModernDoc uses `minted` for code highlighting, which requires the `-shell-escape` flag during compilation.
 
 ## Using with AI Agents
 
