@@ -188,3 +188,6 @@ latex.out/
 
 # minted
 _minted
+
+# claude
+.claude/skills/skill-creator
