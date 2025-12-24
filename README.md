@@ -11,11 +11,11 @@ ModernDoc transforms the powerful but complex LaTeX system into an accessible, "
 - **✨ Modern Aesthetics**: Ships with **IBM Plex**, a typeface designed for the intersection of mankind and machine.
 - **🏛️ Archival Quality**: Outputs **PDF/A-4** (ISO 19005-4:2020) by default for long-term preservation.
 - **🚀 Zero Config**: Pre-configured settings for bibliography, code highlighting, and typography.
-- **🤖 Agent Ready**: Includes `moderndoc.skill` for AI agents to generate documents autonomously.
+- **🤖 Agent Ready**: Includes `modern-doc.skill` for AI agents to generate documents autonomously.
 
 ## Quick Start
 
-1. **Install the library**:
+1. **Install the class/package**:
     ```bash
     curl -sSL https://raw.githubusercontent.com/tychota/moderndoc/main/scripts/install.sh | bash
     ```
@@ -29,6 +29,11 @@ ModernDoc transforms the powerful but complex LaTeX system into an accessible, "
 3. **Build a template**:
     ```bash
     make article
+    ```
+
+4. **Use the class**:
+    ```tex
+    \documentclass[article]{modern-doc}
     ```
 
 ## Documentation

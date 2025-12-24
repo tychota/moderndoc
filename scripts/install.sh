@@ -9,15 +9,17 @@ set -e
 # Configuration
 REPO_RAW_URL="https://raw.githubusercontent.com/tychota/moderndoc/main"
 DEPS_URL="$REPO_RAW_URL/dependencies.txt"
-STYLE_URL="$REPO_RAW_URL/styles/moderndoc.sty"
+CLASS_URL="$REPO_RAW_URL/tex/latex/modern-doc/modern-doc.cls"
+STYLE_URL="$REPO_RAW_URL/tex/latex/modern-doc/modern-doc.sty"
 
 echo "=== ModernDoc Installer ==="
 
 # 1. Determine installation source
-if [ -f "styles/moderndoc.sty" ] && [ -f "dependencies.txt" ]; then
+if [ -f "tex/latex/modern-doc/modern-doc.sty" ] && [ -f "tex/latex/modern-doc/modern-doc.cls" ] && [ -f "dependencies.txt" ]; then
     echo "Detected local repository."
     LOCAL_MODE=true
-    STYLE_FILE="styles/moderndoc.sty"
+    CLASS_FILE="tex/latex/modern-doc/modern-doc.cls"
+    STYLE_FILE="tex/latex/modern-doc/modern-doc.sty"
     DEPS_FILE="dependencies.txt"
 else
     echo "Detected remote installation mode."
@@ -68,18 +70,20 @@ else
     fi
 fi
 
-# 5. Install moderndoc.sty
-echo "Installing moderndoc.sty to local TEXMF directory..."
+# 5. Install modern-doc.cls and modern-doc.sty
+echo "Installing modern-doc.cls and modern-doc.sty to local TEXMF directory..."
 
 TEXMFHOME=$(kpsewhich -var-value=TEXMFHOME)
-TARGET_DIR="$TEXMFHOME/tex/latex/moderndoc"
+TARGET_DIR="$TEXMFHOME/tex/latex/modern-doc"
 
 mkdir -p "$TARGET_DIR"
 
 if [ "$LOCAL_MODE" = true ]; then
+    cp "$CLASS_FILE" "$TARGET_DIR/"
     cp "$STYLE_FILE" "$TARGET_DIR/"
 else
-    curl -sSL "$STYLE_URL" -o "$TARGET_DIR/moderndoc.sty"
+    curl -sSL "$CLASS_URL" -o "$TARGET_DIR/modern-doc.cls"
+    curl -sSL "$STYLE_URL" -o "$TARGET_DIR/modern-doc.sty"
 fi
 
 echo "  Installed to $TARGET_DIR"
@@ -94,7 +98,7 @@ if command -v mktexlsr &> /dev/null; then
 fi
 
 echo "=== Installation Complete ==="
-echo "You can now use \usepackage{moderndoc} in your LaTeX documents."
+echo "You can now use \\documentclass{modern-doc} in your LaTeX documents."
 if [ "$LOCAL_MODE" = false ]; then
     echo "To use our templates, clone the repository: git clone https://github.com/tychota/moderndoc.git"
 fi

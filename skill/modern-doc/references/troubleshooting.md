@@ -49,7 +49,7 @@ sudo tlmgr update --self
 # Install specific package
 sudo tlmgr install packagename
 
-# Common moderndoc dependencies
+# Common modern-doc dependencies
 sudo tlmgr install \
   fontspec microtype geometry polyglossia \
   biblatex biber minted tcolorbox tabularray \
@@ -135,7 +135,7 @@ lualatex --shell-escape document.tex
 
 If minted issues persist:
 ```latex
-\usepackage[article, minted=false]{moderndoc}
+\usepackage[article, minted=false]{modern-doc}
 
 % Use listings instead
 \usepackage{listings}
@@ -224,8 +224,8 @@ fc-cache -fv
 
 **Solution 3: Use alternative font option**
 ```latex
-\usepackage[article, font=stix]{moderndoc}    % STIX (TeX Live)
-\usepackage[article, font=palatino]{moderndoc} % TeX Gyre (TeX Live)
+\usepackage[article, font=stix]{modern-doc}    % STIX (TeX Live)
+\usepackage[article, font=palatino]{modern-doc} % TeX Gyre (TeX Live)
 ```
 
 ### Japanese Font Missing
@@ -246,7 +246,7 @@ sudo tlmgr install noto-cjk
 
 **Warning:** `LaTeX Font Warning: Font shape ... undefined`
 
-This is normal for CJK fonts. The warning is suppressed by moderndoc.
+This is normal for CJK fonts. The warning is suppressed by modern-doc.
 
 ---
 
@@ -264,7 +264,7 @@ This is normal for CJK fonts. The warning is suppressed by moderndoc.
 
 2. **Color space issue:**
 ```latex
-% moderndoc uses sRGB by default
+% modern-doc uses sRGB by default
 % Verify images are RGB, not CMYK
 ```
 
@@ -278,7 +278,7 @@ This is normal for CJK fonts. The warning is suppressed by moderndoc.
 
 **Error:** PDF readers show wrong version
 
-**Note:** moderndoc uses PDF 2.0 for PDF/A-4 compliance. Older readers may not fully support this. The document remains readable.
+**Note:** modern-doc uses PDF 2.0 for PDF/A-4 compliance. Older readers may not fully support this. The document remains readable.
 
 ---
 
@@ -334,7 +334,7 @@ Problematic paragraph text...
 % For specific words
 \hyphenation{prob-lem-at-ic}
 
-% Use microtype (included by moderndoc)
+% Use microtype (included by modern-doc)
 \usepackage{microtype}
 ```
 
@@ -413,7 +413,7 @@ make article && ls output/
    # Create minimal example
    cat > test.tex << 'EOF'
    \documentclass{scrartcl}
-   \usepackage[article]{moderndoc}
+   \usepackage[article]{modern-doc}
    \begin{document}
    Hello World
    \end{document}
@@ -441,5 +441,5 @@ make article && ls output/
    lualatex --version
    biber --version
    pygmentize -V
-   kpsewhich moderndoc.sty
+   kpsewhich modern-doc.sty
    ```

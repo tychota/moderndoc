@@ -6,16 +6,9 @@
 % =============================================================================
 
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
-\DocumentMetadata{pdfversion = 2.0, pdfstandard = a-4, lang = en-US}
+\DocumentMetadata{pdfversion=2.0, pdfstandard=a-4, lang=en-US}
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
-\documentclass[11pt, a4paper]{scrartcl}
-
-\usepackage[article]{moderndoc}
-
+\documentclass[article]{modern-doc}
 \addbibresource{references.bib}
 
 \title{Minimal Working Example}
@@ -42,13 +35,13 @@ for citing passages from papers or documents.
 
 \section{Code Example}
 
-\begin{minted}{python}
+\begin{codeblock}[python]
 def greet(name: str) -> str:
     """Return a greeting message."""
     return f"Hello, {name}!"
 
 print(greet("World"))
-\end{minted}
+\end{codeblock}
 
 \section{Table Example}
 

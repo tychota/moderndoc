@@ -9,31 +9,27 @@
 % --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion  = 2.0,
-  pdfstandard = a-4,
-  lang        = en-US,
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
 }
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
 \documentclass[
+  thesis,
   11pt,
   a4paper,
   twoside,
-  openright,
-  cleardoublepage = empty,  % Use KOMA-Script option instead of emptypage package
-  chapterprefix = true,
-  numbers       = noenddot,
-  headings      = normal,
-]{scrbook}
+  open=right,
+  cleardoublepage=empty,  % Use KOMA-Script option instead of emptypage package
+  chapterprefix=true,
+  numbers=noenddot,
+  headings=normal,
+  citestyle=authoryear
+]{modern-doc}
 
 % =============================================================================
 % PREAMBLE
 % =============================================================================
-\usepackage[thesis, citestyle=authoryear]{moderndoc}
-
 % --- Bibliography file ---
 \addbibresource{references.bib}
 
@@ -291,7 +287,7 @@ necessary to understand the contributions of this thesis.
 Explanation of the first foundational concept. Include definitions, notation,
 and examples as appropriate.
 
-\begin{notebox}[Definition]
+\begin{notebox}[title=Definition]
 A \concept{key term} is defined as follows: [formal definition].
 \end{notebox}
 
@@ -305,7 +301,7 @@ Explanation of the second foundational concept.
 
 Description of relevant algorithms. Include pseudocode where appropriate:
 
-\begin{minted}{python}
+\begin{codeblock}[python]
 def algorithm_name(input_data, parameters):
     """
     Brief description of what this algorithm does.
@@ -326,7 +322,7 @@ def algorithm_name(input_data, parameters):
     
     # Step 3: Finalize
     return finalize(result)
-\end{minted}
+\end{codeblock}
 
 \section{Summary}
 
@@ -385,7 +381,7 @@ Detailed description of the second component.
 
 If applicable, provide theoretical analysis, proofs, or formal properties.
 
-\begin{notebox}[Theorem 1]
+\begin{notebox}[title=Theorem 1]
 Statement of the theorem.
 \end{notebox}
 

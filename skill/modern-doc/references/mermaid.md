@@ -2,7 +2,7 @@
 
 ## Overview
 
-TikZ is the preferred method for diagrams in moderndoc documents. It provides consistent styling, vector output, and full integration with document colors and fonts. For complex diagrams or rapid prototyping, pre-render Mermaid to images first, then convert to TikZ.
+TikZ is the preferred method for diagrams in modern-doc documents. It provides consistent styling, vector output, and full integration with document colors and fonts. For complex diagrams or rapid prototyping, pre-render Mermaid to images first, then convert to TikZ.
 
 ## Table of Contents
 - [TikZ Diagram Patterns](#tikz-diagram-patterns)
@@ -34,7 +34,7 @@ Load TikZ with required libraries in preamble:
 
 ### Moderndoc Style Integration
 
-Define reusable styles using moderndoc colors:
+Define reusable styles using modern-doc colors:
 
 ```latex
 \tikzset{

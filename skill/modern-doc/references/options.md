@@ -30,12 +30,12 @@ Mutually exclusive. Choose one based on document purpose.
 **Usage:**
 
 ```latex
-\usepackage[article]{moderndoc}    % Single-column article
-\usepackage[paper]{moderndoc}      % Two-column conference paper
-\usepackage[thesis]{moderndoc}     % Academic thesis
-\usepackage[book]{moderndoc}       % Technical book
-\usepackage[report]{moderndoc}     % Technical report
-\usepackage[letter]{moderndoc}     % Formal letter
+\usepackage[article]{modern-doc}    % Single-column article
+\usepackage[paper]{modern-doc}      % Two-column conference paper
+\usepackage[thesis]{modern-doc}     % Academic thesis
+\usepackage[book]{modern-doc}       % Technical book
+\usepackage[report]{modern-doc}     % Technical report
+\usepackage[letter]{modern-doc}     % Formal letter
 ```
 
 ---
@@ -53,8 +53,8 @@ Control bibliography and citation formatting.
 **Usage:**
 
 ```latex
-\usepackage[article, citestyle=numeric]{moderndoc}
-\usepackage[thesis, citestyle=authoryear]{moderndoc}
+\usepackage[article, citestyle=numeric]{modern-doc}
+\usepackage[thesis, citestyle=authoryear]{modern-doc}
 ```
 
 **Citation commands:**
@@ -84,8 +84,8 @@ Set document language for hyphenation, quotes, and localization.
 **Usage:**
 
 ```latex
-\usepackage[article, language=en-US]{moderndoc}
-\usepackage[thesis, language=fr]{moderndoc}
+\usepackage[article, language=en-US]{modern-doc}
+\usepackage[thesis, language=fr]{modern-doc}
 ```
 
 **Quote commands (language-aware):**
@@ -104,7 +104,7 @@ Select font family combination.
 
 ### Option: `font=plex` (default)
 
-IBM Plex font family (bundled with moderndoc).
+IBM Plex font family (bundled with modern-doc).
 
 | Role     | Font             | Features                        |
 | -------- | ---------------- | ------------------------------- |
@@ -139,9 +139,9 @@ TeX Gyre fonts (Palatino/Helvetica clones).
 **Usage:**
 
 ```latex
-\usepackage[article, font=plex]{moderndoc}
-\usepackage[thesis, font=stix]{moderndoc}
-\usepackage[book, font=palatino]{moderndoc}
+\usepackage[article, font=plex]{modern-doc}
+\usepackage[thesis, font=stix]{modern-doc}
+\usepackage[book, font=palatino]{modern-doc}
 ```
 
 ---
@@ -161,7 +161,7 @@ Draft mode adds visual aids for review.
 - Overfull box markers
 
 ```latex
-\usepackage[article, draft=true]{moderndoc}
+\usepackage[article, draft=true]{modern-doc}
 ```
 
 ### `minted=true|false` (default: true)
@@ -175,8 +175,8 @@ Code syntax highlighting via Pygments.
 - `--shell-escape` compiler flag
 
 ```latex
-\usepackage[article, minted=true]{moderndoc}   % Enable (default)
-\usepackage[letter, minted=false]{moderndoc}   % Disable for letters
+\usepackage[article, minted=true]{modern-doc}   % Enable (default)
+\usepackage[letter, minted=false]{modern-doc}   % Disable for letters
 ```
 
 ### `biblatex=true|false` (default: true)
@@ -184,8 +184,8 @@ Code syntax highlighting via Pygments.
 Bibliography support via biblatex/biber.
 
 ```latex
-\usepackage[article, biblatex=true]{moderndoc}  % Enable (default)
-\usepackage[letter, biblatex=false]{moderndoc}  % Disable for letters
+\usepackage[article, biblatex=true]{modern-doc}  % Enable (default)
+\usepackage[letter, biblatex=false]{modern-doc}  % Disable for letters
 ```
 
 ### `hyperlinks=true|false` (default: true)
@@ -193,8 +193,8 @@ Bibliography support via biblatex/biber.
 PDF hyperlinks for cross-references, citations, URLs.
 
 ```latex
-\usepackage[article, hyperlinks=true]{moderndoc}   % Enable (default)
-\usepackage[book, hyperlinks=false]{moderndoc}     % Disable
+\usepackage[article, hyperlinks=true]{modern-doc}   % Enable (default)
+\usepackage[book, hyperlinks=false]{modern-doc}     % Disable
 ```
 
 ### `print=true|false` (default: false)
@@ -202,7 +202,7 @@ PDF hyperlinks for cross-references, citations, URLs.
 Print-ready mode removes colored links.
 
 ```latex
-\usepackage[thesis, print=true]{moderndoc}    % Black links for printing
+\usepackage[thesis, print=true]{modern-doc}    % Black links for printing
 ```
 
 ### `makeindex=true|false` (default: false)
@@ -218,7 +218,7 @@ Enable index generation.
 ```
 
 ```latex
-\usepackage[book, makeindex=true]{moderndoc}
+\usepackage[book, makeindex=true]{modern-doc}
 ```
 
 ---
@@ -241,7 +241,7 @@ Moderndoc defines semantic colors that can be redefined.
 **Override in preamble:**
 
 ```latex
-\usepackage[article]{moderndoc}
+\usepackage[article]{modern-doc}
 
 % Custom brand colors
 \definecolor{mdocprimary}{HTML}{1A73E8}    % Google Blue
@@ -277,7 +277,7 @@ All options combined:
   hyperlinks=true,
   print=false,
   makeindex=true,
-]{moderndoc}
+]{modern-doc}
 
 \title{Complete Example}
 \author{Author Name}
@@ -298,35 +298,35 @@ All options combined:
 ### Journal Submission
 
 ```latex
-\usepackage[article, citestyle=numeric, print=true]{moderndoc}
+\usepackage[article, citestyle=numeric, print=true]{modern-doc}
 ```
 
 ### Conference Paper
 
 ```latex
-\usepackage[paper, citestyle=numeric, minted=true]{moderndoc}
+\usepackage[paper, citestyle=numeric, minted=true]{modern-doc}
 ```
 
 ### PhD Thesis
 
 ```latex
-\usepackage[thesis, citestyle=authoryear, draft=true]{moderndoc}
+\usepackage[thesis, citestyle=authoryear, draft=true]{modern-doc}
 ```
 
 ### Technical Book
 
 ```latex
-\usepackage[book, citestyle=authortitle, makeindex=true]{moderndoc}
+\usepackage[book, citestyle=authortitle, makeindex=true]{modern-doc}
 ```
 
 ### Business Report
 
 ```latex
-\usepackage[report, citestyle=numeric]{moderndoc}
+\usepackage[report, citestyle=numeric]{modern-doc}
 ```
 
 ### Formal Letter
 
 ```latex
-\usepackage[letter, minted=false, biblatex=false]{moderndoc}
+\usepackage[letter, minted=false, biblatex=false]{modern-doc}
 ```

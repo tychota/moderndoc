@@ -9,23 +9,16 @@
 % --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion  = 2.0,
-  pdfstandard = a-4,
-  lang        = en-US,
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
 }
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-% This warning is harmless - latex-lab modifies footnotes for PDF accessibility
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
-\documentclass[11pt, a4paper, oneside]{scrartcl}
+\documentclass[article]{modern-doc}
 
 % =============================================================================
 % PREAMBLE
 % =============================================================================
-\usepackage[article, citestyle=numeric]{moderndoc}
-
 % --- Bibliography file ---
 \addbibresource{references.bib}
 
@@ -72,7 +65,7 @@ typography, LaTeX, document preparation, academic writing, LuaLaTeX
 \section{Introduction}
 % =============================================================================
 
-This template demonstrates the capabilities of the \texttt{moderndoc} style
+This template demonstrates the capabilities of the \texttt{modern-doc} style
 package for creating professional academic articles using LuaLaTeX.
 
 The IBM Plex font family provides a clean, modern aesthetic with excellent
@@ -86,7 +79,7 @@ headings.
   \item IBM Plex font family with Japanese support
   \item Professional typography via \texttt{microtype}
   \item Modern bibliography with \texttt{biblatex}
-  \item Code highlighting with \texttt{minted}
+  \item Code snippets via \texttt{codeblock} (minted when enabled)
   \item Styled quote boxes with \texttt{tcolorbox}
   \item Modern tables with \texttt{tabularray}
 \end{itemize}
@@ -138,11 +131,11 @@ with proper quotation marks that adapt to the document language.
 \section{Code Examples}
 % =============================================================================
 
-Inline code looks like this: \mintinline{python}{def hello(): print("Hello")}.
+Inline code looks like this: \code{def hello(): print("Hello")}.
 
-For code blocks, use the \texttt{minted} environment:
+For code blocks, use the \texttt{codeblock} environment:
 
-\begin{minted}{python}
+\begin{codeblock}[python]
 def fibonacci(n: int) -> int:
     """Calculate the nth Fibonacci number."""
     if n <= 1:
@@ -152,18 +145,18 @@ def fibonacci(n: int) -> int:
 # Example usage
 for i in range(10):
     print(f"F({i}) = {fibonacci(i)}")
-\end{minted}
+\end{codeblock}
 
 Multiple languages are supported:
 
-\begin{minted}{javascript}
+\begin{codeblock}[javascript]
 // Modern JavaScript with async/await
 async function fetchData(url) {
   const response = await fetch(url);
   const data = await response.json();
   return data;
 }
-\end{minted}
+\end{codeblock}
 
 % =============================================================================
 \section{Tables}
@@ -239,7 +232,7 @@ work\autocite{knuth1984texbook} or multiple sources\autocites{lamport1994latex}{
 \section{Semantic Markup}
 % =============================================================================
 
-The \texttt{moderndoc} package provides semantic markup commands:
+The \texttt{modern-doc} package provides semantic markup commands:
 
 \begin{itemize}
   \item \foreign{Foreign terms} for non-English words: \verb|\foreign{bon appétit}|

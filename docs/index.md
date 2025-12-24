@@ -18,11 +18,11 @@ We love LaTeX. For decades, it has been the gold standard for beautiful, high-qu
 
 ## What ModernDoc Offers
 
-ModernDoc is an "opinionated" set of templates and a powerful style package (`moderndoc.sty`) that gives you:
+ModernDoc is an "opinionated" set of templates with a KOMA wrapper class (`modern-doc.cls`) and a style package (`modern-doc.sty`) that gives you:
 
 - **Modern Aesthetics**: Built-in support for the [IBM Plex](https://www.ibm.com/plex/) font family—a typeface designed to capture the relationship between mankind and machine.
 - **Archival Quality**: Default output to **PDF/A-4**, the latest standard for long-term document preservation.
-- **Batteries Included**: Pre-configured setups for Code (minted), Bibliography (biblatex), Tables (tabularray), and more.
+- **Batteries Included**: Pre-configured setups for code (minted when enabled), bibliography (biblatex), tables (tabularray), and more.
 - **Agent-Ready**: Designed to work seamlessly with AI coding agents (Claude Code, Cursor, etc.), allowing you to generate and modify documents using natural language.
 
 ## Key Features

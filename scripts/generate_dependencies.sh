@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ModernDoc Dependency Generator
-# This script scans the templates and styles for LaTeX packages and maps them to tlmgr package names.
+# This script scans the templates and class/package files for LaTeX packages and maps them to tlmgr package names.
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_FILE="$PROJECT_ROOT/dependencies.txt"
@@ -13,7 +13,7 @@ RAW_PKGS=$(mktemp)
 
 # Extract package names from \usepackage and \RequirePackage
 # This uses a slightly more portable grep approach
-find "$PROJECT_ROOT/templates" "$PROJECT_ROOT/styles" -name "*.tex" -o -name "*.sty" | xargs grep -hE "\\(usepackage|RequirePackage)" | \
+find "$PROJECT_ROOT/templates" "$PROJECT_ROOT/tex/latex/modern-doc" -name "*.tex" -o -name "*.sty" -o -name "*.cls" | xargs grep -hE "\\(usepackage|RequirePackage)" | \
     sed -E 's/.*\{(.*)\}.*/\1/' | \
     tr ',' '\n' | \
     sed 's/ //g' | \

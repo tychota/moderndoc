@@ -23,6 +23,11 @@ $max_repeat = 5;
 $emulate_aux = 1;
 $aux_dir = $out_dir;
 
+# Keep LuaTeX font cache under output/
+if (!defined $ENV{TEXMFCACHE}) {
+    $ENV{TEXMFCACHE} = 'build/.tex-cache';
+}
+
 # =============================================================================
 # Minted / Pygments support
 # =============================================================================

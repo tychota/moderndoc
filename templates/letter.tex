@@ -7,32 +7,28 @@
 % --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion  = 2.0,
-  pdfstandard = a-4,
-  lang        = en-US,
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
 }
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
 \documentclass[
+  letter,
+  nobiblatex,
   11pt,
   a4paper,
-  fromalign    = right,
-  fromphone    = true,
-  fromemail    = true,
-  fromlogo     = false,
-  backaddress  = true,
-  foldmarks    = true,
-  pagenumber   = false,
-]{scrlttr2}
+  fromalign=right,
+  fromphone=true,
+  fromemail=true,
+  fromlogo=false,
+  backaddress=true,
+  foldmarks=true,
+  pagenumber=false
+]{modern-doc}
 
 % =============================================================================
 % PREAMBLE
 % =============================================================================
-\usepackage[letter, biblatex=false, minted=false]{moderndoc}
-
 % --- Load KOMA letter options ---
 \LoadLetterOption{DIN}
 

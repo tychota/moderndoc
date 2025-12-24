@@ -1,0 +1,684 @@
+% =============================================================================
+% modern-doc.sty - ModernDoc v4 (LuaLaTeX + KOMA-Script)
+% =============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\ProvidesExplPackage{modern-doc}{2025/12/24}{4.0}
+  {ModernDoc v4 styling (LuaLaTeX + KOMA-Script, IBM Plex)}
+
+\makeatletter
+\def\mdoc@optionlist{}
+\DeclareOption*{%
+  \ifx\mdoc@optionlist\@empty
+    \gdef\mdoc@optionlist{\CurrentOption}%
+  \else
+    \g@addto@macro\mdoc@optionlist{,\CurrentOption}%
+  \fi
+}
+\ProcessOptions\relax
+\makeatother
+
+\RequirePackage{expl3}
+\RequirePackage{xparse}
+\RequirePackage{l3keys2e}
+\ExplSyntaxOn
+
+% -----------------------------------------------------------------------------
+% Engine / base-class checks
+% -----------------------------------------------------------------------------
+\sys_if_engine_luatex:F
+  { \msg_fatal:nn { modern-doc } { luatex-only } }
+
+\cs_if_exist:NF \KOMAClassName
+  { \msg_fatal:nn { modern-doc } { koma-required } }
+
+\msg_new:nnn { modern-doc } { luatex-only }
+  { modern-doc~requires~LuaLaTeX. }
+\msg_new:nnn { modern-doc } { koma-required }
+  { modern-doc~requires~a~KOMA-Script~class~(scrartcl/scrreprt/scrbook/scrlttr2). }
+
+% -----------------------------------------------------------------------------
+% Options (keys)
+% -----------------------------------------------------------------------------
+\bool_new:N \l_mdoc_draft_bool
+\bool_new:N \l_mdoc_print_bool
+\bool_new:N \l_mdoc_hyperlinks_bool
+\bool_new:N \l_mdoc_biblatex_bool
+\bool_new:N \l_mdoc_makeindex_bool
+
+\tl_new:N   \l_mdoc_doctype_tl
+\tl_new:N   \l_mdoc_citestyle_tl
+\tl_new:N   \l_mdoc_div_tl
+\tl_new:N   \l_mdoc_bcor_tl
+\tl_new:N   \l_mdoc_mintedstyle_screen_tl
+\tl_new:N   \l_mdoc_mintedstyle_print_tl
+\int_new:N  \l_mdoc_bookmarkdepth_int
+\tl_new:N   \l_mdoc_optionlist_tl
+
+\keys_define:nn { mdoc }
+  {
+    doctype .choice:,
+    doctype / article .code:n = { \tl_set:Nn \l_mdoc_doctype_tl {article} },
+    doctype / paper   .code:n = { \tl_set:Nn \l_mdoc_doctype_tl {paper} },
+    doctype / thesis  .code:n = { \tl_set:Nn \l_mdoc_doctype_tl {thesis} },
+    doctype / book    .code:n = { \tl_set:Nn \l_mdoc_doctype_tl {book} },
+    doctype / report  .code:n = { \tl_set:Nn \l_mdoc_doctype_tl {report} },
+    doctype / letter  .code:n = { \tl_set:Nn \l_mdoc_doctype_tl {letter} },
+    doctype .initial:n = article,
+
+    draft .bool_set:N = \l_mdoc_draft_bool,
+    draft .initial:n  = false,
+
+    print .bool_set:N = \l_mdoc_print_bool,
+    print .initial:n  = false,
+
+    hyperlinks .bool_set:N = \l_mdoc_hyperlinks_bool,
+    hyperlinks .initial:n  = true,
+
+    minted .code:n = { },
+    minted .default:n = true,
+
+    biblatex .bool_set:N = \l_mdoc_biblatex_bool,
+    biblatex .initial:n  = true,
+
+    makeindex .bool_set:N = \l_mdoc_makeindex_bool,
+    makeindex .initial:n  = false,
+
+    citestyle .tl_set:N = \l_mdoc_citestyle_tl,
+    citestyle .initial:n = numeric,
+
+    div  .tl_set:N = \l_mdoc_div_tl,
+    div  .initial:n = calc,
+
+    bcor .tl_set:N = \l_mdoc_bcor_tl,
+    bcor .initial:n = 0mm,
+
+    bookmarkdepth .int_set:N = \l_mdoc_bookmarkdepth_int,
+    bookmarkdepth .initial:n = 3,
+
+    mintedstyle-screen .tl_set:N = \l_mdoc_mintedstyle_screen_tl,
+    mintedstyle-screen .initial:n = ,
+
+    mintedstyle-print .tl_set:N = \l_mdoc_mintedstyle_print_tl,
+    mintedstyle-print .initial:n = ,
+  }
+
+\tl_set:Nx \l_mdoc_optionlist_tl { \csname mdoc@optionlist\endcsname }
+\tl_if_empty:NF \l_mdoc_optionlist_tl
+  { \keys_set:nV { mdoc } \l_mdoc_optionlist_tl }
+\tl_trim_spaces:N \l_mdoc_mintedstyle_screen_tl
+\tl_trim_spaces:N \l_mdoc_mintedstyle_print_tl
+
+% -----------------------------------------------------------------------------
+% Fonts (IBM Plex only) + Japanese via luatexja
+% -----------------------------------------------------------------------------
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures={TeX,Common},Kerning=On}
+
+% Main text: IBM Plex Serif (FakeSmallCaps: Plex Serif has no true small caps)
+\setmainfont{IBM Plex Serif}[
+  Numbers          = {OldStyle,Proportional},
+  SmallCapsFont    = {IBM Plex Serif},
+  SmallCapsFeatures= {FakeSmallCaps},
+  SlantedFont      = {IBM Plex Serif Italic},
+  BoldFont         = {IBM Plex Serif Bold},
+  ItalicFont       = {IBM Plex Serif Italic},
+  BoldItalicFont   = {IBM Plex Serif Bold Italic},
+]
+
+% Headings: IBM Plex Sans
+\setsansfont{IBM Plex Sans}[
+  Scale            = MatchLowercase,
+  Numbers          = {Lining,Proportional},
+  SmallCapsFont    = {IBM Plex Sans},
+  SmallCapsFeatures= {FakeSmallCaps},
+  BoldFont         = {IBM Plex Sans Bold},
+  ItalicFont       = {IBM Plex Sans Italic},
+  BoldItalicFont   = {IBM Plex Sans Bold Italic},
+]
+\newfontfamily\headingfont{IBM Plex Sans}[
+  Scale            = MatchLowercase,
+  Numbers          = {Lining,Proportional},
+  SmallCapsFeatures= {FakeSmallCaps},
+  BoldFont         = {IBM Plex Sans Bold},
+]
+
+% Quotes
+\newfontfamily\quotefont{IBM Plex Serif}[
+  Numbers          = {OldStyle,Proportional},
+  ItalicFont       = {IBM Plex Serif Italic},
+]
+
+% Code
+\setmonofont{IBM Plex Mono}[
+  Scale            = 0.85,
+  Ligatures        = {},
+  Numbers          = {Lining,Tabular},
+  BoldFont         = {IBM Plex Mono Bold},
+  ItalicFont       = {IBM Plex Mono Italic},
+  BoldItalicFont   = {IBM Plex Mono Bold Italic},
+]
+
+% Japanese
+\RequirePackage{luatexja}
+\RequirePackage[match]{luatexja-fontspec}
+% luatexja recommends not defining Japanese fonts with HarfBuzz renderer.
+\IfFontExistsTF{IBM Plex Sans JP}{
+  \setmainjfont{IBM Plex Sans JP}[Renderer=OpenType,Scale=0.95]
+  \setsansjfont{IBM Plex Sans JP}[Renderer=OpenType,Scale=0.95]
+}{
+  \IfFontExistsTF{Noto Sans JP}{
+    \setmainjfont{Noto Sans JP}[Renderer=OpenType,Scale=0.95]
+    \setsansjfont{Noto Sans JP}[Renderer=OpenType,Scale=0.95]
+  }{}
+}
+
+% -----------------------------------------------------------------------------
+% Microtype (LuaTeX: protrusion/expansion/tracking; not all pdfTeX features)
+% -----------------------------------------------------------------------------
+\RequirePackage[
+  protrusion=true,
+  expansion=true,
+  tracking=true,
+  final
+]{microtype}
+
+% Use a conservative config (good general baseline across fonts)
+\microtypesetup{factor=950}
+
+% Small caps tracking (only SC / caps; never lowercase)
+\SetTracking{encoding=*,shape=sc}{50}
+
+% Disable protrusion where alignment matters
+\RequirePackage{etoolbox}
+\preto\tableofcontents{\microtypesetup{protrusion=false}}
+\appto\tableofcontents{\microtypesetup{protrusion=true}}
+\preto\listoffigures{\microtypesetup{protrusion=false}}
+\appto\listoffigures{\microtypesetup{protrusion=true}}
+\preto\listoftables{\microtypesetup{protrusion=false}}
+\appto\listoftables{\microtypesetup{protrusion=true}}
+
+% -----------------------------------------------------------------------------
+% Languages (polyglossia must be before biblatex)
+% -----------------------------------------------------------------------------
+\RequirePackage{polyglossia}
+\setdefaultlanguage[variant=american]{english}
+\setotherlanguage{french}
+\setotherlanguage[spelling=new]{german}
+
+% -----------------------------------------------------------------------------
+% Layout via typearea/KOMA options
+% -----------------------------------------------------------------------------
+\cs_new_protected:Npn \mdoc_apply_layout:
+  {
+    \str_case:nn { \l_mdoc_doctype_tl }
+      {
+        {article}{ \linespread{1.08} }
+        {report} { \linespread{1.10} }
+        {book}   { \linespread{1.12} }
+        {thesis} { \linespread{1.25} }
+        {paper}  { \linespread{1.04} \setlength{\columnsep}{6mm} }
+        {letter} { \linespread{1.05} }
+      }
+
+    % Apply requested typearea knobs.
+    \KOMAoptions{
+      BCOR=\l_mdoc_bcor_tl,
+      DIV=\l_mdoc_div_tl,
+      headinclude,
+      footinclude=false
+    }
+  }
+\AtBeginDocument{ \mdoc_apply_layout: }
+
+% Paragraph defaults
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+
+% -----------------------------------------------------------------------------
+% Colors (Okabe-Ito palette)
+% -----------------------------------------------------------------------------
+\RequirePackage{xcolor}
+\cs_if_exist:cF { @pdfcolorstack }
+  { \RequirePackage{pdfcol} }
+\definecolor{mdocBlue}{RGB}{0,114,178}
+\definecolor{mdocSky}{RGB}{86,180,233}
+\definecolor{mdocGreen}{RGB}{0,158,115}
+\definecolor{mdocOrange}{RGB}{230,159,0}
+\definecolor{mdocVermillion}{RGB}{213,94,0}
+\definecolor{mdocGray}{RGB}{90,90,90}
+
+\definecolor{mdocCodeBg}{RGB}{248,248,248}
+\definecolor{mdocCodeFrame}{RGB}{210,210,210}
+\definecolor{mdocQuoteBg}{RGB}{245,245,245}
+\definecolor{mdocQuoteBar}{RGB}{180,180,180}
+
+% -----------------------------------------------------------------------------
+% Headings (KOMA native; avoid titlesec for tagging compatibility)
+% -----------------------------------------------------------------------------
+\str_if_eq:eeF { \KOMAClassName } { scrlttr2 }
+  {
+    \setkomafont{disposition}{\headingfont\bfseries}
+
+    \setkomafont{section}{\headingfont\Large\bfseries}
+    \RedeclareSectionCommand[
+      beforeskip = 2.5ex plus 1ex minus .2ex,
+      afterskip  = 1.2ex plus .2ex,
+      indent     = 0pt,
+    ]{section}
+
+    \setkomafont{subsection}{\headingfont\large\bfseries}
+    \RedeclareSectionCommand[
+      beforeskip = 2ex plus .6ex minus .2ex,
+      afterskip  = 1ex plus .2ex,
+      indent     = 0pt,
+    ]{subsection}
+
+    \setkomafont{subsubsection}{\headingfont\normalsize\bfseries}
+    \RedeclareSectionCommand[
+      beforeskip = 1.5ex plus .5ex minus .2ex,
+      afterskip  = .8ex plus .2ex,
+      indent     = 0pt,
+    ]{subsubsection}
+  }
+
+% -----------------------------------------------------------------------------
+% Headers/footers (scrlayer-scrpage)
+% Use \clearpairofpagestyles to reset defaults.
+% -----------------------------------------------------------------------------
+\RequirePackage[automark,headsepline]{scrlayer-scrpage}
+\clearpairofpagestyles
+
+\tl_new:N \g_mdoc_shorttitle_tl
+\tl_new:N \g_mdoc_shortauthor_tl
+\tl_gset:Nn \g_mdoc_shorttitle_tl {}
+\tl_gset:Nn \g_mdoc_shortauthor_tl {}
+
+\NewDocumentCommand{\shorttitle}{m}{\tl_gset:Nn \g_mdoc_shorttitle_tl {#1}}
+\NewDocumentCommand{\shortauthor}{m}{\tl_gset:Nn \g_mdoc_shortauthor_tl {#1}}
+
+\setkomafont{pagehead}{\small\normalfont}
+\setkomafont{pagefoot}{\small\normalfont}
+
+\cs_new_protected:Npn \mdoc_apply_pagestyle:
+  {
+    \str_case:nn { \l_mdoc_doctype_tl }
+      {
+        {paper}{
+          \KOMAoptions{headsepline=false}
+          \ofoot{\pagemark}
+          \pagestyle{scrheadings}
+        }
+        {article}{
+          \KOMAoptions{headsepline=0.4pt}
+          \ihead{\textit{\tl_use:N \g_mdoc_shortauthor_tl}}
+          \ohead{\textit{\tl_use:N \g_mdoc_shorttitle_tl}}
+          \cfoot{\pagemark}
+          \pagestyle{scrheadings}
+        }
+        {report}{
+          \KOMAoptions{headsepline=0.4pt}
+          \ihead{\headmark}
+          \ohead{\pagemark}
+          \pagestyle{scrheadings}
+        }
+        {book}{
+          \KOMAoptions{headsepline=0.4pt}
+          \automark[section]{chapter}
+          \lehead{\pagemark}\rehead{\headmark}
+          \lohead{\headmark}\rohead{\pagemark}
+          \pagestyle{scrheadings}
+        }
+        {thesis}{
+          \KOMAoptions{headsepline=0.4pt}
+          \automark[section]{chapter}
+          \lehead{\pagemark}\rehead{\headmark}
+          \lohead{\headmark}\rohead{\pagemark}
+          \pagestyle{scrheadings}
+        }
+        {letter}{
+          \pagestyle{empty}
+        }
+      }
+  }
+\AtBeginDocument{ \mdoc_apply_pagestyle: }
+
+% -----------------------------------------------------------------------------
+% Draft mode
+% -----------------------------------------------------------------------------
+\bool_if:NT \l_mdoc_draft_bool
+  {
+    \RequirePackage{draftwatermark}
+    \SetWatermarkText{DRAFT}
+    \SetWatermarkScale{1}
+    \SetWatermarkColor[gray]{0.90}
+  }
+
+% -----------------------------------------------------------------------------
+% Bibliography (csquotes recommended with polyglossia+biblatex)
+% hyperref should be loaded after biblatex.
+% -----------------------------------------------------------------------------
+\bool_if:NT \l_mdoc_biblatex_bool
+  {
+    \RequirePackage[
+      autostyle=true,
+      autopunct=true
+    ]{csquotes}
+
+    \RequirePackage[
+      backend=biber,
+      style=\l_mdoc_citestyle_tl,
+      sorting=nyt,
+      giveninits=true,
+      maxnames=3,
+      doi=true,
+      isbn=false,
+      url=true
+    ]{biblatex}
+  }
+
+% -----------------------------------------------------------------------------
+% Hyperref + bookmark
+% -----------------------------------------------------------------------------
+\bool_if:NT \l_mdoc_hyperlinks_bool
+  {
+    \RequirePackage[unicode]{hyperref}
+    \bool_if:NTF \l_mdoc_print_bool
+      {
+        \hypersetup{hidelinks}
+      }
+      {
+        \hypersetup{
+          colorlinks=true,
+          linkcolor=mdocBlue,
+          citecolor=mdocBlue,
+          urlcolor=mdocBlue
+        }
+      }
+
+    \RequirePackage{bookmark}
+    \AtBeginDocument{
+      \bookmarksetup{depth=\int_use:N \l_mdoc_bookmarkdepth_int}
+    }
+  }
+
+% -----------------------------------------------------------------------------
+% Code (minted)
+% Note: minted v3 may not require -shell-escape on TeX Live 2024+ but depends on setup.
+% -----------------------------------------------------------------------------
+\makeatletter
+\let\mdoc@orig@makecol\@makecol
+\makeatother
+\RequirePackage{minted}
+\RequirePackage{lineno}
+\makeatletter
+\let\@LN@orig@makecol\mdoc@orig@makecol
+\let\@makecol\mdoc@orig@makecol
+\makeatother
+\bool_if:NTF \l_mdoc_print_bool
+  {
+    \tl_if_blank:VTF \l_mdoc_mintedstyle_print_tl
+      {}
+      { \usemintedstyle{\tl_use:N \l_mdoc_mintedstyle_print_tl} }
+  }
+  {
+    \tl_if_blank:VTF \l_mdoc_mintedstyle_screen_tl
+      {}
+      { \usemintedstyle{\tl_use:N \l_mdoc_mintedstyle_screen_tl} }
+  }
+
+\setminted{
+  bgcolor=mdocCodeBg,
+  frame=single,
+  rulecolor=\color{mdocCodeFrame},
+  framesep=2mm,
+  fontsize=\small,
+  breaklines=true,
+  tabsize=2
+}
+
+\NewDocumentCommand{\code}{m}{\mintinline{text}{#1}}
+\NewDocumentEnvironment{codeblock}{O{text}}%
+  {\VerbatimEnvironment\begin{minted}{#1}}{\end{minted}}
+
+% -----------------------------------------------------------------------------
+% Boxes (tcolorbox)
+% -----------------------------------------------------------------------------
+\RequirePackage[most]{tcolorbox}
+\tcbuselibrary{breakable,skins}
+
+\newtcolorbox{paperquote}[1][]{%
+  enhanced,breakable,
+  colback=mdocQuoteBg,colframe=mdocQuoteBg,boxrule=0pt,
+  left=5mm,right=5mm,top=3mm,bottom=3mm,arc=0mm,
+  fontupper=\small\quotefont\itshape,
+  #1
+}
+
+\newtcolorbox{notebox}[1][]{%
+  enhanced,breakable,
+  colback=mdocCodeBg,colframe=mdocCodeFrame,boxrule=0.4pt,
+  left=4mm,right=4mm,top=3mm,bottom=3mm,arc=0mm,
+  fontupper=\small,
+  #1
+}
+
+\newtcolorbox{warningbox}[1][]{%
+  enhanced,breakable,
+  colback=mdocOrange!10,colframe=mdocOrange,boxrule=0.6pt,
+  left=4mm,right=4mm,top=3mm,bottom=3mm,arc=0mm,
+  fontupper=\small,
+  #1
+}
+
+% -----------------------------------------------------------------------------
+% Tables (tabularray)
+% -----------------------------------------------------------------------------
+\RequirePackage{tabularray}
+\UseTblrLibrary{booktabs,varwidth}
+
+\NewTblrTheme{mdoc}{
+  \SetTblrStyle{firsthead}{font=\small\sffamily\bfseries}
+  \SetTblrStyle{head}{font=\small\sffamily\bfseries}
+  \SetTblrStyle{caption-tag}{font=\small\sffamily\bfseries}
+  \SetTblrStyle{caption-text}{font=\small}
+}
+
+\NewTblrEnviron{mdtable}
+\SetTblrOuter[mdtable]{long,theme=mdoc}
+\SetTblrInner[mdtable]{
+  rowsep=4pt,colsep=8pt,hlines={},vlines={},
+  hline{1}={1pt},hline{2}={0.5pt},hline{Z}={1pt},
+  row{1}={font=\small\sffamily\bfseries,bg=gray!5},
+  cells={valign=m},
+}
+
+% -----------------------------------------------------------------------------
+% Math (unicode-math)
+% -----------------------------------------------------------------------------
+\RequirePackage{mathtools}
+\RequirePackage[warnings-off={mathtools-overbracket,mathtools-colon}]{unicode-math}
+\IfFontExistsTF{STIX Two Math}{\setmathfont{STIX Two Math}}{\setmathfont{Latin Modern Math}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\NewDocumentCommand{\abs}{m}{\left\lvert#1\right\rvert}
+\NewDocumentCommand{\norm}{m}{\left\lVert#1\right\rVert}
+
+% -----------------------------------------------------------------------------
+% Cross-references (after hyperref)
+% -----------------------------------------------------------------------------
+\RequirePackage[capitalize,nameinlink]{cleveref}
+
+% -----------------------------------------------------------------------------
+% Inline quotes and semantic markup helpers
+% -----------------------------------------------------------------------------
+\NewDocumentCommand{\q}{m}{\enquote{#1}}
+\NewDocumentCommand{\foreign}{m}{\textit{#1}}
+\NewDocumentCommand{\term}{m}{\textbf{#1}}
+\NewDocumentCommand{\acronym}{m}{\textsc{#1}}
+\NewDocumentCommand{\bookref}{m}{\textit{#1}}
+\NewDocumentCommand{\software}{m}{\textsc{#1}}
+\NewDocumentCommand{\email}{m}{\texttt{#1}}
+\NewDocumentCommand{\set}{m}{\left\{#1\right\}}
+
+% -----------------------------------------------------------------------------
+% Abstract helpers and metadata blocks
+% -----------------------------------------------------------------------------
+\cs_new_protected:Npn \mdoc_define_doctype_envs:
+  {
+    \str_case:nn { \l_mdoc_doctype_tl }
+      {
+        {article}{
+          \RequirePackage{abstract}
+          \renewcommand{\abstractnamefont}{\headingfont\bfseries\normalsize}
+          \renewcommand{\abstracttextfont}{\small}
+          \setlength{\absleftindent}{0pt}
+          \setlength{\absrightindent}{0pt}
+          \setlength{\abstitleskip}{-\parindent}
+
+          \NewDocumentEnvironment{keywords}{}{%
+            \par\smallskip\noindent\textbf{Keywords:}\space
+          }{\par}
+        }
+        {paper}{
+          \RequirePackage{abstract}
+          \renewcommand{\abstractnamefont}{\headingfont\bfseries\normalsize}
+          \renewcommand{\abstracttextfont}{\small}
+          \setlength{\absleftindent}{0pt}
+          \setlength{\absrightindent}{0pt}
+          \setlength{\abstitleskip}{-\parindent}
+
+          \NewDocumentEnvironment{keywords}{}{%
+            \par\smallskip\noindent\textbf{Keywords:}\space
+          }{\par}
+
+          \NewDocumentEnvironment{ccsclassification}{}{%
+            \par\smallskip\noindent\textbf{CCS Concepts:}\space\small
+          }{\par}
+        }
+        {thesis}{
+          \NewDocumentEnvironment{thesisabstract}{}{%
+            \cleardoublepage
+            \cs_if_exist:NTF \chapter
+              { \chapter*{Abstract} \addcontentsline{toc}{chapter}{Abstract} }
+              { \section*{Abstract} \addcontentsline{toc}{section}{Abstract} }
+            \thispagestyle{plain}
+          }{}
+        }
+      }
+  }
+\mdoc_define_doctype_envs:
+
+\cs_if_exist:NF \keywords
+  {
+    \NewDocumentEnvironment{keywords}{}{%
+      \par\smallskip\noindent\textbf{Keywords:}\space
+    }{\par}
+  }
+\cs_if_exist:NF \ccsclassification
+  {
+    \NewDocumentEnvironment{ccsclassification}{}{%
+      \par\smallskip\noindent\textbf{CCS Concepts:}\space\small
+    }{\par}
+  }
+
+\cs_if_exist:NF \thesisabstract
+  {
+    \NewDocumentEnvironment{thesisabstract}{}{%
+      \cleardoublepage
+      \cs_if_exist:NTF \chapter
+        { \chapter*{Abstract} \addcontentsline{toc}{chapter}{Abstract} }
+        { \section*{Abstract} \addcontentsline{toc}{section}{Abstract} }
+      \thispagestyle{plain}
+    }{}
+  }
+
+\cs_if_exist:NF \abstractfr
+  {
+    \NewDocumentEnvironment{abstractfr}{}{%
+      \cleardoublepage
+      \cs_if_exist:NTF \chapter
+        { \chapter*{Résumé} \addcontentsline{toc}{chapter}{Résumé} }
+        { \section*{Résumé} \addcontentsline{toc}{section}{Résumé} }
+      \begin{otherlanguage}{french}
+    }{%
+      \end{otherlanguage}
+    }
+  }
+
+\cs_if_exist:NF \frontmatter
+  { \newcommand{\frontmatter}{\cleardoublepage\pagenumbering{roman}} }
+\cs_if_exist:NF \mainmatter
+  { \newcommand{\mainmatter}{\cleardoublepage\pagenumbering{arabic}} }
+\cs_if_exist:NF \backmatter
+  { \newcommand{\backmatter}{\cleardoublepage} }
+\cs_if_exist:NF \startappendices
+  { \newcommand{\startappendices}{\cleardoublepage\appendix} }
+
+% -----------------------------------------------------------------------------
+% Lists
+% -----------------------------------------------------------------------------
+\RequirePackage{enumitem}
+\setlist{topsep=0.5em,itemsep=0.25em,parsep=0pt,leftmargin=1.5em}
+
+% -----------------------------------------------------------------------------
+% Quotes and semantic helpers
+% -----------------------------------------------------------------------------
+\tl_new:N \l_mdoc_chapterquote_author_tl
+\tl_new:N \l_mdoc_chapterquote_source_tl
+
+\NewDocumentEnvironment{chapterquote}{mm}{%
+  % #1 = author, #2 = source/year
+  \tl_set:Nn \l_mdoc_chapterquote_author_tl {#1}%
+  \tl_set:Nn \l_mdoc_chapterquote_source_tl {#2}%
+  \begin{flushright}
+    \begin{minipage}{0.7\textwidth}
+      \small\quotefont\itshape
+}{%
+      \par\vspace{0.4em}
+      \normalfont\small --- \tl_use:N \l_mdoc_chapterquote_author_tl
+      \tl_if_blank:VF \l_mdoc_chapterquote_source_tl
+        {, \textit{\tl_use:N \l_mdoc_chapterquote_source_tl}}
+    \end{minipage}
+  \end{flushright}
+  \vspace{1.5em}
+}
+
+\NewDocumentCommand{\jpterm}{mm}{\textit{#1} ({#2})}
+\NewDocumentCommand{\jp}{m}{{#1}}
+\NewDocumentCommand{\concept}{m}{\textbf{#1}}
+
+\NewDocumentEnvironment{attributedquote}{m}{%
+  \begin{flushright}
+    \begin{minipage}{0.7\textwidth}
+      \small\quotefont\itshape
+}{%
+      \par\vspace{0.4em}
+      \normalfont\small --- #1
+    \end{minipage}
+  \end{flushright}
+  \vspace{1em}
+}
+
+\NewDocumentEnvironment{citedquote}{mm}{%
+  \begin{flushright}
+    \begin{minipage}{0.7\textwidth}
+      \small\quotefont\itshape
+}{%
+      \par\vspace{0.4em}
+      \normalfont\small --- #1, \textit{#2}
+    \end{minipage}
+  \end{flushright}
+  \vspace{1em}
+}
+
+% -----------------------------------------------------------------------------
+% Index (optional)
+% -----------------------------------------------------------------------------
+\bool_if:NT \l_mdoc_makeindex_bool
+  {
+    \RequirePackage[intoc]{imakeidx}
+    \makeindex
+  }
+
+\ExplSyntaxOff

@@ -9,30 +9,25 @@
 % --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion  = 2.0,
-  pdfstandard = a-4,
-  lang        = en-US,
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
 }
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
 \documentclass[
+  report,
   11pt,
   a4paper,
   oneside,
-  headings      = normal,
-  numbers       = noenddot,
-  listof        = totoc,
-  bibliography  = totoc,
-]{scrreprt}
+  headings=normal,
+  numbers=noenddot,
+  listof=totoc,
+  bibliography=totoc
+]{modern-doc}
 
 % =============================================================================
 % PREAMBLE
 % =============================================================================
-\usepackage[report, citestyle=numeric]{moderndoc}
-
 % --- Bibliography file ---
 \addbibresource{references.bib}
 
@@ -41,7 +36,7 @@
 \addtokomafont{chapterprefix}{\headingfont\Large}
 \renewcommand*{\raggedchapter}{\raggedleft}
 \renewcommand*{\chapterformat}{%
-  \mbox{\scalebox{2}{\color{mdocsecondary}\thechapter}}%
+  \mbox{\scalebox{2}{\color{mdocGray}\thechapter}}%
 }
 \RedeclareSectionCommand[
   beforeskip = 0pt,
@@ -209,7 +204,7 @@ the past quarter. The key findings and recommendations are summarized below.
 % MAIN MATTER
 % =============================================================================
 \pagenumbering{arabic}
-\pagestyle{mdocreport}
+\pagestyle{scrheadings}
 
 % =====================================
 \chapter{Introduction}
@@ -280,7 +275,7 @@ reporting period.
   \end{tblr}
 \end{table}
 
-\begin{notebox}[Performance Improvement]
+\begin{notebox}[title=Performance Improvement]
 The 18\% improvement in average throughput from October to December reflects
 the successful implementation of caching optimizations deployed in early
 November.

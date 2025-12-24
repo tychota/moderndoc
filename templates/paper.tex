@@ -9,42 +9,36 @@
 % --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion  = 2.0,
-  pdfstandard = a-4,
-  lang        = en-US,
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
 }
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
-\documentclass[11pt, a4paper, twocolumn]{scrartcl}
+\documentclass[paper]{modern-doc}
 
 % =============================================================================
 % PREAMBLE
 % =============================================================================
-\usepackage[paper, citestyle=numeric]{moderndoc}
-
 % --- Bibliography file ---
 \addbibresource{references.bib}
 
 % --- Additional paper-specific settings ---
 \RedeclareSectionCommand[
-  beforeskip = 1.5ex plus 0.5ex minus 0.2ex,
-  afterskip  = 1ex plus 0.2ex,
+  beforeskip=1.5ex plus 0.5ex minus 0.2ex,
+  afterskip=1ex plus 0.2ex,
 ]{section}
 
 \RedeclareSectionCommand[
-  beforeskip = 1.2ex plus 0.4ex minus 0.2ex,
-  afterskip  = 0.8ex plus 0.2ex,
+  beforeskip=1.2ex plus 0.4ex minus 0.2ex,
+  afterskip=0.8ex plus 0.2ex,
 ]{subsection}
 
 % Tighter lists for papers
 \setlist{
-  topsep     = 0.3em,
-  itemsep    = 0.15em,
-  parsep     = 0pt,
-  leftmargin = 1.2em,
+  topsep=0.3em,
+  itemsep=0.15em,
+  parsep=0pt,
+  leftmargin=1.2em,
 }
 
 % --- Document metadata ---
@@ -161,19 +155,19 @@ Description of the second component.
 
 The complete algorithm is presented below:
 
-\begin{minted}[fontsize=\footnotesize, linenos]{python}
+\begin{verbatim}
 def our_algorithm(X, y, params):
     """Main algorithm implementation."""
     model = initialize_model(params)
-    
+
     for epoch in range(params.epochs):
         # Training loop
         loss = compute_loss(model, X, y)
         gradients = compute_gradients(loss)
         model = update_model(model, gradients)
-    
+
     return model
-\end{minted}
+\end{verbatim}
 
 % =============================================================================
 \section{Experiments}

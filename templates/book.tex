@@ -9,33 +9,29 @@
 % --- PDF 2.0 with PDF/A-4 archival format (must be before \documentclass) ---
 % PDF/A-4 (ISO 19005-4:2020) is the archival standard based on PDF 2.0
 \DocumentMetadata{
-  pdfversion  = 2.0,
-  pdfstandard = a-4,
-  lang        = en-US,
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
 }
 
-% Suppress expected warning from latex-lab tagging (modifies \@footnotemark)
-\RequirePackage{silence}
-\WarningFilter{latex}{Command \@footnotemark}
-
 \documentclass[
+  book,
   11pt,
   a4paper,
   twoside,
-  openright,
-  cleardoublepage = empty,  % Use KOMA-Script option instead of emptypage package
-  chapterprefix = true,
-  numbers       = noenddot,
-  headings      = big,
-  DIV           = 12,
-  BCOR          = 10mm,
-]{scrbook}
+  open=right,
+  cleardoublepage=empty,  % Use KOMA-Script option instead of emptypage package
+  chapterprefix=true,
+  numbers=noenddot,
+  headings=big,
+  citestyle=authoryear,
+  DIV=12,
+  BCOR=10mm
+]{modern-doc}
 
 % =============================================================================
 % PREAMBLE
 % =============================================================================
-\usepackage[book, citestyle=authoryear]{moderndoc}
-
 % --- Bibliography file ---
 \addbibresource{references.bib}
 
@@ -50,11 +46,11 @@
 
 % --- Chapter styling (decorative) ---
 \addtokomafont{chapter}{\headingfont}
-\addtokomafont{chapterprefix}{\headingfont\Large\color{mdocsecondary}}
+\addtokomafont{chapterprefix}{\headingfont\Large\color{mdocGray}}
 
 \renewcommand*{\raggedchapter}{\raggedleft}
 \renewcommand*{\chapterformat}{%
-  \mbox{\scalebox{2.5}{\color{mdocsecondary}\thechapter}}%
+  \mbox{\scalebox{2.5}{\color{mdocGray}\thechapter}}%
 }
 
 \RedeclareSectionCommand[
@@ -76,14 +72,14 @@
 
 % --- Drop cap configuration ---
 % IBM Plex Sans Bold pairs well with Plex Serif body text
-\renewcommand{\LettrineFontHook}{\headingfont\bfseries\color{mdocsecondary}}
+\renewcommand{\LettrineFontHook}{\headingfont\bfseries\color{mdocGray}}
 \setcounter{DefaultLines}{2}
 \renewcommand{\DefaultLoversize}{0.15}
 \renewcommand{\DefaultLraise}{0.1}
 \setlength{\DefaultFindent}{3pt}
 \setlength{\DefaultNindent}{0pt}
 
-% Note: The chapterquote environment is now provided by moderndoc.sty
+% Note: The chapterquote environment is now provided by modern-doc.sty
 % Legacy alias for backward compatibility
 \newcommand{\chapterepigraph}[2]{%
   \begin{chapterquote}{#2}{}
@@ -247,7 +243,7 @@ This book explores the fascinating world of [subject]. Whether you're a
 complete beginner or an experienced practitioner, you'll find valuable insights
 and practical techniques.
 
-\begin{notebox}[Key Concept]
+\begin{notebox}[title=Key Concept]
 A \concept{central concept} is the fundamental building block of our discipline.
 Understanding this concept is crucial for everything that follows.
 \end{notebox}
@@ -382,7 +378,7 @@ Before starting, ensure you have...
 
 The core implementation involves:
 
-\begin{minted}{python}
+\begin{codeblock}[python]
 class TechniqueOne:
     """Implementation of Technique One."""
     
@@ -414,7 +410,7 @@ class TechniqueOne:
         result = self._process(transformed)
         
         return result
-\end{minted}
+\end{codeblock}
 
 \subsection{Step 3: Verification}
 
@@ -510,7 +506,7 @@ Quick reference tables for common operations...
 \vfill
 \begin{center}
   \small
-  This book was typeset using LuaLaTeX with the \texttt{moderndoc} style.\\
+  This book was typeset using LuaLaTeX with the \texttt{modern-doc} style.\\
   Body text is set in IBM Plex Serif, headings in IBM Plex Sans,\\
   and code in IBM Plex Mono.\\[1em]
   First printing, \publishyear

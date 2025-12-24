@@ -1,6 +1,6 @@
 ---
-name: moderndoc
-description: Professional LaTeX document creation using the moderndoc style package with LuaLaTeX and KOMA-Script. Use when working with .tex files that use moderndoc.sty, creating academic documents (articles, papers, theses, books, reports, letters), debugging LaTeX compilation issues, configuring PDF/A-4 archival output, setting up minted code highlighting, structuring multi-file LaTeX projects, or creating TikZ diagrams. Triggers on moderndoc package usage, LuaLaTeX compilation, KOMA-Script document classes (scrartcl, scrbook, scrreprt, scrlttr2).
+name: modern-doc
+description: Professional LaTeX document creation using the modern-doc style package with LuaLaTeX and KOMA-Script. Use when working with .tex files that use modern-doc.sty, creating academic documents (articles, papers, theses, books, reports, letters), debugging LaTeX compilation issues, configuring PDF/A-4 archival output, setting up minted code highlighting, structuring multi-file LaTeX projects, or creating TikZ diagrams. Triggers on modern-doc package usage, LuaLaTeX compilation, KOMA-Script document classes (scrartcl, scrbook, scrreprt, scrlttr2).
 ---
 
 # Moderndoc
@@ -34,8 +34,7 @@ Professional LaTeX template system for academic and technical documents. Built o
 Minimal document setup:
 
 ```latex
-\documentclass[11pt, a4paper]{scrartcl}
-\usepackage[article]{moderndoc}
+\documentclass[article, 11pt, a4paper]{modern-doc}
 
 \title{Document Title}
 \author{Author Name}
@@ -89,7 +88,7 @@ Full details in [references/templates.md](references/templates.md).
   draft=false,          % Draft mode with watermark
   minted=true,          % Code highlighting
   biblatex=true,        % Bibliography support
-]{moderndoc}
+]{modern-doc}
 ```
 
 Full options in [references/options.md](references/options.md).
@@ -156,8 +155,9 @@ Basic layout:
 project/
 ├── main.tex              # Main document
 ├── references.bib        # Bibliography
-├── styles/
-│   └── moderndoc.sty     # Style package
+├── tex/latex/modern-doc/
+│   ├── modern-doc.cls     # Wrapper class
+│   └── modern-doc.sty     # Style package
 ├── fonts/                # Bundled fonts
 ├── chapters/             # For books/theses
 ├── figures/              # Images and diagrams

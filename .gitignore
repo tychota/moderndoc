@@ -33,6 +33,7 @@
 *.pdfsync
 *.rubbercache
 rubber.cache
+.tex-cache
 
 # Indices
 *.idx

@@ -16,13 +16,15 @@
 
 # Directories
 ROOT      := $(shell pwd)
-STYLEDIR  := $(ROOT)/styles
+TEXDIR    := $(ROOT)/tex/latex/modern-doc
 TEMPLATEDIR := $(ROOT)/templates
 BUILDDIR  := $(ROOT)/build
 OUTPUTDIR := $(ROOT)/output
 
-# Set TEXINPUTS to find styles without relative paths
-export TEXINPUTS := $(STYLEDIR):$(TEMPLATEDIR):$(TEXINPUTS)
+# Set TEXINPUTS to find class/package without relative paths
+export TEXINPUTS := $(TEXDIR):$(TEMPLATEDIR):$(TEXINPUTS)
+# Keep LuaTeX font cache under output/
+export TEXMFCACHE := $(BUILDDIR)/.tex-cache
 
 # latexmk with project latexmkrc
 # -f forces completion even with errors (needed for multi-pass builds)
@@ -44,7 +46,7 @@ define build_template
 .PHONY: $(1)
 $(1):
 	@echo "Building $(1)..."
-	@mkdir -p $(BUILDDIR) $(OUTPUTDIR)
+	@mkdir -p $(BUILDDIR) $(OUTPUTDIR) $(TEXMFCACHE)
 	@cd $(TEMPLATEDIR) && $(LATEXMK) -outdir=$(BUILDDIR) $(1).tex
 	@cp $(BUILDDIR)/$(1).pdf $(OUTPUTDIR)/
 	@echo "Done: $(OUTPUTDIR)/$(1).pdf"
@@ -58,7 +60,7 @@ $(foreach tmpl,$(TEMPLATES),$(eval $(call build_template,$(tmpl))))
 .PHONY: watch-%
 watch-%:
 	@echo "Watching $*..."
-	@mkdir -p $(BUILDDIR) $(OUTPUTDIR)
+	@mkdir -p $(BUILDDIR) $(OUTPUTDIR) $(TEXMFCACHE)
 	@cd $(TEMPLATEDIR) && $(LATEXMK) -outdir=$(BUILDDIR) -pvc $*.tex
 
 # =============================================================================

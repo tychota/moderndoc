@@ -26,7 +26,7 @@ Single-column academic article for journals and short papers.
 **Minimal example:**
 ```latex
 \documentclass[11pt, a4paper, oneside]{scrartcl}
-\usepackage[article, citestyle=numeric]{moderndoc}
+\usepackage[article, citestyle=numeric]{modern-doc}
 
 \title{Article Title}
 \author{Author Name}
@@ -76,7 +76,7 @@ Two-column conference paper format.
 **Minimal example:**
 ```latex
 \documentclass[11pt, a4paper, twocolumn]{scrartcl}
-\usepackage[paper, citestyle=numeric]{moderndoc}
+\usepackage[paper, citestyle=numeric]{modern-doc}
 
 \title{Conference Paper Title}
 \author{Author One \and Author Two}
@@ -130,7 +130,7 @@ Dissertation and long-form academic document format.
 **Document structure:**
 ```latex
 \documentclass[11pt, a4paper, twoside, openright]{scrbook}
-\usepackage[thesis, citestyle=authoryear]{moderndoc}
+\usepackage[thesis, citestyle=authoryear]{modern-doc}
 
 % Thesis metadata
 \title{Thesis Title}
@@ -210,7 +210,7 @@ Technical book with chapters, decorative elements.
 **Example with book features:**
 ```latex
 \documentclass[11pt, a4paper, twoside, openright]{scrbook}
-\usepackage[book, citestyle=authortitle]{moderndoc}
+\usepackage[book, citestyle=authortitle]{modern-doc}
 
 \title{Book Title}
 \author{Author Name}
@@ -278,7 +278,7 @@ Technical and business report format.
 **Example:**
 ```latex
 \documentclass[11pt, a4paper, oneside]{scrreprt}
-\usepackage[report, citestyle=numeric]{moderndoc}
+\usepackage[report, citestyle=numeric]{modern-doc}
 
 \title{Technical Report Title}
 \author{Report Author}
@@ -346,7 +346,7 @@ Formal business correspondence using DIN standard.
 **Example:**
 ```latex
 \documentclass[DIN, 11pt, a4paper]{scrlttr2}
-\usepackage[letter, minted=false, biblatex=false]{moderndoc}
+\usepackage[letter, minted=false, biblatex=false]{modern-doc}
 
 % Sender information
 \setkomavar{fromname}{Your Name}

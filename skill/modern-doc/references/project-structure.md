@@ -20,8 +20,9 @@ project/
 ├── figures/              # Images and diagrams
 │   ├── figure1.pdf
 │   └── diagram.tikz
-├── styles/               # Style package
-│   └── moderndoc.sty
+├── tex/latex/modern-doc/               # Class/package
+│   ├── modern-doc.cls
+│   └── modern-doc.sty
 ├── fonts/                # Bundled fonts (optional)
 │   ├── Serif/
 │   ├── Sans/
@@ -35,8 +36,7 @@ project/
 
 ```latex
 % document.tex
-\documentclass[11pt, a4paper]{scrartcl}
-\usepackage[article]{moderndoc}
+\documentclass[article, 11pt, a4paper]{modern-doc}
 
 \title{Document Title}
 \author{Author Name}
@@ -84,8 +84,9 @@ project/
 ├── tables/               # External table files (optional)
 │   └── data-table.tex
 │
-├── styles/
-│   └── moderndoc.sty
+├── tex/latex/modern-doc/
+│   ├── modern-doc.cls
+│   └── modern-doc.sty
 │
 ├── build/
 └── Makefile
@@ -116,7 +117,7 @@ project/
 
 ```latex
 % preamble.tex
-\usepackage[report, citestyle=numeric]{moderndoc}
+\usepackage[report, citestyle=numeric]{modern-doc}
 
 \addbibresource{references.bib}
 \graphicspath{{figures/}{figures/plots/}{figures/diagrams/}}
@@ -197,8 +198,9 @@ project/
 ├── data/                 # Data files for tables/plots
 │   └── results.csv
 │
-├── styles/
-│   └── moderndoc.sty
+├── tex/latex/modern-doc/
+│   ├── modern-doc.cls
+│   └── modern-doc.sty
 │
 ├── fonts/
 ├── build/
@@ -295,8 +297,9 @@ Chapter~\ref{ch:background} presents...
 ```
 organization/
 ├── shared/                   # Shared across all documents
-│   ├── styles/
-│   │   └── moderndoc.sty
+│   ├── tex/latex/modern-doc/
+│   │   ├── modern-doc.cls
+│   │   └── modern-doc.sty
 │   ├── fonts/
 │   ├── logos/
 │   │   ├── company-logo.pdf
@@ -323,7 +326,7 @@ organization/
 
 ```bash
 # In each project directory
-ln -s ../shared/styles ./styles
+ln -s ../shared/tex/latex/modern-doc ./tex/latex/modern-doc
 ln -s ../shared/fonts ./fonts
 ```
 
@@ -439,7 +442,7 @@ _minted-*/
 .DS_Store
 
 # Keep style and fonts tracked
-!styles/
+!tex/latex/modern-doc/
 !fonts/
 ```
 
@@ -485,5 +488,5 @@ _minted-*/
 3. **One chapter per file**: Easier collaboration and version control
 4. **Consistent naming**: `chapter-01.tex`, `figure-methodology.pdf`
 5. **Build artifacts outside source**: Use `build/` directory
-6. **Version control**: Track `.tex`, `.bib`, styles; ignore build outputs
+6. **Version control**: Track `.tex`, `.bib`, tex/latex/modern-doc; ignore build outputs
 7. **Symlink shared resources**: Avoid duplication across projects
