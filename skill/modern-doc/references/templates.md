@@ -1,5 +1,7 @@
 # Template Reference
 
+This page provides the basic structure for each document type supported by `modern-doc`. These templates contain only the essential structure needed to start a new document.
+
 ## Table of Contents
 - [Article Template](#article-template)
 - [Paper Template](#paper-template)
@@ -12,42 +14,44 @@
 
 ## Article Template
 
-Single-column academic article for journals and short papers.
+Standard academic article format.
 
-**Base class:** `scrartcl` (KOMA-Script article)
-
-**Layout:**
-- Margins: 25mm all sides
-- Line spread: 1.08
-- Single-sided, single-column
-
-**Header/footer:** Author (left) / Title (right) via `\shortauthor{}` and `\shorttitle{}`
-
-**Minimal example:**
 ```latex
-\documentclass[11pt, a4paper, oneside]{scrartcl}
-\usepackage[article, citestyle=numeric]{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
 
-\title{Article Title}
-\author{Author Name}
-\shorttitle{Short Title}
-\shortauthor{A. Name}
-\date{\today}
+\documentclass[article]{modern-doc}
 
 \addbibresource{references.bib}
 
+\hypersetup{
+  pdftitle    = {Article Title},
+  pdfauthor   = {Author Name},
+}
+
+\shorttitle{Short Title}
+\shortauthor{A. Name}
+
 \begin{document}
+
+\title{Article Title}
+\author{Author Name}
+\date{\today}
+
 \maketitle
 
 \begin{abstract}
 Abstract text here.
 \begin{keywords}
-keyword1, keyword2, keyword3
+keyword1, keyword2
 \end{keywords}
 \end{abstract}
 
 \section{Introduction}
-Content...
+% Your content here
 
 \printbibliography
 \end{document}
@@ -59,48 +63,39 @@ Content...
 
 Two-column conference paper format.
 
-**Base class:** `scrartcl` with `twocolumn` option
-
-**Layout:**
-- Margins: 18mm (sides), 22mm (top), 25mm (bottom)
-- Line spread: 1.04 (compact for two-column)
-- Two-column layout
-
-**Header/footer:** Minimal (page number only)
-
-**Special features:**
-- CCS classification environment for ACM conferences
-- Tighter list spacing
-- Optimized section spacing
-
-**Minimal example:**
 ```latex
-\documentclass[11pt, a4paper, twocolumn]{scrartcl}
-\usepackage[paper, citestyle=numeric]{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
 
-\title{Conference Paper Title}
-\author{Author One \and Author Two}
-\date{}
+\documentclass[paper]{modern-doc}
 
 \addbibresource{references.bib}
+
+\hypersetup{
+  pdftitle    = {Paper Title},
+  pdfauthor   = {Author Name},
+}
+
+\title{Paper Title}
+\author{Author Name}
+\date{}
 
 \begin{document}
 \maketitle
 
-\begin{abstract}
-Abstract for conference paper.
+[\begin{abstract}]
+Abstract text here.
 \begin{keywords}
 keyword1, keyword2
 \end{keywords}
 \end{abstract}
-
-\begin{ccsclassification}
-\ccsdesc[500]{Human-centered computing~HCI design}
-\ccsdesc[300]{Computing methodologies~Machine learning}
-\end{ccsclassification}
+[]
 
 \section{Introduction}
-Two-column content flows automatically.
+% Two-column content starts here
 
 \printbibliography
 \end{document}
@@ -110,150 +105,86 @@ Two-column content flows automatically.
 
 ## Thesis Template
 
-Dissertation and long-form academic document format.
+Long-form academic document (Master's/PhD).
 
-**Base class:** `scrbook` (KOMA-Script book)
-
-**Layout:**
-- Margins: 40mm inner (binding), 25mm outer
-- Line spread: 1.25 (1.5-spaced for institutional requirements)
-- Two-sided, chapters open on right pages
-
-**Header/footer:** Chapter (left) / Section (right), italic styling
-
-**Special features:**
-- Full-page abstract environment
-- French abstract support (`abstractfr`)
-- Front/main/back matter separation
-- Custom thesis metadata fields
-
-**Document structure:**
 ```latex
-\documentclass[11pt, a4paper, twoside, openright]{scrbook}
-\usepackage[thesis, citestyle=authoryear]{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
 
-% Thesis metadata
-\title{Thesis Title}
-\author{Candidate Name}
-\date{2024}
-
-% Custom thesis fields
-\newcommand{\department}{Department of Computer Science}
-\newcommand{\university}{University Name}
-\newcommand{\supervisor}{Prof. Supervisor Name}
+\documentclass[thesis]{modern-doc}
 
 \addbibresource{references.bib}
 
+\hypersetup{
+  pdftitle    = {Thesis Title},
+  pdfauthor   = {Author Name},
+}
+
 \begin{document}
 
-% Front matter (roman numerals, plain style)
-\frontmatterstyle
+\frontmatter
+\pagestyle{plain}
 \maketitle
 
 \begin{thesisabstract}
-Full-page abstract in English.
+Abstract in English.
 \end{thesisabstract}
-
-\begin{abstractfr}
-Résumé en français (if required).
-\end{abstractfr}
 
 \tableofcontents
 \listoffigures
 \listoftables
 
-% Main matter (arabic numerals, chapter headers)
-\mainmatterstyle
+\mainmatter
+\pagestyle{scrheadings}
 
 \chapter{Introduction}
-Chapter content here.
+% Your content here
 
-\chapter{Literature Review}
-More content...
-
-% Back matter
 \backmatter
 \printbibliography
-
-\startappendices
-\chapter{Supplementary Data}
-Appendix content...
-
 \end{document}
 ```
-
-**Matter commands:**
-- `\frontmatterstyle` - Roman page numbers, plain headers
-- `\mainmatterstyle` - Arabic page numbers, chapter/section headers
-- `\startappendices` - Appendix numbering (A, B, C...)
 
 ---
 
 ## Book Template
 
-Technical book with chapters, decorative elements.
+Technical or academic book with parts and chapters.
 
-**Base class:** `scrbook`
-
-**Layout:**
-- Margins: 35mm inner, 20mm outer (binding optimized)
-- Line spread: 1.10
-- Two-sided, chapters open on right pages
-
-**Special features:**
-- Decorative chapter headings with large scaled numbers
-- Drop caps via lettrine for chapter openings
-- Per-chapter figure/table numbering
-- Chapter epigraphs/quotes
-- Part divisions with large headings
-
-**Example with book features:**
 ```latex
-\documentclass[11pt, a4paper, twoside, openright]{scrbook}
-\usepackage[book, citestyle=authortitle]{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
 
-\title{Book Title}
-\author{Author Name}
-\date{2024}
+\documentclass[book]{modern-doc}
 
 \addbibresource{references.bib}
 
+\hypersetup{
+  pdftitle    = {Book Title},
+  pdfauthor   = {Author Name},
+}
+
 \begin{document}
+
 \frontmatter
 \maketitle
 \tableofcontents
 
 \mainmatter
 
-\part{Foundation}
-
-\chapter{Introduction}
-
-\begin{chapterquote}{Albert Einstein}{1933}
-Make things as simple as possible, but not simpler.
-\end{chapterquote}
-
-\lettrine{T}{his} chapter introduces the topic with a decorative drop cap.
-The first paragraph continues normally after the initial letter.
-
-Figure and table numbers reset per chapter (Figure 1.1, 1.2, then 2.1...).
-
-\chapter{Background}
-Second chapter content...
-
-\part{Applications}
-
-\chapter{Case Studies}
-More content...
+\part{First Part}
+\chapter{First Chapter}
+\lettrine{F}{irst} word with drop cap.
 
 \backmatter
 \printbibliography
 \end{document}
-```
-
-**Drop cap usage:**
-```latex
-\lettrine{F}{irst} word of chapter with decorative initial.
 ```
 
 ---
@@ -262,63 +193,38 @@ More content...
 
 Technical and business report format.
 
-**Base class:** `scrreprt` (KOMA-Script report)
-
-**Layout:**
-- Margins: 25mm all sides
-- Line spread: 1.10
-- Single-sided
-
-**Special features:**
-- Document control section (version, approvals)
-- Executive summary support
-- Scaled chapter numbers with color
-- Professional title page with report metadata
-
-**Example:**
 ```latex
-\documentclass[11pt, a4paper, oneside]{scrreprt}
-\usepackage[report, citestyle=numeric]{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
 
-\title{Technical Report Title}
-\author{Report Author}
-\date{\today}
-
-% Report metadata
-\newcommand{\reportnumber}{TR-2024-001}
-\newcommand{\reportversion}{1.0}
-\newcommand{\reportstatus}{Final}
+\documentclass[report]{modern-doc}
 
 \addbibresource{references.bib}
 
+\hypersetup{
+  pdftitle    = {Report Title},
+  pdfauthor   = {Author Name},
+}
+
 \begin{document}
-\maketitle
 
-% Document control
-\section*{Document Control}
-\begin{tabular}{ll}
-Report Number: & \reportnumber \\
-Version: & \reportversion \\
-Status: & \reportstatus \\
-Date: & \today \\
-\end{tabular}
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\headingfont\Huge\bfseries Report Title\par}
+  \vfill
+  {\Large Prepared by: Author Name\par}
+\end{titlepage}
 
-\section*{Executive Summary}
-Brief overview of report findings and recommendations.
-
+\pagenumbering{roman}
 \tableofcontents
 
+\pagenumbering{arabic}
 \chapter{Introduction}
-Report content...
-
-\chapter{Methodology}
-Methods used...
-
-\chapter{Results}
-Findings...
-
-\chapter{Recommendations}
-Conclusions and next steps...
+% Your content here
 
 \printbibliography
 \end{document}
@@ -328,76 +234,35 @@ Conclusions and next steps...
 
 ## Letter Template
 
-Formal business correspondence using DIN standard.
+Formal business correspondence (DIN standard).
 
-**Base class:** `scrlttr2` (KOMA-Script letter)
-
-**Layout:**
-- DIN standard letter format
-- Margins: 25mm
-- Line spread: 1.05
-
-**Special features:**
-- Sender information via KOMA variables
-- Multiple letters per document
-- Enclosures and CC support
-- No minted/biblatex (disabled by default)
-
-**Example:**
 ```latex
-\documentclass[DIN, 11pt, a4paper]{scrlttr2}
-\usepackage[letter, minted=false, biblatex=false]{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
 
-% Sender information
+\documentclass[letter, nobiblatex]{modern-doc}
+
 \setkomavar{fromname}{Your Name}
-\setkomavar{fromaddress}{123 Street Name\\City, Country 12345}
-\setkomavar{fromemail}{your.email@example.com}
-\setkomavar{fromphone}{+1 234 567 8900}
+\setkomavar{fromaddress}{Your Address}
 \setkomavar{signature}{Your Name}
-
-% Optional: place/date
-\setkomavar{place}{City}
-\setkomavar{date}{\today}
 
 \begin{document}
 
-\begin{letter}{%
+\begin{letter}{
   Recipient Name\\
-  Organization\\
-  456 Address Line\\
-  City, Country 67890
+  Recipient Address
 }
 
-\opening{Dear Mr./Ms. Recipient,}
+\setkomavar{subject}{Letter Subject}
+\opening{Dear Recipient,}
 
-This is the body of the letter. Multiple paragraphs are supported.
-
-Second paragraph of the letter with additional content.
+Letter content here.
 
 \closing{Sincerely,}
-
-\encl{Attachment 1\\Attachment 2}
-\cc{Copy Recipient 1\\Copy Recipient 2}
-
-\end{letter}
-
-% Multiple letters in one document
-\begin{letter}{Another Recipient\\Different Address}
-\opening{Dear Colleague,}
-Another letter body...
-\closing{Best regards,}
 \end{letter}
 
 \end{document}
-```
-
-**KOMA letter variables:**
-```latex
-\setkomavar{fromname}{Name}           % Sender name
-\setkomavar{fromaddress}{Address}     % Sender address
-\setkomavar{fromemail}{email}         % Email
-\setkomavar{fromphone}{phone}         % Phone
-\setkomavar{signature}{Name}          % Signature
-\setkomavar{place}{City}              % Place for date
-\setkomavar{subject}{Subject}         % Letter subject
 ```

@@ -2,14 +2,14 @@
 # Makefile for Modern LaTeX Templates
 # =============================================================================
 # Usage:
-#   make article    - Build the article template
-#   make paper      - Build the paper template
-#   make thesis     - Build the thesis template
-#   make book       - Build the book template
-#   make report     - Build the report template
-#   make letter     - Build the letter template
-#   make minimal    - Build the minimal template
-#   make all        - Build all templates
+#   make article    - Build the article example
+#   make paper      - Build the paper example
+#   make thesis     - Build the thesis example
+#   make book       - Build the book example
+#   make report     - Build the report example
+#   make letter     - Build the letter example
+#   make minimal    - Build the minimal example
+#   make all        - Build all examples
 #   make clean      - Remove auxiliary files
 #   make distclean  - Remove all generated files
 # =============================================================================
@@ -17,42 +17,43 @@
 # Directories
 ROOT      := $(shell pwd)
 TEXDIR    := $(ROOT)/tex/latex/modern-doc
-TEMPLATEDIR := $(ROOT)/templates
+EXAMPLEDIR := $(ROOT)/examples
 BUILDDIR  := $(ROOT)/build
 OUTPUTDIR := $(ROOT)/output
 
 # Set TEXINPUTS to find class/package without relative paths
-export TEXINPUTS := $(TEXDIR):$(TEMPLATEDIR):$(TEXINPUTS)
-# Keep LuaTeX font cache under output/
+# Include TEXDIR for class/sty and subdirs of EXAMPLEDIR
+export TEXINPUTS := $(TEXDIR):$(EXAMPLEDIR)//:$(TEXINPUTS)
+# Keep LuaTeX font cache under build/
 export TEXMFCACHE := $(BUILDDIR)/.tex-cache
 
 # latexmk with project latexmkrc
 # -f forces completion even with errors (needed for multi-pass builds)
 LATEXMK = latexmk -r $(ROOT)/latexmkrc -f
 
-# Source files
-TEMPLATES = article paper thesis book report letter minimal
+# Example names
+EXAMPLES = article paper thesis book report letter minimal
 
 # =============================================================================
 # Default target
 # =============================================================================
 .PHONY: all
-all: $(TEMPLATES)
+all: $(EXAMPLES)
 
 # =============================================================================
 # Generic build rule
 # =============================================================================
-define build_template
+define build_example
 .PHONY: $(1)
 $(1):
-	@echo "Building $(1)..."
+	@echo "Building $(1) example..."
 	@mkdir -p $(BUILDDIR) $(OUTPUTDIR) $(TEXMFCACHE)
-	@cd $(TEMPLATEDIR) && $(LATEXMK) -outdir=$(BUILDDIR) $(1).tex
+	@cd $(EXAMPLEDIR)/$(1) && $(LATEXMK) -outdir=$(BUILDDIR) $(1).tex
 	@cp $(BUILDDIR)/$(1).pdf $(OUTPUTDIR)/
 	@echo "Done: $(OUTPUTDIR)/$(1).pdf"
 endef
 
-$(foreach tmpl,$(TEMPLATES),$(eval $(call build_template,$(tmpl))))
+$(foreach ex,$(EXAMPLES),$(eval $(call build_example,$(ex))))
 
 # =============================================================================
 # Watch mode (continuous compilation)
@@ -61,7 +62,7 @@ $(foreach tmpl,$(TEMPLATES),$(eval $(call build_template,$(tmpl))))
 watch-%:
 	@echo "Watching $*..."
 	@mkdir -p $(BUILDDIR) $(OUTPUTDIR) $(TEXMFCACHE)
-	@cd $(TEMPLATEDIR) && $(LATEXMK) -outdir=$(BUILDDIR) -pvc $*.tex
+	@cd $(EXAMPLEDIR)/$* && $(LATEXMK) -outdir=$(BUILDDIR) -pvc $*.tex
 
 # =============================================================================
 # Clean targets
@@ -70,8 +71,8 @@ watch-%:
 clean:
 	@echo "Cleaning auxiliary files..."
 	@rm -rf $(BUILDDIR)
-	@rm -rf $(TEMPLATEDIR)/_minted-*
-	@rm -f $(TEMPLATEDIR)/*.synctex.gz
+	@find $(EXAMPLEDIR) -name "_minted-*" -type d -exec rm -rf {} +
+	@find $(EXAMPLEDIR) -name "*.synctex.gz" -type f -delete
 	@echo "Done."
 
 .PHONY: distclean
@@ -88,14 +89,14 @@ help:
 	@echo "Modern LaTeX Templates - Makefile"
 	@echo ""
 	@echo "Usage:"
-	@echo "  make article     - Build the article template"
-	@echo "  make paper       - Build the paper template"
-	@echo "  make thesis      - Build the thesis template"
-	@echo "  make book        - Build the book template"
-	@echo "  make report      - Build the report template"
-	@echo "  make letter      - Build the letter template"
-	@echo "  make minimal     - Build the minimal template"
-	@echo "  make all         - Build all templates"
+	@echo "  make article     - Build the article example"
+	@echo "  make paper       - Build the paper example"
+	@echo "  make thesis      - Build the thesis example"
+	@echo "  make book        - Build the book example"
+	@echo "  make report      - Build the report example"
+	@echo "  make letter      - Build the letter example"
+	@echo "  make minimal     - Build the minimal example"
+	@echo "  make all         - Build all examples"
 	@echo "  make watch-NAME  - Watch and rebuild NAME on changes"
 	@echo "  make clean       - Remove auxiliary files (build/)"
 	@echo "  make distclean   - Remove all generated files"

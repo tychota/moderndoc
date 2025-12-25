@@ -1,0 +1,89 @@
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
+
+\documentclass[paper]{modern-doc}
+
+\addbibresource{../references.bib}
+
+\hypersetup{
+  pdftitle    = {Can AI Models Appreciate Document Aesthetics?},
+  pdfauthor   = {Hsiu-Wei Yang et al.},
+}
+
+\title{Can AI Models Appreciate Document Aesthetics?\\
+  \large An Exploration of Legibility and Layout Quality in Relation to Prediction Confidence}
+\author[ ]{% 
+  Jane Doe\thanks{University of Typography, jane@example.edu} \and
+  John Smith\thanks{Design Institute, smith@design.org}
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\begin{abstract} 
+This paper explores the evolution of digital typography and its impact on
+modern document design. We analyze the transition from mechanical to digital
+typesetting and discuss the principles that ensure readability in the age of
+ubiquitous screens.
+
+\begin{keywords}
+digital typography, legibility, font design, LaTeX, modern-doc
+\end{keywords}
+\end{abstract}
+
+
+\section{Introduction}
+
+The transition from lead-based movable type to digital character encoding has
+democratized the art of typography. Today, professional-grade tools like
+LuaLaTeX and the IBM Plex font family are available to everyone.
+
+\section{The Evolution of Type}
+
+As noted by \textcite{bringhurst2004elements}, typography exists to honor
+content. The Digital Age has introduced new challenges, such as rendering type
+on low-resolution displays and maintaining consistency across diverse devices.
+
+\section{Proposed Framework}
+
+We propose a modular approach to document styling, as implemented in the
+\software{modern-doc} package. This framework separates structural content from
+visual presentation.
+
+\begin{equation}
+  S = f(C, T, L)
+  \label{eq:style}
+\end{equation}
+
+where $S$ is the final style, $C$ is the content, $T$ is the template, and $L$
+is the layout logic as shown in \cref{eq:style}.
+
+\section{Experimental Results}
+
+Our tests on various font families show that the IBM Plex family achieves high
+readability scores across different screen sizes.
+
+\begin{table}[h]
+  \centering
+  \caption{Readability Scores}
+  \begin{tblr}{hlines, vlines}
+    Font Family & Screen & Score \\
+    IBM Plex    & 4K     & 9.8   \\
+    IBM Plex    & Mobile & 9.2   \\
+    Standard    & 4K     & 8.5   \\
+  \end{tblr}
+\end{table}
+
+\section{Conclusion}
+
+Digital typography continues to evolve, blending traditional principles with
+modern technological capabilities.
+
+\printbibliography
+
+\end{document}

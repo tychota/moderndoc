@@ -1,0 +1,103 @@
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
+
+\documentclass[article]{modern-doc}
+
+\addbibresource{../references.bib}
+
+\hypersetup{
+  pdftitle    = {Use of LLMs in preparing accessible scientific papers},
+  pdfauthor   = {Allison Doami \and Christine James \and Dan Lu \and \\
+  Lia Prins \and Annette Torrence \and Boris Veytsman},
+}
+
+\shorttitle{LLMs for Accessible Papers}
+\shortauthor{A. Doami et al.}
+
+\begin{document}
+
+\title{Use of LLMs in preparing accessible scientific papers}
+\author{
+  Allison Doami \and Christine James \and Dan Lu \and \\
+  Lia Prins \and Annette Torrence \and Boris Veytsman
+}
+\date{May 7, 2025}
+
+\maketitle
+
+\begin{abstract}
+Making scientific papers accessible may require reprocessing old papers to
+create output compliant with accessibility standards. An important step there is
+to convert the visual formatting to the logical one. In this report we describe
+our attempt at zero shot conversion of arXiv papers. Our results are mixed: while
+it is possible to do conversion, the reliability is not too good. We discuss
+alternative approaches to this problem.
+
+\begin{keywords}
+accessibility, LLM, LaTeX, arXiv, document conversion
+\end{keywords}
+\end{abstract}
+
+\section{Introduction}
+
+The scientific community has produced a vast repository of knowledge in the form
+of research papers, predominantly distributed as PDF files. However, a
+significant portion of this legacy content is not accessible to individuals
+with disabilities, failing to meet modern standards such as WCAG or PDF/UA.
+
+Making scientific papers accessible is not merely a legal or ethical obligation
+but a necessity for the broad dissemination of scientific knowledge. For older
+papers, where the original source (e.g., \\TeX or \\LaTeX) may be lost or
+incompatible with modern tools, the challenge is even greater.
+
+\section{Logical vs. Visual Formatting}
+
+A key hurdle in document accessibility is the distinction between visual and
+logical formatting. While humans can easily infer the structure of a document
+(headings, lists, equations) from its visual layout, assistive technologies
+require explicit logical markup.
+
+\begin{notebox}
+\term{Visual formatting} refers to how the text looks on the page (bold, large
+fonts, spacing). \term{Logical formatting} defines what the text is (a section
+heading, a figure caption, a mathematical variable).
+\end{notebox}
+
+\section{LLMs for Zero-Shot Conversion}
+
+Large Language Models (LLMs) have shown remarkable capabilities in understanding
+and transforming text. We explored the possibility of using LLMs to convert
+visually formatted text extracted from PDFs back into structured \\LaTeX or
+HTML.
+
+\begin{codeblock}[python]
+def convert_to_accessible(text):
+    # Pseudocode for LLM-based conversion
+    prompt = f"Convert the following visual text to logical LaTeX:\n{text}"
+    accessible_tex = llm.generate(prompt)
+    return accessible_tex
+\end{codeblock}
+
+\section{Results and Observations}
+
+Our experiments with zero-shot conversion yielded mixed results. While the LLMs
+were often able to identify major structural elements like section titles, they
+frequently struggled with complex mathematical formulas and tables.
+
+As noted in \\textcite{yang2024aesthetics}, the aesthetic quality of a document
+can influence how its information is perceived, but for AI models, the visual
+clues are often secondary to the textual patterns.
+
+\section{Conclusion}
+
+While LLMs offer a promising path for automating the creation of accessible
+scientific documents, the current reliability is insufficient for fully
+automated pipelines. Further research into fine-tuned models or hybrid
+approaches combining LLMs with traditional OCR/layout analysis is needed.
+
+\printbibliography
+
+\end{document}

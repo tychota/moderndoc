@@ -1,0 +1,132 @@
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
+
+\documentclass[thesis]{modern-doc}
+
+\addbibresource{../references.bib}
+
+\hypersetup{
+  pdftitle    = {Aesthetic-Aware Document Layout via Deep Learning},
+  pdfauthor   = {Jane Scholar},
+}
+
+\begin{document}
+
+\frontmatter
+\pagestyle{plain}
+
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\headingfont\LARGE University of Typography\par}
+  \vspace{0.5cm}
+  {\headingfont\large Department of Computer Science\par}
+  
+  \vspace{3cm}
+  
+  {\headingfont\Huge\bfseries Aesthetic-Aware Document Layout via Deep Learning\par}
+  
+  \vspace{2cm}
+  
+  {\Large Master's Thesis\par}
+  
+  \vspace{2cm}
+  
+  {\Large Jane Scholar\par}
+  
+  \vfill
+  
+  {\large Supervised by:\par}
+  {\large Prof. Donald Knuth\par}
+  
+  \vspace{1cm}
+  
+  {\large December 2025\par}
+\end{titlepage}
+
+\begin{thesisabstract}
+This thesis explores the integration of typographic design principles into
+automated document layout systems. While deep learning has achieved state-of-the-art
+results in document understanding, generating layouts that are both functional
+and aesthetically pleasing remains a challenge.
+
+We propose a novel neural architecture that explicitly models \q{white space}
+and alignment. Our results, validated through user studies and quantitative
+metrics, demonstrate a significant improvement over baseline generative models.
+\end{thesisabstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+\pagestyle{scrheadings}
+
+\chapter{Introduction}
+
+\section{Motivation}
+
+The proliferation of digital documents has made professional-grade typography
+more accessible than ever. However, the quality of automated layout generation
+often falls short of human-designed counterparts.
+
+\section{Problem Statement}
+
+Current layout algorithms focus primarily on content density and fitting
+constraints, often neglecting the subtle interplay of fonts, margins, and
+visual hierarchy that defines good typography.
+
+\chapter{Literature Review}
+
+\section{Historical Perspective}
+
+As Bringhurst argues, typography is the craft of endowing human language with a
+durable visual form\autocite{bringhurst2004elements}. From the mechanical
+presses of Gutenberg to the digital precision of \TeX\autocite{carroll1865alice}, the
+fundamental goal remains legibility.
+
+\section{AI in Document Analysis}
+
+Recent work by \textcite{yang2024aesthetics} suggests that AI models can be
+trained to recognize aesthetic qualities, though their confidence does not always
+align with human perception.
+
+\chapter{Methodology}
+
+\section{Neural Layout Model}
+
+We utilize a Transformer-based architecture to model the dependencies between
+various document elements.
+
+\begin{codeblock}[python]
+class LayoutTransformer(nn.Module):
+    def __init__(self, vocab_size, d_model):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, d_model)
+        self.transformer = nn.Transformer(d_model)
+        
+    def forward(self, x):
+        x = self.embedding(x)
+        return self.transformer(x)
+\end{codeblock}
+
+\chapter{Evaluation}
+
+\section{Datasets}
+
+We evaluate our model on the DocBank and PubLayNet datasets, which contain
+millions of annotated document pages.
+
+\chapter{Conclusion}
+
+Our work bridges the gap between traditional design theory and modern
+computational methods. Future work will focus on interactive layout assistants
+that collaborate with human designers.
+
+\backmatter
+\printbibliography
+
+\end{document}

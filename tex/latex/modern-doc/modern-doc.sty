@@ -53,6 +53,53 @@
 \tl_new:N   \l_mdoc_mintedstyle_print_tl
 \int_new:N  \l_mdoc_bookmarkdepth_int
 \tl_new:N   \l_mdoc_optionlist_tl
+\tl_new:N   \g_mdoc_paper_abstract_tl
+\bool_new:N \g_mdoc_paper_abstract_ready_bool
+\bool_new:N \g_mdoc_paper_maketitle_called_bool
+\bool_new:N \g_mdoc_paper_title_abstract_emitted_bool
+
+\cs_new_protected:Npn \mdoc_emit_paper_title_abstract:
+  {
+    \bool_if:NF \g_mdoc_paper_title_abstract_emitted_bool
+      {
+        \bool_set_true:N \g_mdoc_paper_title_abstract_emitted_bool
+        \twocolumn[{%
+          \mdoc@orig@maketitle
+          \begin{center}
+          \begin{minipage}{0.9\textwidth}
+          \centering
+          \setlength{\parindent}{0pt}
+          \mdoc@orig@abstract
+          \tl_use:N \g_mdoc_paper_abstract_tl
+          \mdoc@orig@endabstract
+          \end{minipage}
+          \end{center}
+          \vspace{0.8em}
+        }]
+      }
+  }
+
+\cs_new_protected:Npn \mdoc_maybe_emit_paper_title_abstract:
+  {
+    \bool_if:NT \g_mdoc_paper_maketitle_called_bool
+      {
+        \bool_if:NT \g_mdoc_paper_abstract_ready_bool
+          { \mdoc_emit_paper_title_abstract: }
+      }
+  }
+
+\cs_new_protected:Npn \mdoc_store_paper_abstract:n #1
+  {
+    \tl_gset:Nn \g_mdoc_paper_abstract_tl {#1}
+    \bool_set_true:N \g_mdoc_paper_abstract_ready_bool
+    \mdoc_maybe_emit_paper_title_abstract:
+  }
+
+\cs_new_protected:Npn \mdoc_paper_maketitle:
+  {
+    \bool_set_true:N \g_mdoc_paper_maketitle_called_bool
+    \mdoc_maybe_emit_paper_title_abstract:
+  }
 
 \keys_define:nn { mdoc }
   {
@@ -232,7 +279,7 @@
 
 % Paragraph defaults
 \setlength{\parindent}{1em}
-\setlength{\parskip}{0pt}
+\setlength{\parskip}{0.5\baselineskip}
 
 % -----------------------------------------------------------------------------
 % Colors (Okabe-Ito palette)
@@ -306,6 +353,7 @@
         {paper}{
           \KOMAoptions{headsepline=false}
           \ofoot{\pagemark}
+          \ofoot*{\pagemark}
           \pagestyle{scrheadings}
         }
         {article}{
@@ -548,6 +596,22 @@
           \setlength{\absrightindent}{0pt}
           \setlength{\abstitleskip}{-\parindent}
 
+          \cs_if_exist:NF \mdoc@orig@abstract
+            {
+              \cs_set_eq:NN \mdoc@orig@abstract \abstract
+              \cs_set_eq:NN \mdoc@orig@endabstract \endabstract
+            }
+
+          \cs_if_exist:NF \mdoc@orig@maketitle
+            { \cs_set_eq:NN \mdoc@orig@maketitle \maketitle }
+
+          \RenewDocumentEnvironment{abstract}{+b}
+            { \mdoc_store_paper_abstract:n {##1} }
+            { }
+
+          \RenewDocumentCommand{\maketitle}{}
+            { \mdoc_paper_maketitle: }
+
           \NewDocumentEnvironment{keywords}{}{%
             \par\smallskip\noindent\textbf{Keywords:}\space
           }{\par}
@@ -632,7 +696,7 @@
   \tl_set:Nn \l_mdoc_chapterquote_author_tl {#1}%
   \tl_set:Nn \l_mdoc_chapterquote_source_tl {#2}%
   \begin{flushright}
-    \begin{minipage}{0.7\textwidth}
+    \begin{minipage}{0.7\linewidth}
       \small\quotefont\itshape
 }{%
       \par\vspace{0.4em}
@@ -650,7 +714,7 @@
 
 \NewDocumentEnvironment{attributedquote}{m}{%
   \begin{flushright}
-    \begin{minipage}{0.7\textwidth}
+    \begin{minipage}{0.7\linewidth}
       \small\quotefont\itshape
 }{%
       \par\vspace{0.4em}
@@ -662,7 +726,7 @@
 
 \NewDocumentEnvironment{citedquote}{mm}{%
   \begin{flushright}
-    \begin{minipage}{0.7\textwidth}
+    \begin{minipage}{0.7\linewidth}
       \small\quotefont\itshape
 }{%
       \par\vspace{0.4em}
