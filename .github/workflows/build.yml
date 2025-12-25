@@ -2,89 +2,59 @@ name: Build Templates
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-    - name: Install Pygments
-      run: pip install Pygments
+      - name: Install Pygments
+        run: pip install Pygments
 
-    - name: Install TeX Live
-      uses: zauguin/install-texlive@v3
-      with:
-        packages: |
-          scheme-basic
-          latexmk
-          luatex
-          fontspec
-          microtype
-          polyglossia
-          luatexja
-          biblatex
-          biber
-          minted
-          tcolorbox
-          tabularray
-          ninecolors
-          booktabs
-          cleveref
-          koma-script
-          hyperref
-          bookmark
-          unicode-math
-          lualatex-math
-          pdfmanagement-testphase
-          tagpdf
-          colorprofiles
-          abstract
-          amsmath
-          appendix
-          caption
-          csquotes
-          draftwatermark
-          enumitem
-          environ
-          geometry
-          imakeidx
-          lettrine
-          lineno
-          listings
-          marginnote
-          mathtools
-          needspace
-          pgf
-          placeins
-          setspace
-          silence
-          trimspaces
-          varwidth
-          xcolor
-          fvextra
-          fancyvrb
-          upquote
-          tikzfill
-          pdfcol
-          everyhook
-          svn-prov
-          plex
-          stix2-otf
-          tex-gyre
-          haranoaji
-          lm
-          hyphen-french
-          hyphen-german
+      - name: Install TeX Live
+        uses: zauguin/install-texlive@v3
+        with:
+          packages: |
+            latexmk
+            lualatex
+            koma-script
+            scrlayer-scrpage
 
-    - name: Build all templates
-      run: make all
+            fontspec
+            microtype
+            polyglossia
+            csquotes
+
+            biblatex
+            biber
+
+            minted
+            tcolorbox
+            tabularray
+            cleveref
+            hyperref
+            bookmark
+
+            unicode-math
+            mathtools
+
+            enumitem
+
+            luatexja
+            luatexja-fontspec
+
+            plex
+            haranoaji
+
+      - name: Build all templates
+        run: make all
