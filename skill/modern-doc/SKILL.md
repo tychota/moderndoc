@@ -1,220 +1,128 @@
 ---
 name: modern-doc
-description: Professional LaTeX document creation using the modern-doc style package with LuaLaTeX and KOMA-Script. Use when working with .tex files that use modern-doc.sty, creating academic documents (articles, papers, theses, books, reports, letters), debugging LaTeX compilation issues, configuring PDF/A-4 archival output, setting up minted code highlighting, structuring multi-file LaTeX projects, or creating TikZ diagrams. Triggers on modern-doc package usage, LuaLaTeX compilation, KOMA-Script document classes (scrartcl, scrbook, scrreprt, scrlttr2).
+description: >
+  Create, improve, and debug professional LuaLaTeX documents using KOMA-Script + the moderndoc package (and the legacy modern-doc shim). Use for: generating new documents from a goal, improving typography/layout, producing PDF/A-4-friendly output, setting up minted/biblatex/tabularray/tikz, converting Mermaid → TikZ, and debugging compilation logs.
+
+
+triggers:
+  - "File extension: .tex"
+  - "Uses \\usepackage{moderndoc} or \\usepackage{modern-doc}"
+  - "Uses KOMA classes: scrartcl/scrreprt/scrbook/scrlttr2"
+  - "Mentions: lualatex, latexmk, tlmgr, biber, biblatex, minted, tabularray, tikz, luatexja"
+success_criteria:
+  - "Generated LaTeX compiles with LuaLaTeX (and biber/minted if enabled)."
+  - "Typography: no fake small caps by default, consistent paragraph style, widow/orphan control enabled."
+  - "When debugging: identify the first real error, provide exact fix and recompile command."
+principles:
+  - "Make minimal, safe diffs. Do not introduce packages without a concrete reason."
+  - "When adding bibliography data: verify citation metadata via web search (DOI/arXiv/ISBN) when possible."
+  - "Prefer semantic markup over manual styling (\\term, \\foreign, \\software, \\acronym, etc.)."
 ---
 
-# Moderndoc
+# ModernDoc Skill
 
-Professional LaTeX template system for academic and technical documents. Built on LuaLaTeX + KOMA-Script with PDF/A-4 archival compliance, IBM Plex fonts, and modern typography.
+This skill helps users (beginners and advanced) produce high‑quality PDFs using:
 
-## Workflow Decision Tree
+- **LuaLaTeX** (Unicode + OpenType fonts)
+- **KOMA‑Script** for layout and headings
+- **moderndoc** style package
 
-**Creating a new document?**
-1. Choose template type → See [references/templates.md](references/templates.md)
-2. Copy template file and customize
-3. Build with `make <template-name>` or `latexmk -lualatex`
+## Workflow
 
-**Structuring a project?**
-→ See [references/project-structure.md](references/project-structure.md) for file organization
+### 0) If the user wants “a beautiful document fast”
 
-**Configuring document options?**
-→ See [references/options.md](references/options.md) for all package options
+Use the **Template Picker** below, then generate a complete, compilable template.
 
-**Working with LuaTeX, KOMA-Script, or packages?**
-→ See [references/luatex-koma.md](references/luatex-koma.md) for detailed reference
+### 1) Template picker (choose the best starting point)
 
-**Creating diagrams?**
-→ See [references/mermaid.md](references/mermaid.md) for TikZ patterns and conversion
+**Ask only if missing:**
 
-**Compilation errors?**
-→ See [references/troubleshooting.md](references/troubleshooting.md)
+- What are you writing? (paper/report/book/letter/etc.)
+- Single vs two‑column?
+- Any institutional constraints? (margin rules, spacing rules, required styles)
+- Need code highlighting? (minted)
+- Need bibliography? (biblatex)
 
-## Quick Start
+**Mapping:**
 
-Minimal document setup:
+| User goal                     | KOMA class               | moderndoc doctype |
+| ----------------------------- | ------------------------ | ----------------- |
+| Short article / documentation | `scrartcl`               | `article`         |
+| Conference paper (two‑column) | `scrartcl` + `twocolumn` | `paper`           |
+| Technical/business report     | `scrreprt`               | `report`          |
+| Thesis / dissertation         | `scrbook` (preferred)    | `thesis`          |
+| Book / long-form              | `scrbook`                | `book`            |
+| Formal letter                 | `scrlttr2`               | `letter`          |
 
-```latex
-\documentclass[article, 11pt, a4paper]{modern-doc}
+Then generate from: `references/templates.md`.
 
-\title{Document Title}
-\author{Author Name}
-\date{\today}
+### 2) Configure options safely
 
-\addbibresource{references.bib}
+- Keep defaults unless the user asks.
+- Use `references/options.md` to select: language, font, CJK strategy, citations, minted.
 
-\begin{document}
-\maketitle
+### 3) Add content features
 
-\begin{abstract}
-Abstract text here.
-\begin{keywords}
-keyword1, keyword2
-\end{keywords}
-\end{abstract}
+- Bibliography: see `references/bibliography.md`
+- Code: see `references/code-minted.md`
+- Tables: see `references/tables-tabularray.md`
+- Diagrams: see `references/diagrams-tikz.md` (+ Mermaid conversion in `references/mermaid.md`)
 
-\section{Introduction}
-Content here.
+### 4) Typography improvement pass (when editing existing LaTeX)
 
-\printbibliography
-\end{document}
-```
+Must check:
 
-Build command:
-```bash
-latexmk -lualatex -shell-escape document.tex
-```
+- **Paragraph style**: indent OR skip (not both)
+- **Widows/orphans** penalties enabled
+- Two-column layout: KOMA typearea aware (`twocolumn=true` before `\recalctypearea`)
+- No fake small caps by default (fallback to letterspaced caps)
 
-## Template Types
+### 5) Build and verify
 
-| Type | Class | Use Case |
-|------|-------|----------|
-| `article` | scrartcl | Journal articles, short papers |
-| `paper` | scrartcl | Two-column conference papers |
-| `thesis` | scrbook | Dissertations, long-form academic |
-| `book` | scrbook | Technical books with chapters |
-| `report` | scrreprt | Technical/business reports |
-| `letter` | scrlttr2 | Formal correspondence |
+Preferred build:
 
-Full details in [references/templates.md](references/templates.md).
+- `latexmk -lualatex --shell-escape main.tex`
 
-## Core Package Options
+If minted disabled:
 
-```latex
-\usepackage[
-  article,              % Document type: article|paper|thesis|book|report|letter
-  citestyle=numeric,    % Citation: numeric|authoryear|authortitle
-  language=en-US,       % Language: en-US|en-GB|fr|de
-  font=plex,            % Font: plex|stix|palatino
-  draft=false,          % Draft mode with watermark
-  minted=true,          % Code highlighting
-  biblatex=true,        % Bibliography support
-]{modern-doc}
-```
+- `latexmk -lualatex main.tex`
 
-Full options in [references/options.md](references/options.md).
+## Debugging protocol (LaTeX compilation issues)
 
-## Key Features
+When user provides logs, follow this exact order:
 
-### Quote Environments
-```latex
-\begin{paperquote}
-  Quoted text in gray box.
-\end{paperquote}
+1. Identify the _first real_ error in `.log` (ignore cascaded errors).
+2. Classify:
+   - Missing package (`*.sty not found`)
+   - Wrong engine (pdfTeX vs LuaLaTeX)
+   - Minted issue (shell escape / latexminted / pygmentize)
+   - Biber/biblatex mismatch
+   - Font not found (fontspec)
+3. Provide:
+   - Root cause (1–2 lines)
+   - Exact fix command(s)
+   - Exact rebuild command(s)
 
-\begin{attributedquote}{Author Name}
-  Quote with attribution.
-\end{attributedquote}
+If logs are not provided:
 
-\begin{citedquote}{Author}{2024}
-  Quote with author and year.
-\end{citedquote}
-```
+- Ask for `build/*.log` or the terminal error output.
+- Suggest: `latexmk -lualatex -interaction=nonstopmode -file-line-error ...`
 
-### Semantic Markup
-```latex
-\foreign{bon appétit}      % Foreign terms (italic)
-\term{kerning}             % Technical terms
-\acronym{UNESCO}           % Acronyms (small caps)
-\caps{WARNING}             % Letterspaced capitals
-\software{LuaTeX}          % Software names (sans)
-\concept{Key Term}         % Bold concepts
-```
+## Output style rules
 
-### Number Utilities
-```latex
-\liningnums{2024}          % Lining figures (tables)
-\tabularnums{1,234}        % Tabular figures (aligned columns)
-\textnums{1984}            % Text/oldstyle figures
-\properfrac{3}{4}          % OpenType fractions (¾)
-```
+- Provide complete, compilable snippets when generating documents.
+- Prefer short patches (diff-style) when improving existing code.
+- Explain _why_ a change improves readability/robustness (1–2 sentences per change).
 
-### Code Blocks (requires minted)
-```latex
-\begin{minted}{python}
-def hello():
-    print("Hello, World!")
-\end{minted}
-```
+## References index
 
-### Note Boxes
-```latex
-\begin{notebox}[Title]
-  Important information.
-\end{notebox}
-
-\begin{warningbox}[Title]
-  Warning message.
-\end{warningbox}
-```
-
-## Project Structure
-
-Basic layout:
-
-```
-project/
-├── main.tex              # Main document
-├── references.bib        # Bibliography
-├── tex/latex/modern-doc/
-│   ├── modern-doc.cls     # Wrapper class
-│   └── modern-doc.sty     # Style package
-├── fonts/                # Bundled fonts
-├── chapters/             # For books/theses
-├── figures/              # Images and diagrams
-├── build/                # Compilation output
-└── Makefile
-```
-
-For multi-file documents:
-```latex
-% main.tex
-\input{chapters/introduction}
-\input{chapters/methodology}
-```
-
-Full guidance in [references/project-structure.md](references/project-structure.md).
-
-## Build System
-
-Using Make:
-```bash
-make article          # Build article template
-make thesis           # Build thesis
-make all              # Build all templates
-make watch-article    # Watch mode with auto-rebuild
-make clean            # Remove auxiliary files
-```
-
-Using latexmk directly:
-```bash
-latexmk -lualatex -shell-escape document.tex
-latexmk -pvc -lualatex document.tex  # Watch mode
-```
-
-Manual compilation (full cycle):
-```bash
-lualatex --shell-escape document.tex
-biber document
-lualatex --shell-escape document.tex
-lualatex --shell-escape document.tex
-```
-
-## Dependencies
-
-**Required:**
-- TeX Live 2024+ or equivalent
-- LuaLaTeX compiler
-- Biber (bibliography processor)
-- Pygments (`pip install Pygments`) for minted
-
-**Key LaTeX packages:**
-fontspec, microtype, geometry, polyglossia, biblatex, minted, tcolorbox, tabularray, koma-script, hyperref, cleveref
-
-## Resources
-
-- [references/templates.md](references/templates.md) - Detailed template documentation
-- [references/options.md](references/options.md) - All package options
-- [references/project-structure.md](references/project-structure.md) - File organization guide
-- [references/luatex-koma.md](references/luatex-koma.md) - LuaTeX, KOMA-Script, package reference
-- [references/mermaid.md](references/mermaid.md) - TikZ diagrams and Mermaid conversion
-- [references/troubleshooting.md](references/troubleshooting.md) - Common issues and fixes
+- `references/templates.md`
+- `references/options.md`
+- `references/project-structure.md`
+- `references/luatex-koma.md`
+- `references/bibliography.md`
+- `references/code-minted.md`
+- `references/tables-tabularray.md`
+- `references/diagrams-tikz.md`
+- `references/mermaid.md`
+- `references/install-and-troubleshooting.md`
