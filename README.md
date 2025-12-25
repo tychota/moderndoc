@@ -2,47 +2,104 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Fonts: OFL](https://img.shields.io/badge/Fonts-OFL%201.1-orange.svg)](fonts/OFL-LICENSE.txt) [![LuaLaTeX](https://img.shields.io/badge/Engine-LuaLaTeX-green.svg)](https://www.luatex.org/) [![Docs](https://img.shields.io/badge/Docs-Available-green)](https://tychota.github.io/moderndoc/)
 
-**Beautiful, modern LaTeX documents for the 21st century.**
+**moderndoc** is a batteries-included LuaLaTeX toolchain + typographic style package that helps you create beautiful, professional PDF documents quickly — even if you don't know LaTeX.
 
-ModernDoc transforms the powerful but complex LaTeX system into an accessible, "batteries-included" toolchain for creating professional articles, reports, books, and theses.
+## What You Get
 
-## Why ModernDoc?
-
-- **✨ Modern Aesthetics**: Ships with **IBM Plex**, a typeface designed for the intersection of mankind and machine.
-- **🏛️ Archival Quality**: Outputs **PDF/A-4** (ISO 19005-4:2020) by default for long-term preservation.
-- **🚀 Zero Config**: Pre-configured settings for bibliography, code highlighting, and typography.
-- **🤖 Agent Ready**: Includes `modern-doc.skill` for AI agents to generate documents autonomously.
+| Feature | Description |
+|---------|-------------|
+| **KOMA-Script Layouts** | Article, paper, report, thesis, book, letter |
+| **Modern Fonts** | IBM Plex (serif, sans, mono) with sane fallbacks |
+| **Bibliography** | Pre-configured biblatex + biber |
+| **Code Listings** | Syntax highlighting via minted |
+| **Tables** | Modern tables with tabularray |
+| **Typography** | Optimal line length, leading, microtype, widow/orphan control |
 
 ## Quick Start
 
-1. **Install the class/package**:
-    ```bash
-    curl -sSL https://raw.githubusercontent.com/tychota/moderndoc/main/scripts/install.sh | bash
-    ```
+### 1. Install
 
-2. **Clone for templates** (optional):
-    ```bash
-    git clone https://github.com/tychota/moderndoc.git
-    cd moderndoc
-    ```
+```bash
+curl -sSL https://raw.githubusercontent.com/tychota/moderndoc/main/scripts/install.sh | bash
+```
 
-3. **Build a template**:
-    ```bash
-    make article
-    ```
+### 2. Create a Document
 
-4. **Use the class**:
-    ```tex
-    \documentclass[article]{modern-doc}
-    ```
+```latex
+\DocumentMetadata{pdfversion=2.0,pdfstandard=a-4,lang=en-US}
+
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[doctype=article,font=plex]{moderndoc}
+
+\title{Hello ModernDoc}
+\author{You}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A clean document in minutes.
+\begin{keywords}
+latex, typography, lua
+\end{keywords}
+\end{abstract}
+
+\section{Introduction}
+Try \acronym{NASA}, \term{microtype}, and a code block:
+
+\begin{codeblock}[python]
+print("hello")
+\end{codeblock}
+
+\end{document}
+```
+
+### 3. Build
+
+```bash
+latexmk -lualatex --shell-escape yourfile.tex
+```
+
+## Document Types
+
+| Type | KOMA Class | Use Case |
+|------|------------|----------|
+| `article` | `scrartcl` | Journal articles, short papers |
+| `paper` | `scrartcl` + twocolumn | Conference papers |
+| `report` | `scrreprt` | Technical reports |
+| `thesis` | `scrreprt` + twoside | Master's/PhD theses |
+| `book` | `scrbook` | Books, manuals |
+| `letter` | `scrlttr2` | Formal correspondence |
 
 ## Documentation
 
-Full documentation is available at our **[documentation site](https://tychota.github.io/moderndoc/)**.
+Full documentation: **[tychota.github.io/moderndoc](https://tychota.github.io/moderndoc/)**
 
 - [Getting Started](https://tychota.github.io/moderndoc/getting-started/)
-- [Advanced Usage](https://tychota.github.io/moderndoc/advanced/)
+- [Template Reference](https://tychota.github.io/moderndoc/templates/)
+- [Typography Guide](https://tychota.github.io/moderndoc/typography/)
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Missing packages | `tlmgr install <package>` |
+| Minted errors | Compile with `--shell-escape` |
+| Bibliography not appearing | Run `biber <jobname>` then compile twice |
+
+## Using with AI Agents
+
+Copy the skill folder to your agent's skills directory:
+
+```
+skill/modern-doc/ → ~/.claude/skills/
+```
+
+Then prompt:
+
+> "Generate a two-page report using the moderndoc report template, with a numeric-comp bibliography."
 
 ## License
 
-MIT License. Fonts are OFL 1.1.
+MIT License. Fonts are licensed under OFL 1.1.

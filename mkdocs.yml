@@ -58,9 +58,20 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Advanced Usage: advanced.md
+  - Tutorials:
+      - First document: tutorials/first-document.md
+      - Writing with AI: tutorials/ai-workflow.md
+  - How-to guides:
+      - Install TeX Live: howto/install-texlive.md
+      - Bibliography (biblatex): howto/bibliography.md
+      - Code listings (minted): howto/code.md
+      - Tables (tabularray): howto/tables.md
+      - Diagrams (TikZ): howto/diagrams.md
   - Reference:
-      - Templates: reference/templates.md
-      - Options: reference/options.md
-      - Troubleshooting: reference/troubleshooting.md
+      - Package options: reference/options.md
+      - Environments & commands: reference/commands.md
+      - Build system: reference/build.md
+  - Explanation:
+      - Typography rationale: explanation/typography.md
+      - PDF/A & metadata: explanation/pdfa.md
+  - Troubleshooting: troubleshooting.md

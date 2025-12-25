@@ -1,35 +1,87 @@
-# Welcome to ModernDoc
+# ModernDoc
 
 ![ModernDoc Banner](assets/banner.png)
 
-**ModernDoc** is a comprehensive LuaLaTeX template repository designed to bridge the gap between the timeless beauty of LaTeX and the efficiency of modern workflows.
+ModernDoc is a **batteries-included LuaLaTeX toolchain + typographic style** designed to help you produce **beautiful, consistent, archival-friendly PDFs**—fast.
 
-## The Motivation
+It gives you:
 
-We love LaTeX. For decades, it has been the gold standard for beautiful, high-quality typography in scientific and technical documents. The precision of its layout algorithms, the quality of its mathematical typesetting, and its robustness are unmatched.
+- **Modern typography** out of the box (font pairing, spacing, microtypography)
+- **KOMA-Script layouts** (robust headings, sensible page design)
+- **Optional features that matter in real documents**:
+  - Bibliographies with **biblatex + biber**
+  - Code listings with **minted**
+  - Tables with **tabularray**
+  - Diagrams with **TikZ**
+- **Agent-friendly conventions** (easy for AI tools to generate and edit reliably)
 
-**However, LaTeX has a steep learning curve.**
+---
 
-- **Complexity**: Configuring a document with modern fonts, colors, and layouts often requires digging through obscure package documentation and 20-year-old forum posts.
-- **Outdated Defaults**: The default "Computer Modern" look, while iconic, instantly dates a document.
-- **Fragmented Ecosystem**: Finding the right combination of packages that work together (e.g., bibliography, code highlighting, tables) is a trial-and-error process.
+## Quick start
 
-**ModernDoc exists to solve these problems.** We believe that producing a professional, archival-quality document shouldn't require a degree in TeX programming. You should be able to focus on your content while the system handles the typography.
+### 1) Install prerequisites
 
-## What ModernDoc Offers
+You need:
 
-ModernDoc is an "opinionated" set of templates with a KOMA wrapper class (`modern-doc.cls`) and a style package (`modern-doc.sty`) that gives you:
+- TeX Live **2024+** (LuaLaTeX)
+- Python **3** (for minted/Pygments)
 
-- **Modern Aesthetics**: Built-in support for the [IBM Plex](https://www.ibm.com/plex/) font family—a typeface designed to capture the relationship between mankind and machine.
-- **Archival Quality**: Default output to **PDF/A-4**, the latest standard for long-term document preservation.
-- **Batteries Included**: Pre-configured setups for code (minted when enabled), bibliography (biblatex), tables (tabularray), and more.
-- **Agent-Ready**: Designed to work seamlessly with AI coding agents (Claude Code, Cursor, etc.), allowing you to generate and modify documents using natural language.
+Follow: **How-to → Install TeX Live**
 
-## Key Features
+### 2) Create your first document
 
-- **Typography**: Microtype enabled, carefully tuned line spreads and margins.
-- **Fonts**: IBM Plex Serif, Sans, Mono, and JP (Japanese) bundled.
-- **Templates**: Ready-to-use layouts for Articles, Books, Theses, Reports, and Letters.
-- **Efficiency**: Fast compilation with LuaLaTeX.
+Follow: **Tutorials → First document**
 
-[Get Started](getting-started.md){ .md-button .md-button--primary }
+### 3) Build
+
+The recommended build tool is `latexmk`:
+
+```bash
+latexmk -lualatex --shell-escape main.tex
+```
+
+Or with the repo Makefile (if you use the examples structure):
+
+```bash
+make article
+```
+
+---
+
+## Choose a starting template
+
+| What you are writing        | Recommended               |
+| --------------------------- | ------------------------- |
+| Blog post, doc, short paper | Article template          |
+| Conference paper            | Two-column paper template |
+| Technical report            | Report template           |
+| Thesis                      | Thesis template           |
+| Book                        | Book template             |
+| Formal letter               | Letter template           |
+
+Go to: **Reference → Package options** and **Tutorials → First document**.
+
+---
+
+## How ModernDoc is organized
+
+ModernDoc is intentionally split into two layers:
+
+1. **KOMA-Script class** (you choose this):
+
+   - `scrartcl`, `scrreprt`, `scrbook`, `scrlttr2`
+
+2. **ModernDoc package** (applies styling and utilities):
+
+   - `\usepackage{moderndoc}` (recommended modern approach)
+
+The docs show both patterns.
+
+---
+
+## Next steps
+
+- Want to write with AI? → **Tutorials → Writing with AI**
+- Want citations done correctly? → **How-to → Bibliography**
+- Want tables/diagrams? → **How-to → Tables / Diagrams**
+- Want the reasoning behind typography? → **Explanation → Typography rationale**
