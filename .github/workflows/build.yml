@@ -26,9 +26,8 @@ jobs:
         with:
           packages: |
             latexmk
-            lualatex
+            luatex
             koma-script
-            scrlayer-scrpage
 
             fontspec
             microtype
@@ -51,7 +50,6 @@ jobs:
             enumitem
 
             luatexja
-            luatexja-fontspec
 
             plex
             haranoaji
