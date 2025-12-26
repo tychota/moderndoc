@@ -1,0 +1,93 @@
+# ModernDoc Dependencies (from LaTeX logs only)
+# Generated on Fri Dec 26 17:53:11 CET 2025
+# Logs:
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/article.log
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/book.log
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/letter.log
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/minimal.log
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/paper.log
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/report.log
+#   - /Users/tychota/Downloads/moderndoc/modern-latex-templates/build/thesis.log
+
+amsmath
+babel
+biber
+biblatex
+bigintcalc
+bitset
+bookmark
+booktabs
+catchfile
+cleveref
+csquotes
+draftwatermark
+enumitem
+environ
+epstopdf-pkg
+etexcmds
+etoolbox
+fancyvrb
+float
+fontspec
+fvextra
+gettitlestring
+graphics
+graphics-cfg
+graphics-def
+grfext
+hycolor
+hyperref
+iftex
+imakeidx
+infwarerr
+intcalc
+koma-script
+kvdefinekeys
+kvoptions
+kvsetkeys
+l3backend
+l3kernel
+l3packages
+latex
+latex-bin
+latex-lab
+latex-tools-dev
+latex2pydata
+latexconfig
+latexmk
+lettrine
+lineno
+listings
+logreq
+ltxcmds
+lualatex-math
+luatex
+luatexja
+mathtools
+microtype
+minted
+moderndoc
+ninecolors
+pdfcol
+pdfescape
+pdfmanagement-testphase
+pdftexcmds
+pgf
+pgfopts
+plex-otf
+polyglossia
+refcount
+siunitx
+stringenc
+tabularray
+tagpdf
+tcolorbox
+tikzfill
+tools
+translations
+trimspaces
+unicode-math
+upquote
+url
+varwidth
+xcolor

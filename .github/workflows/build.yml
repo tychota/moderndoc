@@ -21,38 +21,17 @@ jobs:
       - name: Install Pygments
         run: pip install Pygments
 
+      - name: Load TeX Live packages
+        id: tex-packages
+        run: |
+          echo "packages<<EOF" >> "$GITHUB_OUTPUT"
+          sed -e 's/^#.*//' -e '/^$/d' dependencies.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
       - name: Install TeX Live
         uses: zauguin/install-texlive@v3
         with:
-          packages: |
-            latexmk
-            luatex
-            koma-script
-
-            fontspec
-            microtype
-            polyglossia
-            csquotes
-
-            biblatex
-            biber
-
-            minted
-            tcolorbox
-            tabularray
-            cleveref
-            hyperref
-            bookmark
-
-            unicode-math
-            mathtools
-
-            enumitem
-
-            luatexja
-
-            plex
-            haranoaji
+          packages: ${{ steps.tex-packages.outputs.packages }}
 
       - name: Build all templates
         run: make all
