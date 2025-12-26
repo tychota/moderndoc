@@ -4,13 +4,20 @@
   lang=en-US,
 }
 
-\documentclass[report]{modern-doc}
+\documentclass[11pt,a4paper]{scrreprt}
+\usepackage[
+  doctype=report,
+  language=en-US,
+  font=plex,
+  citestyle=numeric,
+  biblatex=true
+]{moderndoc}
 
 \addbibresource{../references.bib}
 
 \hypersetup{
-  pdftitle    = {Annual Typography Report 2025},
-  pdfauthor   = {Modern Doc Team},
+  pdftitle    = {HyperTransformer: Model Generation for Few-Shot Learning},
+  pdfauthor   = {Andrey Zhmoginov and Mark Sandler and Max Vladymyrov},
 }
 
 \begin{document}
@@ -18,13 +25,15 @@
 \begin{titlepage}
   \centering
   \vspace*{2cm}
-  {\headingfont\Huge\bfseries Annual Typography Report\par}
-  \vspace{1cm}
-  {\headingfont\Large 2025 Edition\par}
-  \vfill
-  {\Large Prepared by: The Modern Doc Team\par}
+  {\headingfont\Huge\bfseries HyperTransformer\par}
   \vspace{0.5cm}
-  {\large \today\par}
+  {\headingfont\Large Model Generation for Supervised and\\Semi-Supervised Few-Shot Learning\par}
+  \vfill
+  {\Large Andrey Zhmoginov, Mark Sandler, Max Vladymyrov\par}
+  \vspace{0.5cm}
+  {\large Google Research\par}
+  \vspace{2cm}
+  {\small arXiv:2201.04182 --- CC BY 4.0 License\par}
 \end{titlepage}
 
 \pagenumbering{roman}
@@ -34,29 +43,150 @@
 
 \chapter{Executive Summary}
 
-This report highlights the significant milestones in the field of digital
-typography over the past year.
+This report presents excerpts from the HyperTransformer
+paper~\autocite{zhmoginov2022hypertransformer}, a Transformer-based model for
+supervised and semi-supervised few-shot learning that generates weights of a
+convolutional neural network (CNN) directly from support samples.
 
-\chapter{Infrastructure Analysis}
+Key contributions include:
+\begin{itemize}
+  \item A novel architecture that decouples the complexity of the large task
+    space from the complexity of individual tasks
+  \item Effective performance for small target CNN architectures
+  \item End-to-end differentiable training without complex nested gradient
+    optimization
+\end{itemize}
 
-The adoption of LuaLaTeX has reached new heights, providing better support for
-OpenType fonts and complex layouts.
+\chapter{Introduction}
 
-\section{Font Performance}
+In few-shot learning, a conventional machine learning paradigm of fitting a
+parametric model to training data is taken to a limit of extreme data scarcity
+where entire categories are introduced with just one or few examples. A generic
+approach to solving this problem uses training data to identify parameters
+$\phi$ of a solver $a_\phi$ that given a small batch of examples for a
+particular task (called a support set) can solve this task on unseen data
+(called a query set).
 
-We have observed that variable fonts are becoming more prevalent in the design
-industry.
+\section{Metric-Based Learning}
+
+One broad family of few-shot image classification methods frequently referred
+to as metric-based learning, relies on pretraining an embedding $e_\phi(\cdot)$
+and then using some distance in the embedding space to label query samples
+based on their closeness to known labeled support samples. These methods proved
+effective on numerous benchmarks, however the capabilities of the solver are
+limited by the capacity of the architecture itself, as these methods try to
+build a universal embedding function.
+
+\section{The HyperTransformer Approach}
+
+The main idea is to use the Transformer model~\autocite{vaswani2017attention}
+that given a few-shot task episode, generates an entire inference model by
+producing all model weights in a single pass. This allows us to encode the
+intricacies of the available training data inside the Transformer model, while
+producing specialized tiny models for a given individual task.
 
 \begin{notebox}
-Variable fonts allow for a single font file to contain multiple weights and
-styles, reducing the overhead for web and document distribution.
+The self-attention mechanism is well suited to be an underlying mechanism for a
+few-shot CNN weight generator. In contrast with earlier CNN- or BiLSTM-based
+approaches, the vanilla Transformer model is invariant to sample permutations
+and can handle unbalanced datasets with a varying number of samples per
+category.
 \end{notebox}
 
-\chapter{Future Outlook}
+\chapter{Methodology}
 
-We anticipate that AI-driven typography will become a major trend in 2026.
+\section{Learning from Task Descriptions}
+
+Consider a set of tasks $\{t \mid t \in \mathcal{T}\}$ each of which is
+associated with a loss $\mathcal{L}(f; t)$ that quantifies the correctness of
+any model $f$ attempting to solve $t$. Along with the loss, each task also is
+characterized by a task description $\tau(t)$ that is sufficient for
+communicating this task and finding the optimal model that solves it.
+
+The weight generation algorithm can then be viewed as a method of using a set
+of training tasks $\mathcal{T}_{\text{train}}$ for discovering a particular
+solver $a_\phi$ that given $\tau(t)$ for a task $t$ similar to those present in
+the training set, produces an optimal model:
+\begin{equation}
+  f^* = a_\phi(\tau) \in \mathcal{F}
+\end{equation}
+minimizing $\mathcal{L}(f^*, t)$.
+
+\section{Few-Shot Learning as Special Case}
+
+Few-shot learning is a special case of this framework. In few-shot learning,
+the loss $\mathcal{L}_t$ of a task $t$ is defined by a labeled query set
+$Q(t)$. The task description $\tau(t)$ is then specified via a support set of
+examples.
+
+In a classical ``$n$-way-$k$-shot'' setting, each training task $t \in
+\mathcal{T}_{\text{train}}$ is sampled by:
+\begin{enumerate}
+  \item Randomly choosing $n$ distinct classes $C_t$ from a large training
+    dataset
+  \item Sampling examples without replacement from these classes to generate
+    $\tau(t)$ and $Q(t)$
+\end{enumerate}
+
+\section{Model Architecture}
+
+A solver $a_\phi$ is the core of a few-shot learning algorithm since it encodes
+the knowledge of the training task distribution within its weights $\phi$. We
+choose $a_\phi$ to be a Transformer-based model that takes a task description
+$\tau$ containing the information about labeled and unlabeled support-set
+samples as input and produces weights for some or all layers
+$\{\theta_\ell \mid \ell \in [1, L]\}$ of the generated CNN model.
+
+The weights are generated layer-by-layer starting from the first layer:
+\begin{equation}
+  \theta_1(\tau) \to \theta_2(\theta_1; \tau) \to \cdots \to \theta_L(\theta_{1,\ldots,L-1}; \tau)
+\end{equation}
+
+\chapter{Experiments}
+
+\section{Datasets}
+
+For the experiments, several widely used few-shot datasets were chosen:
+\begin{itemize}
+  \item \textbf{Omniglot}: Character recognition dataset
+  \item \textbf{Mini-ImageNet}: Subset of ImageNet with 100 classes
+  \item \textbf{Tiered-ImageNet}: Larger ImageNet subset with hierarchical
+    structure
+\end{itemize}
+
+\section{Results}
+
+The HyperTransformer approach shows significantly better performance than
+MAML++ and RFS for smaller CNN models, while also closely matching the
+performance of many state-of-the-art methods for larger CNN models.
+
+Results demonstrate that:
+\begin{enumerate}
+  \item Generating the last logits layer alone, the Transformer-based weight
+    generator beats or matches performance of multiple traditional learning
+    methods
+  \item The approach can be extended to handle semi-supervised tasks with
+    unlabeled samples
+  \item Adding unlabeled samples results in substantial increase of final test
+    accuracy
+\end{enumerate}
+
+\chapter{Conclusion}
+
+The HyperTransformer represents a novel approach that uses a high-capacity
+model for encoding task-dependent variations in the weights of a smaller model.
+By generating the last logits layer alone, the Transformer-based weight
+generator beats or matches performance of multiple traditional learning methods
+on several few-shot benchmarks.
+
+The method straightforwardly extends to handle more complex problems like
+semi-supervised tasks with unlabeled samples present in the support set,
+demonstrating considerable few-shot performance improvement in the presence of
+unlabeled data.
+
+\vspace{1em}
+\noindent\textit{Source: arXiv:2201.04182. Licensed under CC BY 4.0.}
 
 \printbibliography
 
 \end{document}
-

@@ -1,8 +1,42 @@
-\documentclass{modern-doc}
+\DocumentMetadata{
+  pdfversion=2.0,
+  pdfstandard=a-4,
+  lang=en-US,
+}
+
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[
+  doctype=article,
+  language=en-US,
+  font=plex,
+  biblatex=false
+]{moderndoc}
+
 \begin{document}
+
 \title{Minimal Document}
 \author{Author Name}
+\date{\today}
 \maketitle
-This is a minimal document using the \texttt{modern-doc} class.
-\end{document}
 
+This is a minimal document using \software{LuaLaTeX} with the
+\software{moderndoc} package. It demonstrates the basic setup required for a
+simple document.
+
+\section{Quick Start}
+
+To compile this document:
+\begin{verbatim}
+latexmk -lualatex minimal.tex
+\end{verbatim}
+
+\section{Features}
+
+Even this minimal document includes:
+\begin{itemize}
+  \item Professional IBM Plex fonts
+  \item Proper typography defaults
+  \item PDF/A-4 compliance
+\end{itemize}
+
+\end{document}

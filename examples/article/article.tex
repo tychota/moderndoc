@@ -4,99 +4,135 @@
   lang=en-US,
 }
 
-\documentclass[article]{modern-doc}
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[
+  doctype=article,
+  language=en-US,
+  font=plex,
+  citestyle=numeric,
+  biblatex=true
+]{moderndoc}
 
 \addbibresource{../references.bib}
 
 \hypersetup{
-  pdftitle    = {Use of LLMs in preparing accessible scientific papers},
-  pdfauthor   = {Allison Doami \and Christine James \and Dan Lu \and \\
-  Lia Prins \and Annette Torrence \and Boris Veytsman},
+  pdftitle    = {Of Ideas, Their Origin and Association},
+  pdfauthor   = {David Hume},
 }
 
-\shorttitle{LLMs for Accessible Papers}
-\shortauthor{A. Doami et al.}
+\shorttitle{Of Ideas}
+\shortauthor{Hume}
 
 \begin{document}
 
-\title{Use of LLMs in preparing accessible scientific papers}
-\author{
-  Allison Doami \and Christine James \and Dan Lu \and \\
-  Lia Prins \and Annette Torrence \and Boris Veytsman
-}
-\date{May 7, 2025}
+\title{Of Ideas, Their Origin and Association:\\
+  \large Excerpts from A Treatise of Human Nature}
+\author{David Hume}
+\date{1739}
 
 \maketitle
 
 \begin{abstract}
-Making scientific papers accessible may require reprocessing old papers to
-create output compliant with accessibility standards. An important step there is
-to convert the visual formatting to the logical one. In this report we describe
-our attempt at zero shot conversion of arXiv papers. Our results are mixed: while
-it is possible to do conversion, the reliability is not too good. We discuss
-alternative approaches to this problem.
+This article presents key excerpts from David Hume's \emph{A Treatise of Human
+Nature}~\autocite{hume1739treatise}, first published in 1739. Hume's empiricist
+philosophy examines the foundations of human understanding, distinguishing
+between impressions and ideas, and exploring the principles by which the mind
+associates one idea with another. These selections from Book~I demonstrate
+Hume's systematic approach to epistemology and his influence on subsequent
+philosophical inquiry.
 
 \begin{keywords}
-accessibility, LLM, LaTeX, arXiv, document conversion
+empiricism, impressions, ideas, association, causation, philosophy
 \end{keywords}
 \end{abstract}
 
-\section{Introduction}
+\section{Of the Origin of Our Ideas}
 
-The scientific community has produced a vast repository of knowledge in the form
-of research papers, predominantly distributed as PDF files. However, a
-significant portion of this legacy content is not accessible to individuals
-with disabilities, failing to meet modern standards such as WCAG or PDF/UA.
+All the perceptions of the human mind resolve themselves into two distinct
+kinds, which I shall call \textsc{impressions} and \textsc{ideas}. The
+difference betwixt these consists in the degrees of force and liveliness, with
+which they strike upon the mind, and make their way into our thought or
+consciousness. Those perceptions, which enter with most force and violence, we
+may name impressions: and under this name I comprehend all our sensations,
+passions and emotions, as they make their first appearance in the soul. By
+ideas I mean the faint images of these in thinking and reasoning; such as, for
+instance, are all the perceptions excited by the present discourse, excepting
+only those which arise from the sight and touch, and excepting the immediate
+pleasure or uneasiness it may occasion.
 
-Making scientific papers accessible is not merely a legal or ethical obligation
-but a necessity for the broad dissemination of scientific knowledge. For older
-papers, where the original source (e.g., \\TeX or \\LaTeX) may be lost or
-incompatible with modern tools, the challenge is even greater.
-
-\section{Logical vs. Visual Formatting}
-
-A key hurdle in document accessibility is the distinction between visual and
-logical formatting. While humans can easily infer the structure of a document
-(headings, lists, equations) from its visual layout, assistive technologies
-require explicit logical markup.
+I believe it will not be very necessary to employ many words in explaining this
+distinction. Every one of himself will readily perceive the difference betwixt
+feeling and thinking. The common degrees of these are easily distinguished;
+though it is not impossible but in particular instances they may very nearly
+approach to each other. Thus in sleep, in a fever, in madness, or in any very
+violent emotions of soul, our ideas may approach to our impressions. As on the
+other hand it sometimes happens, that our impressions are so faint and low,
+that we cannot distinguish them from our ideas.
 
 \begin{notebox}
-\term{Visual formatting} refers to how the text looks on the page (bold, large
-fonts, spacing). \term{Logical formatting} defines what the text is (a section
-heading, a figure caption, a mathematical variable).
+Hume here makes use of the terms \emph{impression} and \emph{idea} in a sense
+different from what was usual in his time, restoring the word ``idea'' to its
+original sense from which Locke had perverted it.
 \end{notebox}
 
-\section{LLMs for Zero-Shot Conversion}
+\section{Simple and Complex Perceptions}
 
-Large Language Models (LLMs) have shown remarkable capabilities in understanding
-and transforming text. We explored the possibility of using LLMs to convert
-visually formatted text extracted from PDFs back into structured \\LaTeX or
-HTML.
+There is another division of our perceptions, which it will be convenient to
+observe, and which extends itself both to our impressions and ideas. This
+division is into \textsc{simple} and \textsc{complex}. Simple perceptions or
+impressions and ideas are such as admit of no distinction nor separation. The
+complex are the contrary to these, and may be distinguished into parts. Though
+a particular colour, taste, and smell, are qualities all united together in
+this apple, it is easy to perceive they are not the same, but are at least
+distinguishable from each other.
 
-\begin{codeblock}[python]
-def convert_to_accessible(text):
-    # Pseudocode for LLM-based conversion
-    prompt = f"Convert the following visual text to logical LaTeX:\n{text}"
-    accessible_tex = llm.generate(prompt)
-    return accessible_tex
-\end{codeblock}
+Having by these divisions given an order and arrangement to our objects, we may
+now apply ourselves to consider with the more accuracy their qualities and
+relations. The first circumstance, that strikes my eye, is the great
+resemblance betwixt our impressions and ideas in every other particular, except
+their degree of force and vivacity. The one seem to be in a manner the
+reflexion of the other; so that all the perceptions of the mind are double, and
+appear both as impressions and ideas.
 
-\section{Results and Observations}
+\section{Of the Association of Ideas}
 
-Our experiments with zero-shot conversion yielded mixed results. While the LLMs
-were often able to identify major structural elements like section titles, they
-frequently struggled with complex mathematical formulas and tables.
+The qualities, from which this association arises, and by which the mind is
+after this manner conveyed from one idea to another, are three, viz.\
+\textsc{resemblance}, \textsc{contiguity} in time or place, and \textsc{cause
+and effect}.
 
-As noted in \\textcite{yang2024aesthetics}, the aesthetic quality of a document
-can influence how its information is perceived, but for AI models, the visual
-clues are often secondary to the textual patterns.
+\begin{enumerate}
+  \item \textbf{Resemblance}: In the course of our thinking, and in the
+    constant revolution of our ideas, our imagination runs easily from one idea
+    to any other that resembles it.
+  \item \textbf{Contiguity}: As the senses, in changing their objects, are
+    necessitated to change them regularly, and take them as they lie contiguous
+    to each other, the imagination must by long custom acquire the same method
+    of thinking.
+  \item \textbf{Cause and Effect}: There is no relation which produces a
+    stronger connexion in the fancy, and makes one idea more readily recall
+    another, than the relation of cause and effect betwixt their objects.
+\end{enumerate}
+
+That we may understand the full extent of these relations, we must consider,
+that two objects are connected together in the imagination, not only when the
+one is immediately resembling, contiguous to, or the cause of the other, but
+also when there is interposed betwixt them a third object, which bears to both
+of them any of these relations. This may be carried on to a great length;
+though at the same time we may observe, that each remove considerably weakens
+the relation.
 
 \section{Conclusion}
 
-While LLMs offer a promising path for automating the creation of accessible
-scientific documents, the current reliability is insufficient for fully
-automated pipelines. Further research into fine-tuned models or hybrid
-approaches combining LLMs with traditional OCR/layout analysis is needed.
+Of the three relations above-mentioned, causation is the most extensive. Two
+objects may be considered as placed in this relation, as well when one is the
+cause of any of the actions or motions of the other, as when the former is the
+cause of the existence of the latter. These are therefore the principles of
+union or cohesion among our simple ideas, and in the imagination supply the
+place of that inseparable connexion, by which they are united in our memory.
+
+\vspace{1em}
+\noindent\textit{Source: Project Gutenberg eBook \#4705. Public Domain.}
 
 \printbibliography
 

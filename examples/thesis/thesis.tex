@@ -4,12 +4,20 @@
   lang=en-US,
 }
 
-\documentclass[thesis]{modern-doc}
+\documentclass[12pt,a4paper,twoside,open=right]{scrbook}
+\usepackage[
+  doctype=thesis,
+  language=en-US,
+  font=plex,
+  citestyle=authoryear,
+  biblatex=true,
+  bcor=10mm
+]{moderndoc}
 
 \addbibresource{../references.bib}
 
 \hypersetup{
-  pdftitle    = {Aesthetic-Aware Document Layout via Deep Learning},
+  pdftitle    = {The Empiricist Theory of Ideas},
   pdfauthor   = {Jane Scholar},
 }
 
@@ -21,46 +29,56 @@
 \begin{titlepage}
   \centering
   \vspace*{2cm}
-  {\headingfont\LARGE University of Typography\par}
+  {\headingfont\LARGE Open University of Philosophy\par}
   \vspace{0.5cm}
-  {\headingfont\large Department of Computer Science\par}
-  
+  {\headingfont\large Department of Epistemology\par}
+
   \vspace{3cm}
-  
-  {\headingfont\Huge\bfseries Aesthetic-Aware Document Layout via Deep Learning\par}
-  
+
+  {\headingfont\Huge\bfseries The Empiricist Theory of Ideas:\\
+    A Study of Hume's Treatise\par}
+
   \vspace{2cm}
-  
+
   {\Large Master's Thesis\par}
-  
+
   \vspace{2cm}
-  
+
   {\Large Jane Scholar\par}
-  
+
   \vfill
-  
+
   {\large Supervised by:\par}
-  {\large Prof. Donald Knuth\par}
-  
+  {\large Prof.\ Maria Epistemology\par}
+
   \vspace{1cm}
-  
+
   {\large December 2025\par}
+
+  \vspace{1cm}
+
+  {\small Based on public domain texts from Project Gutenberg\par}
 \end{titlepage}
 
 \begin{thesisabstract}
-This thesis explores the integration of typographic design principles into
-automated document layout systems. While deep learning has achieved state-of-the-art
-results in document understanding, generating layouts that are both functional
-and aesthetically pleasing remains a challenge.
+This thesis examines David Hume's empiricist theory of ideas as presented in
+\emph{A Treatise of Human Nature}~\autocite{hume1739treatise}. Hume's
+fundamental distinction between impressions and ideas, and his account of how
+the mind associates ideas through resemblance, contiguity, and causation,
+remain central to contemporary debates in epistemology and philosophy of mind.
 
-We propose a novel neural architecture that explicitly models \q{white space}
-and alignment. Our results, validated through user studies and quantitative
-metrics, demonstrate a significant improvement over baseline generative models.
+We analyze Hume's arguments for the primacy of sense experience in the
+formation of knowledge, his distinction between simple and complex perceptions,
+and his influential account of memory and imagination. Building on these
+foundations, we explore the implications for contemporary theories of mental
+representation and cognitive architecture.
+
+This study demonstrates that Hume's empiricist framework, while formulated in
+the eighteenth century, continues to offer insights relevant to modern
+cognitive science and philosophy of mind.
 \end{thesisabstract}
 
 \tableofcontents
-\listoffigures
-\listoftables
 
 \mainmatter
 \pagestyle{scrheadings}
@@ -69,64 +87,191 @@ metrics, demonstrate a significant improvement over baseline generative models.
 
 \section{Motivation}
 
-The proliferation of digital documents has made professional-grade typography
-more accessible than ever. However, the quality of automated layout generation
-often falls short of human-designed counterparts.
+The question of how human beings acquire knowledge has occupied philosophers
+since antiquity. David Hume's \emph{A Treatise of Human
+Nature}~\autocite{hume1739treatise}, first published in 1739, represents one of
+the most systematic attempts to ground human understanding in experience.
+
+Hume's empiricist project seeks to explain all mental contents---our ideas,
+beliefs, and knowledge---as ultimately derived from sensory impressions. As he
+writes in the opening of the Treatise, all the perceptions of the human mind
+resolve themselves into two distinct kinds, which he calls impressions and
+ideas.
 
 \section{Problem Statement}
 
-Current layout algorithms focus primarily on content density and fitting
-constraints, often neglecting the subtle interplay of fonts, margins, and
-visual hierarchy that defines good typography.
+This thesis addresses several key questions arising from Hume's theory:
+\begin{enumerate}
+  \item What is the precise relationship between impressions and ideas?
+  \item How does the mind form complex ideas from simple components?
+  \item What principles govern the association of ideas?
+  \item How do memory and imagination differ in their operations?
+\end{enumerate}
 
-\chapter{Literature Review}
+\section{Contributions}
 
-\section{Historical Perspective}
+This thesis makes the following contributions:
+\begin{itemize}
+  \item A systematic analysis of Hume's impression-idea distinction
+  \item An examination of the principles of mental association
+  \item A comparison with contemporary theories of mental representation
+  \item An assessment of Hume's relevance to cognitive science
+\end{itemize}
 
-As Bringhurst argues, typography is the craft of endowing human language with a
-durable visual form\autocite{bringhurst2004elements}. From the mechanical
-presses of Gutenberg to the digital precision of \TeX\autocite{carroll1865alice}, the
-fundamental goal remains legibility.
+\chapter{Impressions and Ideas}
 
-\section{AI in Document Analysis}
+\section{The Fundamental Distinction}
 
-Recent work by \textcite{yang2024aesthetics} suggests that AI models can be
-trained to recognize aesthetic qualities, though their confidence does not always
-align with human perception.
+All the perceptions of the human mind resolve themselves into two distinct
+kinds, which Hume calls \textsc{impressions} and \textsc{ideas}. The difference
+betwixt these consists in the degrees of force and liveliness, with which they
+strike upon the mind, and make their way into our thought or consciousness.
 
-\chapter{Methodology}
+Those perceptions which enter with most force and violence, we may name
+impressions: and under this name Hume comprehends all our sensations, passions
+and emotions, as they make their first appearance in the soul. By ideas he
+means the faint images of these in thinking and reasoning.
 
-\section{Neural Layout Model}
+\subsection{Force and Vivacity}
 
-We utilize a Transformer-based architecture to model the dependencies between
-various document elements.
+Every one of himself will readily perceive the difference betwixt feeling and
+thinking. The common degrees of these are easily distinguished; though it is
+not impossible but in particular instances they may very nearly approach to
+each other. Thus in sleep, in a fever, in madness, or in any very violent
+emotions of soul, our ideas may approach to our impressions.
 
-\begin{codeblock}[python]
-class LayoutTransformer(nn.Module):
-    def __init__(self, vocab_size, d_model):
-        super().__init__()
-        self.embedding = nn.Embedding(vocab_size, d_model)
-        self.transformer = nn.Transformer(d_model)
-        
-    def forward(self, x):
-        x = self.embedding(x)
-        return self.transformer(x)
-\end{codeblock}
+\subsection{Terminological Innovation}
 
-\chapter{Evaluation}
+\begin{notebox}
+Hume makes use of the terms \emph{impression} and \emph{idea} in a sense
+different from what was usual in his time. He claims to restore the word
+``idea'' to its original sense, from which Locke had perverted it in making it
+stand for all our perceptions.
+\end{notebox}
 
-\section{Datasets}
+\section{Simple and Complex Perceptions}
 
-We evaluate our model on the DocBank and PubLayNet datasets, which contain
-millions of annotated document pages.
+There is another division of our perceptions, which extends itself both to our
+impressions and ideas. This division is into \textsc{simple} and
+\textsc{complex}. Simple perceptions or impressions and ideas are such as admit
+of no distinction nor separation. The complex are the contrary to these, and
+may be distinguished into parts.
+
+Though a particular colour, taste, and smell, are qualities all united together
+in this apple, it is easy to perceive they are not the same, but are at least
+distinguishable from each other.
+
+\chapter{The Association of Ideas}
+
+\section{The Need for Associating Principles}
+
+As all simple ideas may be separated by the imagination, and may be united
+again in what form it pleases, nothing would be more unaccountable than the
+operations of that faculty, were it not guided by some universal principles,
+which render it, in some measure, uniform with itself in all times and places.
+
+Were ideas entirely loose and unconnected, chance alone would join them; and it
+is impossible the same simple ideas should fall regularly into complex ones (as
+they commonly do) without some bond of union among them, some associating
+quality, by which one idea naturally introduces another.
+
+\section{The Three Principles of Association}
+
+The qualities from which this association arises, and by which the mind is
+conveyed from one idea to another, are three:
+
+\begin{enumerate}
+  \item \textbf{Resemblance}: In the course of our thinking, and in the
+    constant revolution of our ideas, our imagination runs easily from one idea
+    to any other that resembles it.
+  \item \textbf{Contiguity}: As the senses, in changing their objects, are
+    necessitated to change them regularly, and take them as they lie contiguous
+    to each other, the imagination must by long custom acquire the same method
+    of thinking.
+  \item \textbf{Cause and Effect}: There is no relation which produces a
+    stronger connexion in the fancy, and makes one idea more readily recall
+    another, than the relation of cause and effect betwixt their objects.
+\end{enumerate}
+
+\section{The Extent of These Relations}
+
+Two objects are connected together in the imagination, not only when the one is
+immediately resembling, contiguous to, or the cause of the other, but also when
+there is interposed betwixt them a third object, which bears to both of them
+any of these relations. This may be carried on to a great length; though at the
+same time we may observe, that each remove considerably weakens the relation.
+
+Of the three relations above-mentioned, causation is the most extensive. Two
+objects may be considered as placed in this relation, as well when one is the
+cause of any of the actions or motions of the other, as when the former is the
+cause of the existence of the latter.
+
+\chapter{Memory and Imagination}
+
+\section{The Distinction}
+
+It is evident at first sight that the ideas of the memory are much more lively
+and strong than those of the imagination, and that the former faculty paints
+its objects in more distinct colours than any which are employed by the latter.
+When we remember any past event, the idea of it flows in upon the mind in a
+forcible manner; whereas in the imagination the perception is faint and
+languid, and cannot without difficulty be preserved by the mind steady and
+uniform for any considerable time.
+
+\section{Order and Form}
+
+Though neither the ideas of the memory nor imagination can make their
+appearance in the mind unless their correspondent impressions have gone before
+to prepare the way for them, yet the imagination is not restrained to the same
+order and form with the original impressions; while the memory is in a manner
+tied down in that respect, without any power of variation.
+
+It is evident that the memory preserves the original form in which its objects
+were presented, and that wherever we depart from it in recollecting anything,
+it proceeds from some defect or imperfection in that faculty.
+
+\section{The Liberty of Imagination}
+
+The same evidence follows us in our second principle, of the liberty of the
+imagination to transpose and change its ideas. The fables we meet with in poems
+and romances put this entirely out of the question. Nature there is totally
+confounded, and nothing mentioned but winged horses, fiery dragons, and
+monstrous giants.
 
 \chapter{Conclusion}
 
-Our work bridges the gap between traditional design theory and modern
-computational methods. Future work will focus on interactive layout assistants
-that collaborate with human designers.
+\section{Summary}
+
+Hume's empiricist theory provides a systematic account of the origin and
+association of our ideas. By grounding all mental contents in sensory
+impressions, and explaining the formation of complex ideas through the
+principles of resemblance, contiguity, and causation, Hume offers a naturalistic
+framework for understanding human cognition.
+
+\section{Contemporary Relevance}
+
+The principles Hume identified remain relevant to contemporary cognitive
+science:
+\begin{itemize}
+  \item Associative learning models in psychology
+  \item Connectionist theories of mental representation
+  \item Theories of memory consolidation and retrieval
+  \item Philosophical debates about the nature of mental content
+\end{itemize}
 
 \backmatter
+
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+I thank my supervisor, Prof.\ Maria Epistemology, for her guidance throughout
+this research. The primary texts analyzed in this thesis are drawn from David
+Hume's \emph{A Treatise of Human Nature}, available through Project Gutenberg
+(eBook \#4705) in the public domain.
+
+\vspace{1em}
+\noindent\textit{Source: Project Gutenberg eBook \#4705. Public Domain.}
+
 \printbibliography
 
 \end{document}

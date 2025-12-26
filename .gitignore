@@ -192,3 +192,7 @@ _minted
 
 # claude
 .claude/skills/skill-creator
+.claude/skills/modern-doc.skill
+
+# examples
+examples/.content

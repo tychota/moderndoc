@@ -16,7 +16,7 @@
 
 # Directories
 ROOT      := $(shell pwd)
-TEXDIR    := $(ROOT)/tex/latex/modern-doc
+TEXDIR    := $(ROOT)/tex/latex/moderndoc
 EXAMPLEDIR := $(ROOT)/examples
 BUILDDIR  := $(ROOT)/build
 OUTPUTDIR := $(ROOT)/output

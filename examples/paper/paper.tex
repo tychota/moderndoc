@@ -4,85 +4,160 @@
   lang=en-US,
 }
 
-\documentclass[paper]{modern-doc}
+\documentclass[10pt,a4paper,twocolumn]{scrartcl}
+\usepackage[
+  doctype=paper,
+  language=en-US,
+  font=plex,
+  citestyle=numeric,
+  biblatex=true,
+  div=16
+]{moderndoc}
 
 \addbibresource{../references.bib}
 
 \hypersetup{
-  pdftitle    = {Can AI Models Appreciate Document Aesthetics?},
-  pdfauthor   = {Hsiu-Wei Yang et al.},
+  pdftitle    = {HyperTransformer: Model Generation for Few-Shot Learning},
+  pdfauthor   = {Andrey Zhmoginov, Mark Sandler, Max Vladymyrov},
 }
 
-\title{Can AI Models Appreciate Document Aesthetics?\\
-  \large An Exploration of Legibility and Layout Quality in Relation to Prediction Confidence}
-\author[ ]{% 
-  Jane Doe\thanks{University of Typography, jane@example.edu} \and
-  John Smith\thanks{Design Institute, smith@design.org}
+\title{HyperTransformer: Model Generation for Supervised and Semi-Supervised Few-Shot Learning}
+\author{
+  Andrey Zhmoginov\thanks{Google Research. Correspondence: zhmoginov@google.com} \and
+  Mark Sandler\thanks{Google Research} \and
+  Max Vladymyrov\thanks{Google Research}
 }
 \date{}
 
 \begin{document}
 \maketitle
 
-
-\begin{abstract} 
-This paper explores the evolution of digital typography and its impact on
-modern document design. We analyze the transition from mechanical to digital
-typesetting and discuss the principles that ensure readability in the age of
-ubiquitous screens.
+\begin{abstract}
+In this work we propose a HyperTransformer, a Transformer-based model for
+supervised and semi-supervised few-shot learning that generates weights of a
+convolutional neural network (CNN) directly from support samples. Since the
+dependence of a small generated CNN model on a specific task is encoded by a
+high-capacity Transformer model, we effectively decouple the complexity of the
+large task space from the complexity of individual tasks. Our method is
+particularly effective for small target CNN architectures where learning a
+fixed universal task-independent embedding is not optimal and better
+performance is attained when the information about the task can modulate all
+model parameters. For larger models we discover that generating the last layer
+alone allows us to produce competitive or better results than those obtained
+with state-of-the-art methods while being end-to-end differentiable.
 
 \begin{keywords}
-digital typography, legibility, font design, LaTeX, modern-doc
+few-shot learning, meta-learning, hypernetworks, transformers, CNN
 \end{keywords}
 \end{abstract}
 
-
 \section{Introduction}
 
-The transition from lead-based movable type to digital character encoding has
-democratized the art of typography. Today, professional-grade tools like
-LuaLaTeX and the IBM Plex font family are available to everyone.
+Few-shot learning aims to train models that can adapt to new tasks using only a
+small number of labeled examples. This is in contrast to traditional supervised
+learning, which typically requires large amounts of labeled data to achieve
+good performance. The ability to learn from few examples is a hallmark of human
+intelligence and is crucial for many real-world applications where labeled data
+is scarce or expensive to obtain.
 
-\section{The Evolution of Type}
+In this paper, we propose a novel approach to few-shot learning that leverages
+the power of Transformer architectures to generate the weights of a
+convolutional neural network directly from the support set. Our method, which
+we call \emph{HyperTransformer}, effectively decouples the complexity of the
+task space from the complexity of individual tasks.
 
-As noted by \textcite{bringhurst2004elements}, typography exists to honor
-content. The Digital Age has introduced new challenges, such as rendering type
-on low-resolution displays and maintaining consistency across diverse devices.
+\section{Related Work}
 
-\section{Proposed Framework}
+\subsection{Meta-Learning}
 
-We propose a modular approach to document styling, as implemented in the
-\software{modern-doc} package. This framework separates structural content from
-visual presentation.
+Meta-learning, or ``learning to learn,'' encompasses a broad class of
+algorithms designed to improve learning efficiency across multiple tasks. Early
+work in this area includes MAML~\cite{knuth1984texbook}, which learns an
+initialization that can be quickly adapted to new tasks via gradient descent.
 
+\subsection{Hypernetworks}
+
+Hypernetworks are neural networks that generate the weights of another neural
+network. This concept was introduced to enable dynamic weight generation
+conditioned on task-specific information.
+
+\section{Method}
+
+\subsection{Problem Formulation}
+
+In the few-shot learning setting, we are given a support set $\mathcal{S} =
+\{(x_i, y_i)\}_{i=1}^{N \times K}$ containing $N$ classes with $K$ examples
+each, and a query set $\mathcal{Q}$ of unlabeled examples to classify. The goal
+is to correctly classify the query examples using only the information from the
+support set.
+
+\subsection{HyperTransformer Architecture}
+
+Our HyperTransformer consists of three main components:
+
+\begin{enumerate}
+  \item \textbf{Feature Extractor}: A CNN backbone that extracts features from
+    support images.
+  \item \textbf{Transformer Encoder}: Processes the support set features to
+    capture inter-class and intra-class relationships.
+  \item \textbf{Weight Generator}: Produces the weights of the target CNN from
+    the Transformer output.
+\end{enumerate}
+
+The weight generation process can be formalized as:
 \begin{equation}
-  S = f(C, T, L)
-  \label{eq:style}
+  \theta = f_{\text{hyper}}(\mathcal{S}; \phi)
+  \label{eq:hypernetwork}
+\end{equation}
+where $\theta$ represents the generated CNN weights, $f_{\text{hyper}}$ is the
+HyperTransformer, and $\phi$ are the learnable parameters.
+
+\subsection{Training Objective}
+
+We train the HyperTransformer end-to-end using the cross-entropy loss on the
+query set:
+\begin{equation}
+  \mathcal{L} = -\sum_{(x, y) \in \mathcal{Q}} \log p(y | x; \theta)
 \end{equation}
 
-where $S$ is the final style, $C$ is the content, $T$ is the template, and $L$
-is the layout logic as shown in \cref{eq:style}.
+\section{Experiments}
 
-\section{Experimental Results}
-
-Our tests on various font families show that the IBM Plex family achieves high
-readability scores across different screen sizes.
+We evaluate our method on standard few-shot learning benchmarks including
+\emph{mini}ImageNet and \emph{tiered}ImageNet.
 
 \begin{table}[h]
   \centering
-  \caption{Readability Scores}
+  \caption{Few-shot classification accuracy on \emph{mini}ImageNet}
   \begin{tblr}{hlines, vlines}
-    Font Family & Screen & Score \\
-    IBM Plex    & 4K     & 9.8   \\
-    IBM Plex    & Mobile & 9.2   \\
-    Standard    & 4K     & 8.5   \\
+    Method            & 1-shot        & 5-shot        \\
+    ProtoNet          & 49.4          & 68.2          \\
+    MAML              & 48.7          & 63.1          \\
+    HyperTransformer  & \textbf{54.2} & \textbf{71.3} \\
   \end{tblr}
+  \label{tab:results}
 \end{table}
+
+As shown in \cref{tab:results}, our HyperTransformer achieves state-of-the-art
+results on both 1-shot and 5-shot settings.
 
 \section{Conclusion}
 
-Digital typography continues to evolve, blending traditional principles with
-modern technological capabilities.
+We have presented HyperTransformer, a novel approach to few-shot learning that
+generates CNN weights directly from support samples using a Transformer-based
+hypernetwork. Our method achieves competitive results while being fully
+end-to-end differentiable.
+
+\section*{Acknowledgments}
+
+This work was supported by Google Research. We thank the anonymous reviewers
+for their valuable feedback.
+
+\section*{License}
+
+This paper is adapted from arXiv:2201.04182, which is licensed under
+\textbf{CC BY 4.0} (Creative Commons Attribution 4.0 International License).
+The original authors are Andrey Zhmoginov, Mark Sandler, and Max Vladymyrov
+from Google Research. Content has been adapted for demonstration purposes.
 
 \printbibliography
 
